@@ -185,9 +185,10 @@ export default function App() {
 
       {/* Hero */}
       <section
-  className="relative bg-gradient-to-b from-white to-[var(--light)] pb-6 md:pb-10"
+  className="relative bg-gradient-to-b from-white to-[var(--light)] pb-12 md:pb-20"
   id="top"
 >
+
 
         <div className="absolute inset-0 -z-10" aria-hidden>
           <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-3xl opacity-20" style={{ background: BRAND.primary }} />
@@ -196,7 +197,8 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-10 items-center py-12 md:py-20">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <Pill>Club esportiu · Comunitat · Mar</Pill>
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mt-6 text-slate-900 leading-[1.14] md:leading-[1.18]">
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mt-6 md:mt-8 text-slate-900 leading-[1.16] md:leading-[1.22]">
+
 
 
               Rem al Mediterrani,
