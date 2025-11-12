@@ -237,9 +237,12 @@ export default function App() {
               <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
                 Prova una sessió <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
-              <Button size="lg" variant="outline" className="border-slate-300">
-                Calendari d’activitats
-              </Button>
+              <a href="/calendario.jpg" target="_blank" rel="noopener noreferrer">
+  <Button size="lg" variant="outline" className="border-slate-300">
+    Calendari d’activitats
+  </Button>
+</a>
+
             </div>
             <div className="flex gap-6 mt-8 text-slate-500">
               <div className="flex items-center gap-2"><Users className="h-4 w-4"/> +200 socis</div>
