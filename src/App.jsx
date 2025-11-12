@@ -278,7 +278,12 @@ export default function App() {
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <div className="aspect-video rounded-2xl overflow-hidden shadow-xl">
- <img src="/hero-botecompeti.jpg" alt="Vent d’Estrop en acció" className="w-full h-full object-cover" />
+ <img
+  src={HERO_PHOTOS[slide]}
+  alt={`Vent d’Estrop en acció ${slide + 1}`}
+  className="w-full h-full object-cover transition-opacity duration-1000"
+/>
+
 
 
 </div>
