@@ -223,10 +223,11 @@ export default function App() {
             </div>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div className="aspect-video rounded-2xl bg-slate-200 shadow-xl overflow-hidden grid place-items-center">
-              <img src={BRAND.logo} alt="Marca Vent d’Estrop" className="h-24 opacity-70" />
-            </div>
-            <div className="mt-3 text-xs text-slate-500">Substituir per foto o vídeo de portada</div>
+            <div className="aspect-video rounded-2xl overflow-hidden shadow-xl">
+  <img src="/src/assets/hero-bote.jpg" alt="Vent d’Estrop en acció" className="w-full h-full object-cover" />
+</div>
+<div className="mt-3 text-xs text-slate-500">Foto: equip Vent d’Estrop</div>
+
           </motion.div>
         </div>
       </section>
