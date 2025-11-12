@@ -1,3 +1,5 @@
+import logoAzul from "@/assets/logo-azul.png";
+import logoBlanco from "@/assets/logo-blanco.png";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -35,9 +37,10 @@ const BRAND = {
   accent: "#007A9E",
   dark: "#0D1B2A",
   light: "#F5F9FF",
-  logo: "/src/assets/logo-azul.png",
-  logoAlt: "/src/assets/logo-blanco.png",
+  logo: logoAzul,
+  logoAlt: logoBlanco,
 };
+
 
 const NAV = [
   { label: "Club", href: "#club" },
