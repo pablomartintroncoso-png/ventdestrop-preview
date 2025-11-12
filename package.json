@@ -1,0 +1,20 @@
+{
+  "name": "ventdestrop-preview",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.453.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}
