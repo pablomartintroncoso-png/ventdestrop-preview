@@ -184,7 +184,11 @@ export default function App() {
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-white to-[var(--light)]" id="top">
+      <section
+  className="relative bg-gradient-to-b from-white to-[var(--light)] pb-6 md:pb-10"
+  id="top"
+>
+
         <div className="absolute inset-0 -z-10" aria-hidden>
           <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-3xl opacity-20" style={{ background: BRAND.primary }} />
           <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-3xl opacity-10" style={{ background: BRAND.accent }} />
