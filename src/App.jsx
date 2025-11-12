@@ -237,11 +237,19 @@ export default function App() {
               <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
                 Prova una sessió <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
-              <a href="/calendario.jpg" target="_blank" rel="noopener noreferrer">
-  <Button size="lg" variant="outline" className="border-slate-300">
-    Calendari d’activitats
-  </Button>
-</a>
+              import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+
+<Dialog>
+  <DialogTrigger asChild>
+    <Button size="lg" variant="outline" className="border-slate-300">
+      Calendari d’activitats
+    </Button>
+  </DialogTrigger>
+  <DialogContent className="max-w-4xl">
+    <img src="/calendario.jpeg" alt="Calendari d’activitats" className="w-full h-auto rounded-lg" />
+  </DialogContent>
+</Dialog>
+
 
             </div>
             <div className="flex gap-6 mt-8 text-slate-500">
