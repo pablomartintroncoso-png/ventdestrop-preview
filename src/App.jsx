@@ -167,6 +167,15 @@ function useActiveSection(ids) {
 }
 
 export default function App() {
+    const [slide, setSlide] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSlide((s) => (s + 1) % HERO_PHOTOS.length);
+    }, 4000); // cambia cada 4 segundos
+    return () => clearInterval(id);
+  }, []);
+
   const active = useActiveSection(["club","escoles","competicio","agenda","noticies","galeria","socis","contacte"]);
   const [lang, setLang] = useState("CAT");
 
