@@ -40,7 +40,7 @@ const HERO_PHOTOS = [
   "/hero-botesocial.jpg",
 ];
 
-function App() {
+
   const [slide, setSlide] = useState(0);
 
   useEffect(() => {
@@ -63,14 +63,7 @@ function App() {
 }
 
 export default App;
-const [slide, setSlide] = useState(0);
 
-useEffect(() => {
-  const id = setInterval(() => {
-    setSlide((s) => (s + 1) % HERO_PHOTOS.length);
-  }, 4000); // cambia cada 4 segundos
-  return () => clearInterval(id);
-}, []);
 
 
 // --- Brand system ---
