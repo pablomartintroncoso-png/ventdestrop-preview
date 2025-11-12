@@ -41,28 +41,6 @@ const HERO_PHOTOS = [
 ];
 
 
-  const [slide, setSlide] = useState(0);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setSlide((s) => (s + 1) % HERO_PHOTOS.length);
-    }, 4000);
-    return () => clearInterval(id);
-  }, []);
-
-  return (
-    <>
-      {/* acá va todo tu contenido */}
-      <motion.div ...>
-        <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl">
-          {/* las imágenes */}
-        </div>
-      </motion.div>
-    </>
-  );
-}
-
-export default App;
 
 
 
