@@ -27,6 +27,7 @@ import {
   ExternalLink
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 
 // === Carrusel de imágenes del hero ===
@@ -233,8 +234,7 @@ export default function App() {
               <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
                 Prova una sessió <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
-              import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-
+              
 <Dialog>
   <DialogTrigger asChild>
     <Button size="lg" variant="outline" className="border-slate-300">
