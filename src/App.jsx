@@ -28,6 +28,52 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
+
+
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+// otros imports...
+
+// === Carrusel de imágenes del hero ===
+const HERO_PHOTOS = [
+  "/hero-botecompeti.jpg",
+  "/hero-boteescuela.jpg",
+  "/hero-botesocial.jpg",
+];
+
+function App() {
+  const [slide, setSlide] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setSlide((s) => (s + 1) % HERO_PHOTOS.length);
+    }, 4000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <>
+      {/* acá va todo tu contenido */}
+      <motion.div ...>
+        <div className="relative aspect-video rounded-2xl overflow-hidden shadow-xl">
+          {/* las imágenes */}
+        </div>
+      </motion.div>
+    </>
+  );
+}
+
+export default App;
+const [slide, setSlide] = useState(0);
+
+useEffect(() => {
+  const id = setInterval(() => {
+    setSlide((s) => (s + 1) % HERO_PHOTOS.length);
+  }, 4000); // cambia cada 4 segundos
+  return () => clearInterval(id);
+}, []);
+
+
 // --- Brand system ---
 const BRAND = {
   name: "Vent d’Estrop",
