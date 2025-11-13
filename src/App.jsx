@@ -170,10 +170,17 @@ export default function App() {
           </nav>
 
           {/* Actions */}
-          <div className="flex items-center gap-2">
-            <Button className="hidden md:inline-flex" style={{ backgroundColor: BRAND.primary }}>
-              Fes-te soci
-            </Button>
+          <a
+  href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="hidden md:inline-flex"
+>
+  <Button style={{ backgroundColor: BRAND.primary }}>
+    Fes-te soci
+  </Button>
+</a>
+
             <Button variant="outline" className="border-slate-300 hidden md:inline-flex" onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}>
               <Globe className="h-4 w-4 mr-1"/>{lang}
             </Button>
