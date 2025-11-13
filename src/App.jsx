@@ -170,25 +170,28 @@ export default function App() {
           </nav>
 
 {/* Actions */}
-<div className="flex items-center gap-2">
+          {/* Actions */}
+          <div className="hidden md:flex items-center gap-2">
+            <a
+              href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button style={{ backgroundColor: BRAND.primary }}>
+                Fes-te soci
+              </Button>
+            </a>
 
-  {/* Botón Fes-te soci */}
-  <a
-    href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="hidden md:inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium text-white shadow-sm"
-    style={{ backgroundColor: BRAND.primary }}
-  >
-    Fes-te soci
-  </a>
-
-  {/* Selector idioma */}
-  <Button variant="outline" className="border-slate-300 hidden md:inline-flex"
-    onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}>
-    <Globe className="h-4 w-4 mr-1"/>{lang}
-  </Button>
-
+            <Button
+              variant="outline"
+              className="border-slate-300"
+              onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
+            >
+              <Globe className="h-4 w-4 mr-1" />
+              {lang}
+            </Button>
+          </div>
+          
   {/* Menú móvil */}
   <Sheet>
     <SheetTrigger asChild>
