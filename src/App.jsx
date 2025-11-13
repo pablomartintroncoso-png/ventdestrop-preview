@@ -171,19 +171,19 @@ export default function App() {
 
           {/* Actions */}
  {/* Actions */}
-<Button
-  asChild
-  className="hidden md:inline-flex"
+
+{/* Actions */}
+<a
+  href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="hidden md:inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium text-white shadow-sm"
   style={{ backgroundColor: BRAND.primary }}
 >
-  <a
-    href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    Fes-te soci
-  </a>
-</Button>
+  Fes-te soci
+</a>
+
+  
 
 
             <Button variant="outline" className="border-slate-300 hidden md:inline-flex" onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}>
