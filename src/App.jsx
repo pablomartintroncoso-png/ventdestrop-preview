@@ -183,7 +183,14 @@ export default function App() {
   Fes-te soci
 </a>
 
-  
+  <a
+    href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Fes-te soci
+  </a>
+</Button>
 
 
             <Button variant="outline" className="border-slate-300 hidden md:inline-flex" onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}>
