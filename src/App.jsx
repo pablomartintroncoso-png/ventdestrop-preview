@@ -515,11 +515,19 @@ export default function App() {
       </footer>
 
       {/* Sticky join CTA */}
-      <div className="fixed bottom-4 right-4 md:right-6 z-50">
-        <Button size="lg" style={{ backgroundColor: BRAND.primary }} className="shadow-xl">
-          Fes-te soci <ExternalLink className="ml-2 h-4 w-4" />
-        </Button>
-      </div>
+     {/* Sticky join CTA */}
+<div className="fixed bottom-4 right-4 md:right-6 z-50">
+  <a
+    href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <Button size="lg" style={{ backgroundColor: BRAND.primary }} className="shadow-xl">
+      Fes-te soci <ExternalLink className="ml-2 h-4 w-4" />
+    </Button>
+  </a>
+</div>
+
     </Shell>
   );
 }
