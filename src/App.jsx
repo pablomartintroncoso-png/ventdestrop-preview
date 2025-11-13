@@ -169,50 +169,69 @@ export default function App() {
             ))}
           </nav>
 
-
 {/* Actions */}
-<a
-  href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="hidden md:inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium text-white shadow-sm"
-  style={{ backgroundColor: BRAND.primary }}
->
-  Fes-te soci
-</a>
+<div className="flex items-center gap-2">
 
-            <Button variant="outline" className="border-slate-300 hidden md:inline-flex" onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}>
-              <Globe className="h-4 w-4 mr-1"/>{lang}
-            </Button>
-            {/* Mobile menu */}
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button size="icon" variant="outline" className="md:hidden">
-                  <Menu className="h-5 w-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-72">
-                <div className="flex items-center gap-2 mb-6">
-                  <img src={BRAND.logo} alt="logo" className="h-7" />
-                  <span className="font-semibold">{BRAND.name}</span>
-                </div>
-                <nav className="grid gap-3">
-                  {NAV.map((n) => (
-                    <a key={n.href} href={n.href} className="text-slate-700" aria-label={n.label}>{n.label}</a>
-                  ))}
-                </nav>
-                <Separator className="my-4" />
-                <div className="grid gap-2">
-                  <Button style={{ backgroundColor: BRAND.primary }}>Fes-te soci</Button>
-                  <Button variant="outline" onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}>{lang}</Button>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
-        </div>
-      </header>
+  {/* Botón Fes-te soci */}
+  <a
+    href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="hidden md:inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium text-white shadow-sm"
+    style={{ backgroundColor: BRAND.primary }}
+  >
+    Fes-te soci
+  </a>
 
-      {/* Hero */}
+  {/* Selector idioma */}
+  <Button variant="outline" className="border-slate-300 hidden md:inline-flex"
+    onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}>
+    <Globe className="h-4 w-4 mr-1"/>{lang}
+  </Button>
+
+  {/* Menú móvil */}
+  <Sheet>
+    <SheetTrigger asChild>
+      <Button size="icon" variant="outline" className="md:hidden">
+        <Menu className="h-5 w-5" />
+      </Button>
+    </SheetTrigger>
+
+    <SheetContent side="right" className="w-72">
+      <div className="flex items-center gap-2 mb-6">
+        <img src={BRAND.logo} alt="logo" className="h-7" />
+        <span className="font-semibold">{BRAND.name}</span>
+      </div>
+
+      <nav className="grid gap-3">
+        {NAV.map((n) => (
+          <a key={n.href} href={n.href} className="text-slate-700">{n.label}</a>
+        ))}
+      </nav>
+
+      <Separator className="my-4" />
+
+      <div className="grid gap-2">
+        <a
+          href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button style={{ backgroundColor: BRAND.primary }} className="w-full">
+            Fes-te soci
+          </Button>
+        </a>
+
+        <Button variant="outline"
+          onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}>
+          {lang}
+        </Button>
+      </div>
+    </SheetContent>
+  </Sheet>
+</div>
+
+
       <section
   className="relative bg-gradient-to-b from-white to-[var(--light)] pb-12 md:pb-20"
   id="top"
