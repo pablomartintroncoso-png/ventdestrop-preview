@@ -234,11 +234,12 @@ export default function App() {
               <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
                 Prova una sessió <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
-<a href="/calendario.jpeg" target="_blank" rel="noopener noreferrer">
+<a href="/calendario.jpg" target="_blank" rel="noopener" aria-label="Calendari d’activitats (imatge)">
   <Button size="lg" variant="outline" className="border-slate-300">
     Calendari d’activitats
   </Button>
 </a>
+
 
 
 
