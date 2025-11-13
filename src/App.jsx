@@ -233,7 +233,7 @@ export default function App() {
     </SheetContent>
   </Sheet>
 </div>
-
+</header>
 
       <section
   className="relative bg-gradient-to-b from-white to-[var(--light)] pb-12 md:pb-20"
