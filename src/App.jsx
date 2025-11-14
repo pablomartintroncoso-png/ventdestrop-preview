@@ -418,6 +418,55 @@ export default function App() {
   </Card>
 
 </div>
+ <section id="social" className="py-16 bg-white">
+  <SectionTitle kicker="Social" title="Activitats Socials">
+
+             Descomptes per famílies, accés a material i activitats exclusives.
+        </SectionTitle>
+        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
+
+  {/* Foto 1 */}
+  <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
+    <img 
+      src="/social-1.jpg" 
+      alt="Activitat social del club" 
+      className="w-full h-full object-cover"
+    />
+  </div>
+
+  {/* Foto 2 */}
+  <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
+    <img 
+      src="/social-2.jpg" 
+      alt="Esdeveniment comunitari" 
+      className="w-full h-full object-cover"
+    />
+  </div>
+
+  {/* Texto + horarios */}
+  <Card className="rounded-2xl shadow-sm">
+    <CardHeader>
+      <CardTitle>Activitats socials</CardTitle>
+      <CardDescription>
+        Rem social, jornades familiars, sortides al mar i activitats de comunitat per a totes les edats.
+      </CardDescription>
+    </CardHeader>
+
+    <CardContent>
+      <ul className="space-y-2 text-slate-700">
+        <li>• Rem social – Dm i Dv 17:00–18:30</li>
+        <li>• Sortides familiars – Caps de setmana</li>
+        <li>• Activitats comunitàries mensuals</li>
+        <li>• Sessions d’iniciació per nous membres</li>
+      </ul>
+
+      <Button size="lg" style={{ backgroundColor: BRAND.primary }} className="mt-4">
+        Prova una sessió
+      </Button>
+    </CardContent>
+  </Card>
+
+</div>
 
       </section>
 
@@ -477,56 +526,7 @@ export default function App() {
       </section>
 
       {/* Membership */}
-      <section id="social" className="py-16 bg-white">
-  <SectionTitle kicker="Social" title="Activitats Socials">
-
-             Descomptes per famílies, accés a material i activitats exclusives.
-        </SectionTitle>
-        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
-
-  {/* Foto 1 */}
-  <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
-    <img 
-      src="/social-1.jpg" 
-      alt="Activitat social del club" 
-      className="w-full h-full object-cover"
-    />
-  </div>
-
-  {/* Foto 2 */}
-  <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
-    <img 
-      src="/social-2.jpg" 
-      alt="Esdeveniment comunitari" 
-      className="w-full h-full object-cover"
-    />
-  </div>
-
-  {/* Texto + horarios */}
-  <Card className="rounded-2xl shadow-sm">
-    <CardHeader>
-      <CardTitle>Activitats socials</CardTitle>
-      <CardDescription>
-        Rem social, jornades familiars, sortides al mar i activitats de comunitat per a totes les edats.
-      </CardDescription>
-    </CardHeader>
-
-    <CardContent>
-      <ul className="space-y-2 text-slate-700">
-        <li>• Rem social – Dm i Dv 17:00–18:30</li>
-        <li>• Sortides familiars – Caps de setmana</li>
-        <li>• Activitats comunitàries mensuals</li>
-        <li>• Sessions d’iniciació per nous membres</li>
-      </ul>
-
-      <Button size="lg" style={{ backgroundColor: BRAND.primary }} className="mt-4">
-        Prova una sessió
-      </Button>
-    </CardContent>
-  </Card>
-
-</div>
-
+     
         {/* Sponsors */}
         <div className="max-w-7xl mx-auto px-4 md:px-6 mt-12">
           <div className="flex items-center justify-between flex-wrap gap-3">
