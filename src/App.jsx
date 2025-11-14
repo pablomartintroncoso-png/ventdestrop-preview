@@ -59,12 +59,13 @@ const NAV = [
   { label: "Club", href: "#club" },
   { label: "Escoles", href: "#escoles" },
   { label: "Competició", href: "#competicio" },
+  { label: "Social", href: "#social" },
   { label: "Agenda", href: "#agenda" },
   { label: "Notícies", href: "#noticies" },
   { label: "Galeria", href: "#galeria" },
-  { label: "Social", href: "#social" },
   { label: "Contacte", href: "#contacte" },
 ];
+
 
 const EVENTS = [
   { date: "24 NOV", title: "Regata Llagut Mediterrani – Badia de Cambrils", location: "Port de Cambrils", desc: "Prova del calendari federatiu. Categories absolut i veterà." },
