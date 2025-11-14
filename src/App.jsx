@@ -477,8 +477,9 @@ export default function App() {
       </section>
 
       {/* Membership */}
-      <section id="socis" className="py-16 bg-white">
-        <SectionTitle kicker="Fes-te soci" title="Quotes i beneficis">
+      <section id="social" className="py-16 bg-white">
+  <SectionTitle kicker="Social" title="Activitats Socials">
+
              Descomptes per famílies, accés a material i activitats exclusives.
         </SectionTitle>
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
