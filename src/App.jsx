@@ -515,15 +515,55 @@ export default function App() {
         </div>
       </section>
 
-      {/* Gallery */}
-      <section id="galeria" className="py-16 bg-[var(--light)]">
-        <SectionTitle kicker="Moments" title="Galeria" />
-        <div className="max-w-7xl mx-auto px-4 md:px-6 grid grid-cols-2 md:grid-cols-4 gap-3">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="aspect-[4/3] bg-white rounded-xl border grid place-items-center text-slate-400">Foto {i+1}</div>
-          ))}
-        </div>
-      </section>
+     {/* Meteo */}
+<section id="meteo" className="py-16 bg-[var(--light)]">
+  <SectionTitle
+    kicker="Meteo"
+    title="Condicions de mar i vent"
+  >
+    Consulta el vent, onatge i previsió abans de sortir a remar.
+  </SectionTitle>
+
+  <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
+    {/* Mapa / widget meteo */}
+    <div className="rounded-2xl overflow-hidden shadow-sm bg-slate-200 h-[420px]">
+      <iframe
+        src="https://remcambrils.com/meteo"
+        title="Meteo rem Cambrils"
+        className="w-full h-full border-0"
+      />
+    </div>
+
+    {/* Explicació + enllaç ampliat */}
+    <Card className="rounded-2xl shadow-sm">
+      <CardHeader>
+        <CardTitle>Meteo per al rem</CardTitle>
+        <CardDescription>
+          Revisem vent, onatge i condicions abans de programar sortides i entrenaments.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-3 text-slate-700 text-sm">
+        <p>Utilitza aquest mapa per:</p>
+        <ul className="list-disc list-inside space-y-1">
+          <li>Comprovar la direcció i força del vent.</li>
+          <li>Veure l&apos;estat de la mar a la zona de Cambrils.</li>
+          <li>Planificar entrenaments i sortides amb seguretat.</li>
+        </ul>
+
+        <a
+          href="https://remcambrils.com/meteo"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button variant="outline" className="mt-2 border-slate-300">
+            Obrir meteo en una pestanya nova
+          </Button>
+        </a>
+      </CardContent>
+    </Card>
+  </div>
+</section>
+
 
       {/* Membership */}
      
