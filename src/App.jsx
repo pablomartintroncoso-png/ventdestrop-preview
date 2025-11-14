@@ -62,8 +62,7 @@ const NAV = [
   { label: "Social", href: "#social" },
   { label: "Agenda", href: "#agenda" },
   { label: "Notícies", href: "#noticies" },
-  { label: "Galeria", href: "#galeria" },
-  { label: "Contacte", href: "#contacte" },
+    { label: "Contacte", href: "#contacte" },
 ];
 
 
