@@ -371,24 +371,9 @@ export default function App() {
   >
     Veure més fotos
   </Button>
-</div>
-<CardContent>
-  <div className="mt-4 flex flex-wrap gap-2">
-    <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
-      Prova una sessió
-    </Button>
 
-    <Button
-      variant="outline"
-      size="lg"
-      onClick={() => window.location.href = "/galeria"}
-    >
-      Veure més fotos
-    </Button>
-  </div>
 </CardContent>
 
-    </CardContent>
   </Card>
 
 </div>
