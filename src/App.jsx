@@ -374,35 +374,51 @@ export default function App() {
         <SectionTitle kicker="Competició" title="Equips i resultats">
           Participem en llagut mediterrani, rem de mar i regates locals.
         </SectionTitle>
-        <div className="max-w-7xl mx-auto px-4 md:px-6 grid lg:grid-cols-3 gap-6">
-          <Card className="rounded-2xl shadow-sm lg:col-span-2">
-            <CardHeader>
-              <CardTitle>Equips 2025</CardTitle>
-              <CardDescription>Absolut, Veterà, Femení, Mixt</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="grid md:grid-cols-2 gap-3 text-slate-700">
-                <li>• Absolut Masculí – Entrenador: J. Pons</li>
-                <li>• Absolut Femení – Entrenadora: M. Serra</li>
-                <li>• Veterà – Entrenador: R. Vidal</li>
-                <li>• Mixt – Coordinació tècnica</li>
-              </ul>
-            </CardContent>
-          </Card>
-          <Card className="rounded-2xl shadow-sm">
-            <CardHeader>
-              <CardTitle>Últims resultats</CardTitle>
-              <CardDescription>Actualització mensual</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-3 text-slate-700">
-                <li>🥉 3r – Campionat Catalunya Llagut (Absolut)</li>
-                <li>🥈 2n – Regata Costa Daurada (Veterà)</li>
-                <li>🥇 1r – Trofeu Festa Major (Mixt)</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
+       <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
+
+  {/* Foto 1 */}
+  <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
+    <img 
+      src="/competi-1.jpg" 
+      alt="Entrenaments de competició" 
+      className="w-full h-full object-cover"
+    />
+  </div>
+
+  {/* Foto 2 */}
+  <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
+    <img 
+      src="/competi-2.jpg" 
+      alt="Equip de regates" 
+      className="w-full h-full object-cover"
+    />
+  </div>
+
+  {/* Texto + horarios */}
+  <Card className="rounded-2xl shadow-sm">
+    <CardHeader>
+      <CardTitle>Equips i entrenaments</CardTitle>
+      <CardDescription>
+        Absolut, Veterà, Femení i Mixt. Sessions setmanals per millorar tècnica, resistència i coordinació.
+      </CardDescription>
+    </CardHeader>
+
+    <CardContent>
+      <ul className="space-y-2 text-slate-700">
+        <li>• Absolut – Dl, Dmc, Dvj 20:00–22:00</li>
+        <li>• Veterà – Dm i Dv 19:00–20:30</li>
+        <li>• Femení – Dx i Dv 18:00–19:30</li>
+        <li>• Mixt – Ds 09:00–11:00</li>
+      </ul>
+
+      <Button size="lg" style={{ backgroundColor: BRAND.primary }} className="mt-4">
+        Prova una sessió
+      </Button>
+    </CardContent>
+  </Card>
+
+</div>
+
       </section>
 
       {/* Agenda */}
