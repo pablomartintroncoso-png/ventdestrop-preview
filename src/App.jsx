@@ -362,6 +362,15 @@ export default function App() {
       <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
         Prova una sessió
       </Button>
+      <Button
+  size="lg"
+  variant="outline"
+  className="mt-2 w-full"
+  onClick={() => window.location.href = "/galeria"}
+>
+  Veure més fotos
+</Button>
+
     </CardContent>
   </Card>
 
