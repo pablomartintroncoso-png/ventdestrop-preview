@@ -315,20 +315,58 @@ export default function App() {
         <SectionTitle kicker="Programes" title="Escoles de rem">
           Iniciació, tecnificació i veterà. Plans adaptats per edat i objectiu, amb horaris flexibles.
         </SectionTitle>
-        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
-          {[{ tag: "Infantil (8–12)", title: "Descobreix el rem", body: "Joc, tècnica bàsica i seguretat. Dimarts i dijous 17:00–18:15." }, { tag: "Juvenil (13–17)", title: "Tecnificació", body: "Millora gest tècnic, força i treball en equip. Dll-Dmc-Dvj 18:30–20:00." }, { tag: "Adults", title: "Salut i competició", body: "Grups fitness i equip de llagut. Matí o vespre." }].map((p, i) => (
-            <Card key={i} className="rounded-2xl shadow-sm">
-              <CardHeader>
-                <Badge variant="secondary" className="w-fit">{p.tag}</Badge>
-                <CardTitle className="mt-2">{p.title}</CardTitle>
-                <CardDescription>{p.body}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button style={{ backgroundColor: BRAND.accent }}>Inscriu-t’hi</Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+       <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
+
+  {/* Tarjeta 1 – FOTO */}
+  <Card className="rounded-2xl shadow-sm overflow-hidden">
+    <img
+      src="/hero-boteescuela.jpg"
+      alt="Escola infantil"
+      className="w-full h-48 object-cover"
+    />
+    <CardHeader>
+      <Badge variant="secondary" className="w-fit">Infantil (8–12)</Badge>
+      <CardTitle className="mt-2">Descobreix el rem</CardTitle>
+    </CardHeader>
+  </Card>
+
+  {/* Tarjeta 2 – FOTO */}
+  <Card className="rounded-2xl shadow-sm overflow-hidden">
+    <img
+      src="/hero-botecompeti.jpg"
+      alt="Escola juvenil"
+      className="w-full h-48 object-cover"
+    />
+    <CardHeader>
+      <Badge variant="secondary" className="w-fit">Juvenil (13–17)</Badge>
+      <CardTitle className="mt-2">Tecnificació</CardTitle>
+    </CardHeader>
+  </Card>
+
+  {/* Tarjeta 3 – HORARIS + BOTÓ */}
+  <Card className="rounded-2xl shadow-sm">
+    <CardHeader>
+      <Badge variant="secondary" className="w-fit">Adults</Badge>
+      <CardTitle className="mt-2">Salut i competició</CardTitle>
+      <CardDescription>
+        Grups fitness i equip de llagut.  
+        Matí o vespre.  
+        <br /><br />
+        <strong>Horaris:</strong><br />
+        Dilluns – 19:00–20:30<br />
+        Dimecres – 19:00–20:30<br />
+        Dissabte – 09:00–11:00
+      </CardDescription>
+    </CardHeader>
+    <CardContent>
+      <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
+        Prova una sessió
+      </Button>
+    </CardContent>
+  </Card>
+
+</div>
+
       </section>
 
       {/* Competition */}
