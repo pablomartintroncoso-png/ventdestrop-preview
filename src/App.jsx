@@ -479,24 +479,52 @@ export default function App() {
       {/* Membership */}
       <section id="socis" className="py-16 bg-white">
         <SectionTitle kicker="Fes-te soci" title="Quotes i beneficis">
-          Descomptes per famílies, accés a material i activitats exclusives.
+             Descomptes per famílies, accés a material i activitats exclusives.
         </SectionTitle>
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
-          {[{ plan: "Base", price: "15€ / mes", perks: ["Accés entrenaments","Participació activitats","Assegurança bàsica"] },{ plan: "Complet", price: "25€ / mes", perks: ["Totes les sessions","Preferència regates","Equipació bàsica"] },{ plan: "Família", price: "60€ / mes", perks: ["2 adults + 2 infants","Descomptes events","Pack benvinguda"] }].map((p, i) => (
-            <Card key={i} className="rounded-2xl shadow-sm">
-              <CardHeader>
-                <CardTitle>{p.plan}</CardTitle>
-                <CardDescription>{p.price}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="text-slate-700 space-y-2 mb-4">
-                  {p.perks.map((k, j) => <li key={j}>• {k}</li>)}
-                </ul>
-                <Button style={{ backgroundColor: BRAND.primary }}>Unir-me</Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+
+  {/* Foto 1 */}
+  <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
+    <img 
+      src="/social-1.jpg" 
+      alt="Activitat social del club" 
+      className="w-full h-full object-cover"
+    />
+  </div>
+
+  {/* Foto 2 */}
+  <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
+    <img 
+      src="/social-2.jpg" 
+      alt="Esdeveniment comunitari" 
+      className="w-full h-full object-cover"
+    />
+  </div>
+
+  {/* Texto + horarios */}
+  <Card className="rounded-2xl shadow-sm">
+    <CardHeader>
+      <CardTitle>Activitats socials</CardTitle>
+      <CardDescription>
+        Rem social, jornades familiars, sortides al mar i activitats de comunitat per a totes les edats.
+      </CardDescription>
+    </CardHeader>
+
+    <CardContent>
+      <ul className="space-y-2 text-slate-700">
+        <li>• Rem social – Dm i Dv 17:00–18:30</li>
+        <li>• Sortides familiars – Caps de setmana</li>
+        <li>• Activitats comunitàries mensuals</li>
+        <li>• Sessions d’iniciació per nous membres</li>
+      </ul>
+
+      <Button size="lg" style={{ backgroundColor: BRAND.primary }} className="mt-4">
+        Prova una sessió
+      </Button>
+    </CardContent>
+  </Card>
+
+</div>
 
         {/* Sponsors */}
         <div className="max-w-7xl mx-auto px-4 md:px-6 mt-12">
