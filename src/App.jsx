@@ -519,50 +519,55 @@ export default function App() {
 <section id="meteo" className="py-16 bg-[var(--light)]">
   <SectionTitle
     kicker="Meteo"
-    title="Condicions de mar i vent"
+    title="Condicions de vent i mar"
   >
-    Consulta el vent, onatge i previsió abans de sortir a remar.
+    Informació actualitzada per planificar les sortides amb seguretat.
   </SectionTitle>
 
   <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
-    {/* Mapa / widget meteo */}
-    <div className="rounded-2xl overflow-hidden shadow-sm bg-slate-200 h-[420px]">
+
+    {/* Widget Windy */}
+    <div className="rounded-2xl overflow-hidden shadow-lg bg-slate-200 h-[420px]">
       <iframe
-        src="https://remcambrils.com/meteo"
-        title="Meteo rem Cambrils"
-        className="w-full h-full border-0"
-      />
+        width="100%"
+        height="100%"
+        src="https://embed.windy.com/embed2.html?lat=41.0743&lon=1.0564&detailLat=41.0743&detailLon=1.0564&zoom=11&level=surface&overlay=wind&product=ecmwf&menu=&message=&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C"
+        frameBorder="0"
+      ></iframe>
     </div>
 
-    {/* Explicació + enllaç ampliat */}
+    {/* Explicació */}
     <Card className="rounded-2xl shadow-sm">
       <CardHeader>
-        <CardTitle>Meteo per al rem</CardTitle>
+        <CardTitle>Vent i condicions del mar</CardTitle>
         <CardDescription>
-          Revisem vent, onatge i condicions abans de programar sortides i entrenaments.
+          Consulta el vent actual, les ràfegues, l'onatge i l'evolució per hores.
         </CardDescription>
       </CardHeader>
+
       <CardContent className="space-y-3 text-slate-700 text-sm">
-        <p>Utilitza aquest mapa per:</p>
         <ul className="list-disc list-inside space-y-1">
-          <li>Comprovar la direcció i força del vent.</li>
-          <li>Veure l&apos;estat de la mar a la zona de Cambrils.</li>
-          <li>Planificar entrenaments i sortides amb seguretat.</li>
+          <li>Direcció i intensitat del vent</li>
+          <li>Ràfegues i previsió per hores</li>
+          <li>Especificació per nivell del mar i superfície</li>
+          <li>Model ECMWF (el més fiable del món)</li>
         </ul>
 
         <a
-          href="https://remcambrils.com/meteo"
+          href="https://www.windy.com/?41.0743,1.0564,11"
           target="_blank"
           rel="noopener noreferrer"
         >
           <Button variant="outline" className="mt-2 border-slate-300">
-            Obrir meteo en una pestanya nova
+            Obrir totes les capes meteorològiques
           </Button>
         </a>
       </CardContent>
     </Card>
+
   </div>
 </section>
+
 
 
       {/* Membership */}
