@@ -617,7 +617,7 @@ export default function App() {
             ))}
           </div>
         </div>
-      </section>
+    
 
       {/* CTA */}
       <section className="py-16 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white">
