@@ -343,7 +343,7 @@ export default function App() {
     </CardHeader>
   </Card>
 
-  {/* Tarjeta 3 – HORARIS + BOTÓ */}
+   {/* Tarjeta 3 – HORARIS + BOTÓ */}
   <Card className="rounded-2xl shadow-sm">
     <CardHeader>
       <Badge variant="secondary" className="w-fit">Adults</Badge>
@@ -358,22 +358,24 @@ export default function App() {
         Dissabte – 09:00–11:00
       </CardDescription>
     </CardHeader>
-   <div className="mt-4 flex gap-3">
-  <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
-    Prova una sessió
-  </Button>
 
-  <Button
-    variant="outline"
-    size="lg"
-    onClick={() => (window.location.href = "/galeria")}
-    >
-    Veure més fotos
-  </Button>
-</div>
-    </div>
+    <CardContent>
+      <div className="mt-4 flex flex-wrap gap-2">
+        <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
+          Prova una sessió
+        </Button>
 
-      </section>
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={() => (window.location.href = "/galeria")}
+        >
+          Veure més fotos
+        </Button>
+      </div>
+    </CardContent>
+  </Card>
+
 
       {/* Competition */}
       <section id="competicio" className="py-16 bg-white">
