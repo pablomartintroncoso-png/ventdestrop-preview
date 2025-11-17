@@ -371,7 +371,6 @@ export default function App() {
     Veure més fotos
   </Button>
 </div>
-</div>
 
       </section>
 
