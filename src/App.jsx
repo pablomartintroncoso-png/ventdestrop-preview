@@ -358,8 +358,7 @@ export default function App() {
         Dissabte – 09:00–11:00
       </CardDescription>
     </CardHeader>
-    <CardContent>
-      <div className="mt-4 flex flex-wrap gap-2">
+   <div className="mt-4 flex gap-3">
   <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
     Prova una sessió
   </Button>
@@ -367,15 +366,11 @@ export default function App() {
   <Button
     variant="outline"
     size="lg"
-    onClick={() => window.location.href = "/galeria"}
+    onClick={() => (window.location.href = "/galeria")}
   >
     Veure més fotos
   </Button>
-
-</CardContent>
-
-  </Card>
-
+</div>
 </div>
 
       </section>
