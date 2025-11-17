@@ -378,7 +378,8 @@ export default function App() {
   </CardContent>
 
   </Card>
-
+</div>
+</section>
 
       {/* Competition */}
       <section id="competicio" className="py-16 bg-white">
