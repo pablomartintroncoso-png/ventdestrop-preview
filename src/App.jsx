@@ -343,7 +343,7 @@ export default function App() {
     </CardHeader>
   </Card>
 
-   {/* Tarjeta 3 – HORARIS + BOTÓ */}
+    {/* Tarjeta 3 – HORARIS + BOTÓ */}
   <Card className="rounded-2xl shadow-sm">
     <CardHeader>
       <Badge variant="secondary" className="w-fit">Adults</Badge>
@@ -368,7 +368,7 @@ export default function App() {
         <Button
           variant="outline"
           size="lg"
-          onClick={() => (window.location.href = "/galeria")}
+          onClick={() => { window.location.href = "/galeria"; }}
         >
           Veure més fotos
         </Button>
