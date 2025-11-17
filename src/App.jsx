@@ -367,10 +367,11 @@ export default function App() {
     variant="outline"
     size="lg"
     onClick={() => (window.location.href = "/galeria")}
-  >
+    >
     Veure més fotos
   </Button>
 </div>
+    </div>
 
       </section>
 
