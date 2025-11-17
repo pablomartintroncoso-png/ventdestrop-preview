@@ -415,19 +415,7 @@ export default function App() {
       </CardDescription>
     </CardHeader>
 
-    <CardContent>
-      <ul className="space-y-2 text-slate-700">
-        <li>• Absolut – Dl, Dmc, Dvj 20:00–22:00</li>
-        <li>• Veterà – Dm i Dv 19:00–20:30</li>
-        <li>• Femení – Dx i Dv 18:00–19:30</li>
-        <li>• Mixt – Ds 09:00–11:00</li>
-      </ul>
-
-      <Button size="lg" style={{ backgroundColor: BRAND.primary }} className="mt-4">
-        Prova una sessió
-      </Button>
-    </CardContent>
-  </Card>
+   
 
 </div>
  <section id="social" className="py-16 bg-white">
