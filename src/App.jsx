@@ -298,75 +298,76 @@ export default function App() {
 
     
 
-      {/* Schools */}
-      <section id="escoles" className="py-16">
-        <SectionTitle kicker="Programes" title="Escoles de rem">
-          Iniciació, tecnificació i veterà. Plans adaptats per edat i objectiu, amb horaris flexibles.
-        </SectionTitle>
-       <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
+     {/* Schools */}
+<section id="escoles" className="py-16">
+  <SectionTitle kicker="Programes" title="Escoles de rem">
+    Iniciació, tecnificació i veterà. Plans adaptats per edat i objectiu, amb horaris flexibles.
+  </SectionTitle>
 
-  {/* Tarjeta 1 – FOTO */}
-  <Card className="rounded-2xl shadow-sm overflow-hidden">
-    <img
-      <img src="/escola-1.jpg" ... />
-      alt="Escola infantil"
-      className="w-full h-48 object-cover"
-    />
-    <CardHeader>
-      <Badge variant="secondary" className="w-fit">Infantil (8–12)</Badge>
-      <CardTitle className="mt-2">Descobreix el rem</CardTitle>
-    </CardHeader>
-  </Card>
+  <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
 
-  {/* Tarjeta 2 – FOTO */}
-  <Card className="rounded-2xl shadow-sm overflow-hidden">
-    <img
-      <img src="/escola-2.jpg" ... />
-      alt="Escola juvenil"
-      className="w-full h-48 object-cover"
-    />
-    <CardHeader>
-      <Badge variant="secondary" className="w-fit">Juvenil (13–17)</Badge>
-      <CardTitle className="mt-2">Tecnificació</CardTitle>
-    </CardHeader>
-  </Card>
+    {/* Tarjeta 1 – FOTO */}
+    <Card className="rounded-2xl shadow-sm overflow-hidden">
+      <img
+        src="/escola-1.jpg"
+        alt="Escola infantil"
+        className="w-full h-48 object-cover"
+      />
+      <CardHeader>
+        <Badge variant="secondary" className="w-fit">Infantil (8–12)</Badge>
+        <CardTitle className="mt-2">Descobreix el rem</CardTitle>
+      </CardHeader>
+    </Card>
+
+    {/* Tarjeta 2 – FOTO */}
+    <Card className="rounded-2xl shadow-sm overflow-hidden">
+      <img
+        src="/escola-2.jpg"
+        alt="Escola juvenil"
+        className="w-full h-48 object-cover"
+      />
+      <CardHeader>
+        <Badge variant="secondary" className="w-fit">Juvenil (13–17)</Badge>
+        <CardTitle className="mt-2">Tecnificació</CardTitle>
+      </CardHeader>
+    </Card>
 
     {/* Tarjeta 3 – HORARIS + BOTÓ */}
-  <Card className="rounded-2xl shadow-sm">
-    <CardHeader>
-      <Badge variant="secondary" className="w-fit">Adults</Badge>
-      <CardTitle className="mt-2">Salut i competició</CardTitle>
-      <CardDescription>
-        Grups fitness i equip de llagut.  
-        Matí o vespre.  
-        <br /><br />
-        <strong>Horaris:</strong><br />
-        Dilluns – 19:00–20:30<br />
-        Dimecres – 19:00–20:30<br />
-        Dissabte – 09:00–11:00
-      </CardDescription>
-    </CardHeader>
+    <Card className="rounded-2xl shadow-sm">
+      <CardHeader>
+        <Badge variant="secondary" className="w-fit">Adults</Badge>
+        <CardTitle className="mt-2">Salut i competició</CardTitle>
+        <CardDescription>
+          Grups fitness i equip de llagut.  
+          Matí o vespre.  
+          <br /><br />
+          <strong>Horaris:</strong><br />
+          Dilluns – 19:00–20:30<br />
+          Dimecres – 19:00–20:30<br />
+          Dissabte – 09:00–11:00
+        </CardDescription>
+      </CardHeader>
 
-     <CardContent>
-    <div className="mt-4 flex flex-wrap gap-2">
-      <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
-        Prova una sessió
-      </Button>
+      <CardContent>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
+            Prova una sessió
+          </Button>
 
-      <Button
-        variant="outline"
-        size="lg"
-        onClick={() => {
-          window.location.href = "/galeria";
-        }}
-      >
-        Veure més fotos
-      </Button>
-    </div>
-  </CardContent>
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => {
+              window.location.href = "/galeria";
+            }}
+          >
+            Veure més fotos
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
 
-  </Card>
-</div>
+  </div>
 </section>
 
            {/* Competition */}
