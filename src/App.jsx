@@ -296,19 +296,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Value props */}
-      <section id="club" className="py-14 bg-[var(--light)]">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
-          {[{ title: "Comunitat i salut", desc: "Activitat inclusiva per a totes les edats amb programes de benestar." }, { title: "Formació contínua", desc: "Escoles de rem base, juvenil i adult amb tècnics titulats." }, { title: "Competició", desc: "Equipaments, calendari i staff per portar-te al següent nivell." }].map((v, i) => (
-            <Card key={i} className="rounded-2xl shadow-sm">
-              <CardHeader>
-                <CardTitle>{v.title}</CardTitle>
-                <CardDescription>{v.desc}</CardDescription>
-              </CardHeader>
-            </Card>
-          ))}
-        </div>
-      </section>
+    
 
       {/* Schools */}
       <section id="escoles" className="py-16">
