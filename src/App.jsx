@@ -311,7 +311,7 @@ export default function App() {
       <img
         src="/escola-1.jpg"
         alt="Escola infantil"
-        className="w-full h-48 object-cover"
+        className="w-full h-64 object-cover"
       />
       <CardHeader>
                       </CardHeader>
@@ -322,7 +322,7 @@ export default function App() {
       <img
         src="/escola-2.jpg"
         alt="Escola juvenil"
-        className="w-full h-48 object-cover"
+        className="w-full h-64 object-cover"
       />
       <CardHeader>
                       </CardHeader>
