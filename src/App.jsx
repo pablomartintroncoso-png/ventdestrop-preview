@@ -314,8 +314,7 @@ export default function App() {
         className="w-full h-48 object-cover"
       />
       <CardHeader>
-                <CardTitle className="mt-2">Descobreix el rem</CardTitle>
-      </CardHeader>
+                      </CardHeader>
     </Card>
 
     {/* Tarjeta 2 – FOTO */}
@@ -326,8 +325,7 @@ export default function App() {
         className="w-full h-48 object-cover"
       />
       <CardHeader>
-                <CardTitle className="mt-2">Tecnificació</CardTitle>
-      </CardHeader>
+                      </CardHeader>
     </Card>
 
     {/* Tarjeta 3 – HORARIS + BOTÓ */}
