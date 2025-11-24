@@ -314,8 +314,7 @@ export default function App() {
         className="w-full h-48 object-cover"
       />
       <CardHeader>
-        <Badge variant="secondary" className="w-fit">Infantil (8–12)</Badge>
-        <CardTitle className="mt-2">Descobreix el rem</CardTitle>
+                <CardTitle className="mt-2">Descobreix el rem</CardTitle>
       </CardHeader>
     </Card>
 
@@ -327,8 +326,7 @@ export default function App() {
         className="w-full h-48 object-cover"
       />
       <CardHeader>
-        <Badge variant="secondary" className="w-fit">Juvenil (13–17)</Badge>
-        <CardTitle className="mt-2">Tecnificació</CardTitle>
+                <CardTitle className="mt-2">Tecnificació</CardTitle>
       </CardHeader>
     </Card>
 
