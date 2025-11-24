@@ -308,7 +308,7 @@ export default function App() {
   {/* Tarjeta 1 – FOTO */}
   <Card className="rounded-2xl shadow-sm overflow-hidden">
     <img
-      src="/hero-boteescuela.jpg"
+      <img src="/escola-1.jpg" ... />
       alt="Escola infantil"
       className="w-full h-48 object-cover"
     />
@@ -321,7 +321,7 @@ export default function App() {
   {/* Tarjeta 2 – FOTO */}
   <Card className="rounded-2xl shadow-sm overflow-hidden">
     <img
-      src="/hero-botecompeti.jpg"
+      <img src="/escola-2.jpg" ... />
       alt="Escola juvenil"
       className="w-full h-48 object-cover"
     />
