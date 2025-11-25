@@ -584,16 +584,6 @@ export default function App() {
 
 
 
-      {/* Membership */}
-     
-        {/* Sponsors */}
-        <div className="max-w-7xl mx-auto px-4 md:px-6 mt-12">
-          <div className="flex items-center justify-between flex-wrap gap-3">
-            {SPONSORS.map((s, i) => (
-              <span key={i} className="text-sm text-slate-500">{s}</span>
-            ))}
-          </div>
-        </div>
     
 {/* Sponsors */}
 <section className="py-12 bg-white">
