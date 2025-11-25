@@ -78,25 +78,6 @@ const NEWS = [
   { title: "Projecte de renovació del varador", excerpt: "Presentem el pla d’infraestructura per millorar l’accessibilitat i el manteniment…" },
 ];
 
-{/* Sponsors */}
-<section className="py-12 bg-white">
-  <div className="max-w-7xl mx-auto px-4 md:px-6 overflow-x-auto">
-    <div className="flex items-center gap-10 animate-scroll whitespace-nowrap">
-
-      <img src="/logos/radio-cambrils.png" alt="Ràdio Cambrils" className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-      <img src="/logos/club-nautic-cambrils.png" alt="Club Nàutic Cambrils" className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-      <img src="/logos/castro.png" alt="A.N. Castro" className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-      <img src="/logos/fcr.png" alt="FCR" className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-      <img src="/logos/ajuntament-cambrils.png" alt="Ajuntament de Cambrils" className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-      <img src="/logos/savall.png" alt="Savall" className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-      <img src="/logos/comaigua.png" alt="Comaigua" className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-      <img src="/logos/acuamar.png" alt="Acuamar" className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-      <img src="/logos/revista-cambrils.png" alt="Revista Cambrils" className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-
-    </div>
-  </div>
-</section>
-
 
 const Pill = ({ children }) => (
   <span className="px-3 py-1 rounded-full bg-white/80 text-sm text-slate-700 border border-white/60 shadow-sm">{children}</span>
