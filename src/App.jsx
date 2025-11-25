@@ -591,31 +591,31 @@ export default function App() {
     <div className="flex flex-wrap items-center justify-center gap-10">
 
       <img src="/logos/radio-cambrils.png" alt="Ràdio Cambrils"
-        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+        className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
 
       <img src="/logos/club-nautic-cambrils.png" alt="Club Nàutic Cambrils"
-        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+        className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
 
       <img src="/logos/castro.png" alt="A.N. Castro"
-        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+        className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
 
       <img src="/logos/fcr.png" alt="FCR"
-        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+        className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
 
       <img src="/logos/ajuntament-cambrils.png" alt="Ajuntament de Cambrils"
-        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+        className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
 
       <img src="/logos/savall.png" alt="Savall"
-        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+        className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
 
       <img src="/logos/comaigua.png" alt="Comaigua"
-        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+        className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
 
       <img src="/logos/acuamar.png" alt="Acuamar"
-        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+        className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
 
       <img src="/logos/revista-cambrils.png" alt="Revista Cambrils"
-        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+        className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
 
     </div>
   </div>
