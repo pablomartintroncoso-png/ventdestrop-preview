@@ -645,7 +645,16 @@ export default function App() {
               <p className="flex items-center gap-2"><Mail className="h-4 w-4"/> info@ventdestrop.com</p>
               <Separator />
               <div className="flex items-center gap-4">
-                <a href="#" aria-label="Instagram" className="p-2 rounded-full border"><Instagram className="h-4 w-4"/></a>
+                <a
+  href="https://www.instagram.com/ventdestrop"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Instagram"
+  className="p-2 rounded-full border"
+>
+  <Instagram className="h-4 w-4"/>
+</a>
+
                 <a href="#" aria-label="Facebook" className="p-2 rounded-full border"><Facebook className="h-4 w-4"/></a>
                 <a href="#" aria-label="YouTube" className="p-2 rounded-full border"><Youtube className="h-4 w-4"/></a>
               </div>
