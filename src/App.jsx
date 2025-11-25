@@ -656,7 +656,7 @@ export default function App() {
 </a>
 
                 <a
-  href="https://www.facebook.com/ventdestrop"
+  href="https://www.facebook.com/vent.destropcambrils"
   target="_blank"
   rel="noopener noreferrer"
   aria-label="Facebook"
