@@ -595,6 +595,41 @@ export default function App() {
           </div>
         </div>
     
+{/* Sponsors */}
+<section className="py-12 bg-white">
+  <div className="max-w-7xl mx-auto px-4 md:px-6">
+    <div className="flex flex-wrap items-center justify-center gap-10">
+
+      <img src="/logos/radio-cambrils.png" alt="Ràdio Cambrils"
+        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+
+      <img src="/logos/club-nautic-cambrils.png" alt="Club Nàutic Cambrils"
+        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+
+      <img src="/logos/castro.png" alt="A.N. Castro"
+        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+
+      <img src="/logos/fcr.png" alt="FCR"
+        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+
+      <img src="/logos/ajuntament-cambrils.png" alt="Ajuntament de Cambrils"
+        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+
+      <img src="/logos/savall.png" alt="Savall"
+        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+
+      <img src="/logos/comaigua.png" alt="Comaigua"
+        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+
+      <img src="/logos/acuamar.png" alt="Acuamar"
+        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+
+      <img src="/logos/revista-cambrils.png" alt="Revista Cambrils"
+        className="h-16 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+
+    </div>
+  </div>
+</section>
 
       {/* CTA */}
       <section className="py-16 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white">
