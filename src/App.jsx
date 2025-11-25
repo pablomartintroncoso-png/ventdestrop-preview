@@ -655,7 +655,16 @@ export default function App() {
   <Instagram className="h-4 w-4"/>
 </a>
 
-                <a href="#" aria-label="Facebook" className="p-2 rounded-full border"><Facebook className="h-4 w-4"/></a>
+                <a
+  href="https://www.facebook.com/ventdestrop"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Facebook"
+  className="p-2 rounded-full border"
+>
+  <Facebook className="h-4 w-4"/>
+</a>
+
                 <a href="#" aria-label="YouTube" className="p-2 rounded-full border"><Youtube className="h-4 w-4"/></a>
               </div>
             </CardContent>
