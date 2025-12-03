@@ -198,7 +198,7 @@ export default function App() {
             </Button>
           </div>
 
-        {/* Menú mòbil */}
+      {/* Menú mòbil */}
 <Sheet>
   <SheetTrigger asChild>
     <Button size="icon" variant="outline" className="md:hidden">
@@ -243,8 +243,25 @@ export default function App() {
         </Button>
       </a>
 
-      {/* Botó de descarrega també al menú mòbil */}
       <a href="/ficha-salut-rem.pdf" download>
+        <Button
+          variant="outline"
+          className="w-full border-slate-300"
+        >
+          Descarregar fitxa
+        </Button>
+      </a>
+
+      <Button
+        variant="outline"
+        onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
+      >
+        {lang}
+      </Button>
+    </div>
+  </SheetContent>
+</Sheet>
+
         <Button
           variant="outline"
           className="w-full border-slate-300"
