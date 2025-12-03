@@ -244,9 +244,7 @@ export default function App() {
 
           {/* Menú mòbil */}
           <Sheet>
-            {/* Overlay blanco sólido */}
-<div className="fixed inset-0 bg-white z-40 md:hidden"></div>
-
+           
             <SheetTrigger asChild>
               <Button size="icon" variant="outline" className="md:hidden">
                 <Menu className="h-5 w-5" />
