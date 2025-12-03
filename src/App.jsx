@@ -198,49 +198,71 @@ export default function App() {
             </Button>
           </div>
 
-          {/* Menú móvil */}
+        {/* Menú mòbil */}
+<Sheet>
+  <SheetTrigger asChild>
+    <Button size="icon" variant="outline" className="md:hidden">
+      <Menu className="h-5 w-5" />
+    </Button>
+  </SheetTrigger>
 
-  <Sheet>
-    <SheetTrigger asChild>
-      <Button size="icon" variant="outline" className="md:hidden">
-        <Menu className="h-5 w-5" />
-      </Button>
-    </SheetTrigger>
+  <SheetContent
+    side="right"
+    className="w-72 bg-white shadow-xl border-l border-slate-200"
+  >
+    <div className="flex items-center gap-2 mb-6">
+      <img src={BRAND.logo} alt="logo" className="h-7" />
+      <span className="font-semibold">{BRAND.name}</span>
+    </div>
 
-    <SheetContent side="right" className="w-72 bg-white">
-
-      <div className="flex items-center gap-2 mb-6">
-        <img src={BRAND.logo} alt="logo" className="h-7" />
-        <span className="font-semibold">{BRAND.name}</span>
-      </div>
-
-      <nav className="grid gap-3">
-        {NAV.map((n) => (
-          <a key={n.href} href={n.href} className="text-slate-700">{n.label}</a>
-        ))}
-      </nav>
-
-      <Separator className="my-4" />
-
-      <div className="grid gap-2">
+    <nav className="grid gap-3">
+      {NAV.map((n) => (
         <a
-          href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
-          target="_blank"
-          rel="noopener noreferrer"
+          key={n.href}
+          href={n.href}
+          className="text-slate-700"
         >
-          <Button style={{ backgroundColor: BRAND.primary }} className="w-full">
-            Fes-te soci
-          </Button>
+          {n.label}
         </a>
+      ))}
+    </nav>
 
-        <Button variant="outline"
-          onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}>
-          {lang}
+    <Separator className="my-4" />
+
+    <div className="grid gap-2">
+      <a
+        href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Button
+          style={{ backgroundColor: BRAND.primary }}
+          className="w-full"
+        >
+          Fes-te soci
         </Button>
-      </div>
-    </SheetContent>
-  </Sheet>
-</div>
+      </a>
+
+      {/* Botó de descarrega també al menú mòbil */}
+      <a href="/ficha-salut-rem.pdf" download>
+        <Button
+          variant="outline"
+          className="w-full border-slate-300"
+        >
+          Descarregar fitxa
+        </Button>
+      </a>
+
+      <Button
+        variant="outline"
+        onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
+      >
+        {lang}
+      </Button>
+    </div>
+  </SheetContent>
+</Sheet>
+
 </header>
 
       <section
