@@ -252,7 +252,6 @@ export default function App() {
             </SheetTrigger>
 
             <SheetContent
- <SheetContent
   side="right"
   className="w-full max-w-full bg-white shadow-xl border-slate-200"
 >
