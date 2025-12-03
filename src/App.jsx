@@ -251,9 +251,10 @@ export default function App() {
             </SheetTrigger>
 
             <SheetContent
-              side="right"
-              className="w-72 bg-white shadow-xl border-l border-slate-200"
-            >
+  side="right"
+  className="w-full max-w-xs bg-white shadow-xl border-l border-slate-200"
+>
+
               <div className="flex items-center gap-2 mb-6">
                 <img src={BRAND.logo} alt="logo" className="h-7" />
                 <span className="font-semibold">{BRAND.name}</span>
