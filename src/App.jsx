@@ -242,35 +242,36 @@ export default function App() {
             </Button>
           </div>
 
-          {/* Menú mòbil */}
-          <Sheet>
-           
-            <SheetTrigger asChild>
-              <Button size="icon" variant="outline" className="md:hidden">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
+         {/* Menú mòbil */}
+<Sheet>
+  <SheetTrigger asChild>
+    <Button size="icon" variant="outline" className="md:hidden">
+      <Menu className="h-5 w-5" />
+    </Button>
+  </SheetTrigger>
 
-            <SheetContent
-  side="right"
-  className="w-full max-w-full bg-white shadow-xl border-slate-200"
->
-
-style={{ backgroundColor: "rgba(255,255,255,1)" }}
-
->
-
-   <div className="fixed inset-0 bg-white">
-   <div className="flex flex-col h-full bg-white !bg-opacity-100 p-4">
-
-      {/* Logo y nombre */}
-      <div className="flex items-center gap-2 mb-6">
-        <img src={BRAND.logo} alt="logo" className="h-7" />
-        <span className="font-semibold">{BRAND.name}</span>
+  <SheetContent
+    side="right"
+    className="w-full max-w-full bg-white shadow-xl border-slate-200"
+  >
+    <div className="flex flex-col h-full p-4">
+      {/* Logo y botón cerrar */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <img src={BRAND.logo} alt="logo" className="h-7" />
+          <span className="font-semibold">{BRAND.name}</span>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => (document.activeElement as HTMLElement)?.blur()}
+        >
+          Tancar
+        </Button>
       </div>
 
       {/* Enlaces del menú */}
-      <nav className="grid gap-3">
+      <nav className="grid gap-3 mb-6">
         {NAV.map((n) => (
           <a
             key={n.href}
@@ -282,11 +283,10 @@ style={{ backgroundColor: "rgba(255,255,255,1)" }}
         ))}
       </nav>
 
-      <Separator className="my-6" />
+      <Separator className="my-4" />
 
       {/* Botones */}
       <div className="grid gap-3 mt-auto">
-
         <a
           href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
           target="_blank"
@@ -315,13 +315,11 @@ style={{ backgroundColor: "rgba(255,255,255,1)" }}
         >
           {lang}
         </Button>
-
       </div>
     </div>
-  </div>
-            
-            </SheetContent>
-          </Sheet>
+  </SheetContent>
+</Sheet>
+
         </div>
       </header>
 
