@@ -253,6 +253,7 @@ export default function App() {
             <SheetContent
   side="right"
   className="w-full max-w-xs bg-white !bg-opacity-100 shadow-xl border-l border-slate-200"
+style={{ backgroundColor: "rgba(255,255,255,1)" }}
 
 >
 
