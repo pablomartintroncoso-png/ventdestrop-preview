@@ -152,16 +152,23 @@ export default function App() {
             </div>
           </a>
 
-          {/* Desktop nav */}
+                 {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-6 text-sm">
             {NAV.map((n) => (
-              <a key={n.href} href={n.href} className={`hover:text-slate-900 ${active === n.href ? "text-[var(--primary)] font-medium" : "text-slate-600"}`}>
+              <a
+                key={n.href}
+                href={n.href}
+                className={`hover:text-slate-900 ${
+                  active === n.href
+                    ? "text-[var(--primary)] font-medium"
+                    : "text-slate-600"
+                }`}
+              >
                 {n.label}
               </a>
             ))}
           </nav>
 
-{/* Actions */}
           {/* Actions */}
           <div className="hidden md:flex items-center gap-2">
             <a
@@ -174,6 +181,13 @@ export default function App() {
               </Button>
             </a>
 
+            {/* Botó per descarregar la fitxa de salut */}
+            <a href="/ficha-salut-rem.pdf" download>
+              <Button variant="outline" className="border-slate-300">
+                Descarregar fitxa
+              </Button>
+            </a>
+
             <Button
               variant="outline"
               className="border-slate-300"
@@ -183,8 +197,9 @@ export default function App() {
               {lang}
             </Button>
           </div>
-          
-  {/* Menú móvil */}
+
+          {/* Menú móvil */}
+
   <Sheet>
     <SheetTrigger asChild>
       <Button size="icon" variant="outline" className="md:hidden">
