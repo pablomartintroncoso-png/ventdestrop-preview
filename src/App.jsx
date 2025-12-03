@@ -254,59 +254,66 @@ export default function App() {
   side="right"
   className="w-full max-w-xs bg-white shadow-xl border-l border-slate-200"
 >
+<div className="flex flex-col h-full bg-white p-4">
 
-              <div className="flex items-center gap-2 mb-6">
-                <img src={BRAND.logo} alt="logo" className="h-7" />
-                <span className="font-semibold">{BRAND.name}</span>
-              </div>
+  {/* Logo y nombre */}
+  <div className="flex items-center gap-2 mb-6">
+    <img src={BRAND.logo} alt="logo" className="h-7" />
+    <span className="font-semibold">{BRAND.name}</span>
+  </div>
 
-              <nav className="grid gap-3">
-                {NAV.map((n) => (
-                  <a
-                    key={n.href}
-                    href={n.href}
-                    className="text-slate-700"
-                  >
-                    {n.label}
-                  </a>
-                ))}
-              </nav>
+  {/* Enlaces del menú */}
+  <nav className="grid gap-3">
+    {NAV.map((n) => (
+      <a
+        key={n.href}
+        href={n.href}
+        className="text-slate-700 text-lg"
+      >
+        {n.label}
+      </a>
+    ))}
+  </nav>
 
-              <Separator className="my-4" />
+  <Separator className="my-6" />
 
-              <div className="grid gap-2">
-                <a
-                  href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button
-                    style={{ backgroundColor: BRAND.primary }}
-                    className="w-full"
-                  >
-                    Fes-te soci
-                  </Button>
-                </a>
+  {/* Botones */}
+  <div className="grid gap-3 mt-auto">
 
-                {/* Botó de descarrega també al menú mòbil */}
-                <a href="/ficha-salut-rem.pdf" download>
-                  <Button
-                    variant="outline"
-                    className="w-full border-slate-300"
-                  >
-                    Descarregar fitxa
-                  </Button>
-                </a>
+    <a
+      href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <Button
+        style={{ backgroundColor: BRAND.primary }}
+        className="w-full"
+      >
+        Fes-te soci
+      </Button>
+    </a>
 
-                <Button
-                  variant="outline"
-                  onClick={() =>
-                    setLang(lang === "CAT" ? "ES" : "CAT")
-                  }
-                >
-                  {lang}
-                </Button>
-              </div>
+    <a href="/ficha-salut-rem.pdf" download>
+      <Button
+        variant="outline"
+        className="w-full border-slate-300"
+      >
+        Descarregar fitxa
+      </Button>
+    </a>
+
+    <Button
+      variant="outline"
+      onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
+    >
+      {lang}
+    </Button>
+
+  </div>
+
+</div>
+
+             
             </SheetContent>
           </Sheet>
         </div>
