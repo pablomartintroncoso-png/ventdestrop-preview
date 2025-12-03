@@ -242,84 +242,74 @@ export default function App() {
             </Button>
           </div>
 
-         {/* Menú mòbil */}
-<Sheet>
-  <SheetTrigger asChild>
-    <Button size="icon" variant="outline" className="md:hidden">
-      <Menu className="h-5 w-5" />
-    </Button>
-  </SheetTrigger>
+          {/* Menú mòbil */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button size="icon" variant="outline" className="md:hidden">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
 
-  <SheetContent
-    side="right"
-    className="w-full max-w-full bg-white shadow-xl border-slate-200"
-  >
-    <div className="flex flex-col h-full p-4">
-      {/* Logo y botón cerrar */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-2">
-          <img src={BRAND.logo} alt="logo" className="h-7" />
-          <span className="font-semibold">{BRAND.name}</span>
-        </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => (document.activeElement as HTMLElement)?.blur()}
-        >
-          Tancar
-        </Button>
-      </div>
+            <SheetContent
+              side="right"
+              className="w-full max-w-full bg-white shadow-xl border-slate-200"
+            >
+              <div className="flex flex-col h-full p-4">
+                {/* Logo */}
+                <div className="flex items-center gap-2 mb-6">
+                  <img src={BRAND.logo} alt="logo" className="h-7" />
+                  <span className="font-semibold">{BRAND.name}</span>
+                </div>
 
-      {/* Enlaces del menú */}
-      <nav className="grid gap-3 mb-6">
-        {NAV.map((n) => (
-          <a
-            key={n.href}
-            href={n.href}
-            className="text-slate-700 text-lg"
-          >
-            {n.label}
-          </a>
-        ))}
-      </nav>
+                {/* Enlaces del menú */}
+                <nav className="grid gap-3 mb-6">
+                  {NAV.map((n) => (
+                    <a
+                      key={n.href}
+                      href={n.href}
+                      className="text-slate-700 text-lg"
+                    >
+                      {n.label}
+                    </a>
+                  ))}
+                </nav>
 
-      <Separator className="my-4" />
+                <Separator className="my-4" />
 
-      {/* Botones */}
-      <div className="grid gap-3 mt-auto">
-        <a
-          href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Button
-            style={{ backgroundColor: BRAND.primary }}
-            className="w-full"
-          >
-            Fes-te soci
-          </Button>
-        </a>
+                {/* Botones */}
+                <div className="grid gap-3 mt-auto">
+                  <a
+                    href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button
+                      style={{ backgroundColor: BRAND.primary }}
+                      className="w-full"
+                    >
+                      Fes-te soci
+                    </Button>
+                  </a>
 
-        <a href="/ficha-salut-rem.pdf" download>
-          <Button
-            variant="outline"
-            className="w-full border-slate-300"
-          >
-            Descarregar fitxa
-          </Button>
-        </a>
+                  <a href="/ficha-salut-rem.pdf" download>
+                    <Button
+                      variant="outline"
+                      className="w-full border-slate-300"
+                    >
+                      Descarregar fitxa
+                    </Button>
+                  </a>
 
-        <Button
-          variant="outline"
-          onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
-        >
-          {lang}
-        </Button>
-      </div>
-    </div>
-  </SheetContent>
-</Sheet>
-
+                  <Button
+                    variant="outline"
+                    onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
+                  >
+                    {lang}
+                  </Button>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </header>
 
@@ -408,12 +398,9 @@ export default function App() {
 
       {/* Schools */}
       <section id="escoles" className="py-16">
-        <SectionTitle
-          kicker="Programes"
-          title="Escoles de rem"
-        >
-          Iniciació, tecnificació i veterà. Plans adaptats per edat i
-          objectiu, amb horaris flexibles.
+        <SectionTitle kicker="Programes" title="Escoles de rem">
+          Iniciació, tecnificació i veterà. Plans adaptats per edat i objectiu,
+          amb horaris flexibles.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
@@ -443,9 +430,7 @@ export default function App() {
               <Badge variant="secondary" className="w-fit">
                 Adults
               </Badge>
-              <CardTitle className="mt-2">
-                Salut i competició
-              </CardTitle>
+              <CardTitle className="mt-2">Salut i competició</CardTitle>
               <CardDescription>
                 Grups fitness i equip de llagut.
                 <br />
@@ -488,10 +473,7 @@ export default function App() {
 
       {/* Competition */}
       <section id="competicio" className="py-16 bg-white">
-        <SectionTitle
-          kicker="Competició"
-          title="Equips i resultats"
-        >
+        <SectionTitle kicker="Competició" title="Equips i resultats">
           Participem en llagut mediterrani, rem de mar i regates locals.
         </SectionTitle>
 
@@ -519,8 +501,8 @@ export default function App() {
             <CardHeader>
               <CardTitle>Equips i entrenaments</CardTitle>
               <CardDescription>
-                Absolut, Veterà, Femení i Mixt. Sessions setmanals per
-                millorar tècnica, resistència i coordinació.
+                Absolut, Veterà, Femení i Mixt. Sessions setmanals per millorar
+                tècnica, resistència i coordinació.
               </CardDescription>
             </CardHeader>
 
@@ -557,12 +539,8 @@ export default function App() {
 
       {/* Social */}
       <section id="social" className="py-16 bg-white">
-        <SectionTitle
-          kicker="Social"
-          title="Activitats Socials"
-        >
-          Descomptes per famílies, accés a material i activitats
-          exclusives.
+        <SectionTitle kicker="Social" title="Activitats Socials">
+          Descomptes per famílies, accés a material i activitats exclusives.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
@@ -589,8 +567,8 @@ export default function App() {
             <CardHeader>
               <CardTitle>Activitats socials</CardTitle>
               <CardDescription>
-                Rem social, jornades familiars, sortides al mar i
-                activitats de comunitat per a totes les edats.
+                Rem social, jornades familiars, sortides al mar i activitats de
+                comunitat per a totes les edats.
               </CardDescription>
             </CardHeader>
 
@@ -627,10 +605,7 @@ export default function App() {
 
       {/* Agenda */}
       <section id="agenda" className="py-16 bg-[var(--light)]">
-        <SectionTitle
-          kicker="Agenda"
-          title="Properes activitats"
-        />
+        <SectionTitle kicker="Agenda" title="Properes activitats" />
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
           {EVENTS.map((e, i) => (
             <Card key={i} className="rounded-2xl shadow-sm">
@@ -645,9 +620,7 @@ export default function App() {
                     </div>
                   </div>
                   <div>
-                    <CardTitle className="text-lg">
-                      {e.title}
-                    </CardTitle>
+                    <CardTitle className="text-lg">{e.title}</CardTitle>
                     <CardDescription className="flex items-center gap-2 mt-1">
                       <MapPin className="h-4 w-4" />
                       {e.location}
@@ -671,10 +644,7 @@ export default function App() {
 
       {/* News */}
       <section id="noticies" className="py-16 bg-white">
-        <SectionTitle
-          kicker="Actualitat"
-          title="Notícies del club"
-        />
+        <SectionTitle kicker="Actualitat" title="Notícies del club" />
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
           {NEWS.map((n, i) => (
             <Card key={i} className="rounded-2xl shadow-sm">
@@ -701,12 +671,8 @@ export default function App() {
 
       {/* Meteo */}
       <section id="meteo" className="py-16 bg-[var(--light)]">
-        <SectionTitle
-          kicker="Meteo"
-          title="Condicions de vent i mar"
-        >
-          Informació actualitzada per planificar les sortides amb
-          seguretat.
+        <SectionTitle kicker="Meteo" title="Condicions de vent i mar">
+          Informació actualitzada per planificar les sortides amb seguretat.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
@@ -725,8 +691,8 @@ export default function App() {
             <CardHeader>
               <CardTitle>Vent i condicions del mar</CardTitle>
               <CardDescription>
-                Consulta el vent actual, les ràfegues, l'onatge i
-                l'evolució per hores.
+                Consulta el vent actual, les ràfegues, l'onatge i l'evolució per
+                hores.
               </CardDescription>
             </CardHeader>
 
@@ -734,9 +700,7 @@ export default function App() {
               <ul className="list-disc list-inside space-y-1">
                 <li>Direcció i intensitat del vent</li>
                 <li>Ràfegues i previsió per hores</li>
-                <li>
-                  Especificació per nivell del mar i superfície
-                </li>
+                <li>Especificació per nivell del mar i superfície</li>
                 <li>Model ECMWF (el més fiable del món)</li>
               </ul>
 
@@ -826,8 +790,8 @@ export default function App() {
               Ajuda’ns a fer créixer el rem a Cambrils
             </h3>
             <p className="text-white/90 mt-2">
-              Col·labora com a soci o patrocinador. El teu suport
-              impulsa l’esport i la comunitat.
+              Col·labora com a soci o patrocinador. El teu suport impulsa
+              l’esport i la comunitat.
             </p>
           </div>
           <div className="flex gap-3">
@@ -849,10 +813,7 @@ export default function App() {
 
       {/* Contact */}
       <section id="contacte" className="py-16 bg-white">
-        <SectionTitle
-          kicker="Contacte"
-          title="Parlem?"
-        />
+        <SectionTitle kicker="Contacte" title="Parlem?" />
         <div className="max-w-5xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
@@ -875,8 +836,8 @@ export default function App() {
             </CardHeader>
             <CardContent className="space-y-3 text-slate-700">
               <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port
-                de Cambrils
+                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de
+                Cambrils
               </p>
               <p className="flex items-center gap-2">
                 <Phone className="h-4 w-4" /> +34 600 000 000
@@ -932,8 +893,8 @@ export default function App() {
               {BRAND.name}
             </div>
             <p className="text-slate-400 mt-2 text-sm">
-              Club de rem sense ànim de lucre. Promovem el rem
-              tradicional i de mar a Cambrils.
+              Club de rem sense ànim de lucre. Promovem el rem tradicional i de
+              mar a Cambrils.
             </p>
           </div>
           <div>
@@ -951,9 +912,7 @@ export default function App() {
             </ul>
           </div>
           <div>
-            <div className="font-semibold text-white mb-2">
-              Activitat
-            </div>
+            <div className="font-semibold text-white mb-2">Activitat</div>
             <ul className="space-y-2 text-sm text-slate-300">
               <li>
                 <a href="#agenda">Agenda</a>
@@ -967,8 +926,13 @@ export default function App() {
             </ul>
           </div>
           <div>
-            <div className="font-semibold text-white mb-2">Legal</div>
+            <div className="font-semibold text-white mb-2">Documents</div>
             <ul className="space-y-2 text-sm text-slate-300">
+              <li>
+                <a href="/ficha-salut-rem.pdf" download>
+                  Descarregar fitxa de salut
+                </a>
+              </li>
               <li>Avís legal</li>
               <li>Privacitat</li>
               <li>Cookies</li>
@@ -1005,4 +969,3 @@ export default function App() {
     </Shell>
   );
 }
-
