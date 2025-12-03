@@ -207,7 +207,8 @@ export default function App() {
       </Button>
     </SheetTrigger>
 
-    <SheetContent side="right" className="w-72">
+    <SheetContent side="right" className="w-72 bg-white">
+
       <div className="flex items-center gap-2 mb-6">
         <img src={BRAND.logo} alt="logo" className="h-7" />
         <span className="font-semibold">{BRAND.name}</span>
