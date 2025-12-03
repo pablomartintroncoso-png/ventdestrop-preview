@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   ChevronRight,
   MapPin,
@@ -159,11 +158,14 @@ function useActiveSection(ids) {
 
 export default function App() {
   const [slide, setSlide] = useState(0);
+  const [lang, setLang] = useState("CAT");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setSlide((s) => (s + 1) % HERO_PHOTOS.length);
-    }, 4000);
+    const id = setInterval(
+      () => setSlide((s) => (s + 1) % HERO_PHOTOS.length),
+      4000
+    );
     return () => clearInterval(id);
   }, []);
 
@@ -177,13 +179,12 @@ export default function App() {
     "socis",
     "contacte",
   ]);
-  const [lang, setLang] = useState("CAT");
 
   return (
     <Shell>
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
+      <header className="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-3">
           <a href="#top" className="flex items-center gap-3" aria-label="Inici">
             <img
               src={BRAND.logo}
@@ -225,7 +226,6 @@ export default function App() {
               </Button>
             </a>
 
-            {/* Botó per descarregar la fitxa de salut */}
             <a href="/ficha-salut-rem.pdf" download>
               <Button variant="outline" className="border-slate-300">
                 Descarregar fitxa
@@ -242,76 +242,90 @@ export default function App() {
             </Button>
           </div>
 
-          {/* Menú mòbil */}
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button size="icon" variant="outline" className="md:hidden">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-
-            <SheetContent
-              side="right"
-              className="w-full max-w-full bg-white shadow-xl border-slate-200"
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center">
+            <Button
+              size="icon"
+              variant="outline"
+              onClick={() => setMobileOpen(true)}
             >
-              <div className="flex flex-col h-full p-4">
-                {/* Logo */}
-                <div className="flex items-center gap-2 mb-6">
-                  <img src={BRAND.logo} alt="logo" className="h-7" />
-                  <span className="font-semibold">{BRAND.name}</span>
-                </div>
-
-                {/* Enlaces del menú */}
-                <nav className="grid gap-3 mb-6">
-                  {NAV.map((n) => (
-                    <a
-                      key={n.href}
-                      href={n.href}
-                      className="text-slate-700 text-lg"
-                    >
-                      {n.label}
-                    </a>
-                  ))}
-                </nav>
-
-                <Separator className="my-4" />
-
-                {/* Botones */}
-                <div className="grid gap-3 mt-auto">
-                  <a
-                    href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button
-                      style={{ backgroundColor: BRAND.primary }}
-                      className="w-full"
-                    >
-                      Fes-te soci
-                    </Button>
-                  </a>
-
-                  <a href="/ficha-salut-rem.pdf" download>
-                    <Button
-                      variant="outline"
-                      className="w-full border-slate-300"
-                    >
-                      Descarregar fitxa
-                    </Button>
-                  </a>
-
-                  <Button
-                    variant="outline"
-                    onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
-                  >
-                    {lang}
-                  </Button>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+              <Menu className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </header>
+
+      {/* Mobile menu overlay */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 bg-white">
+          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between border-b border-slate-200">
+            <div className="flex items-center gap-2">
+              <img src={BRAND.logo} alt="logo" className="h-7" />
+              <span className="font-semibold">{BRAND.name}</span>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setMobileOpen(false)}
+            >
+              Tancar
+            </Button>
+          </div>
+
+          <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col h-[calc(100vh-52px)]">
+            <nav className="grid gap-3 mb-6">
+              {NAV.map((n) => (
+                <a
+                  key={n.href}
+                  href={n.href}
+                  className="text-slate-800 text-lg"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {n.label}
+                </a>
+              ))}
+            </nav>
+
+            <Separator className="my-4" />
+
+            <div className="grid gap-3 mt-auto pb-4">
+              <a
+                href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileOpen(false)}
+              >
+                <Button
+                  style={{ backgroundColor: BRAND.primary }}
+                  className="w-full"
+                >
+                  Fes-te soci
+                </Button>
+              </a>
+
+              <a
+                href="/ficha-salut-rem.pdf"
+                download
+                onClick={() => setMobileOpen(false)}
+              >
+                <Button
+                  variant="outline"
+                  className="w-full border-slate-300"
+                >
+                  Descarregar fitxa
+                </Button>
+              </a>
+
+              <Button
+                variant="outline"
+                onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
+              >
+                {lang}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hero */}
       <section
@@ -347,8 +361,7 @@ export default function App() {
             </p>
             <div className="flex flex-wrap gap-3 mt-6">
               <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
-                Prova una sessió{" "}
-                <ChevronRight className="ml-1 h-4 w-4" />
+                Prova una sessió <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
               <a
                 href="/calendario.jpg"
@@ -396,6 +409,7 @@ export default function App() {
         </div>
       </section>
 
+      {/* --- TODO LO DEMÁS IGUAL QUE YA TENÍAS --- */}
       {/* Schools */}
       <section id="escoles" className="py-16">
         <SectionTitle kicker="Programes" title="Escoles de rem">
@@ -404,7 +418,6 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
-          {/* Tarjeta 1 – FOTO */}
           <Card className="rounded-2xl shadow-sm overflow-hidden">
             <img
               src="/escola-1.jpg"
@@ -414,7 +427,6 @@ export default function App() {
             <CardHeader></CardHeader>
           </Card>
 
-          {/* Tarjeta 2 – FOTO */}
           <Card className="rounded-2xl shadow-sm overflow-hidden">
             <img
               src="/escola-2.jpg"
@@ -424,7 +436,6 @@ export default function App() {
             <CardHeader></CardHeader>
           </Card>
 
-          {/* Tarjeta 3 – HORARIS + BOTÓ */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <Badge variant="secondary" className="w-fit">
@@ -478,7 +489,6 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
-          {/* Foto 1 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/competi-1.jpg"
@@ -487,7 +497,6 @@ export default function App() {
             />
           </div>
 
-          {/* Foto 2 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/competi-2.jpg"
@@ -496,7 +505,6 @@ export default function App() {
             />
           </div>
 
-          {/* Text + horaris */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Equips i entrenaments</CardTitle>
@@ -544,7 +552,6 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
-          {/* Foto 1 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/social-1.jpg"
@@ -553,7 +560,6 @@ export default function App() {
             />
           </div>
 
-          {/* Foto 2 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/social-2.jpg"
@@ -562,7 +568,6 @@ export default function App() {
             />
           </div>
 
-          {/* Text + horaris */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Activitats socials</CardTitle>
@@ -660,8 +665,7 @@ export default function App() {
                   variant="ghost"
                   className="px-0 text-[var(--primary)]"
                 >
-                  Llegir més{" "}
-                  <ChevronRight className="h-4 w-4" />
+                  Llegir més <ChevronRight className="h-4 w-4" />
                 </Button>
               </CardContent>
             </Card>
@@ -676,7 +680,6 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
-          {/* Widget Windy */}
           <div className="rounded-2xl overflow-hidden shadow-lg bg-slate-200 h-[420px]">
             <iframe
               width="100%"
@@ -686,7 +689,6 @@ export default function App() {
             ></iframe>
           </div>
 
-          {/* Explicació */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Vent i condicions del mar</CardTitle>
@@ -730,49 +732,41 @@ export default function App() {
               alt="Ràdio Cambrils"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/club-nautic-cambrils.png"
               alt="Club Nàutic Cambrils"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/castro.png"
               alt="A.N. Castro"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/fcr.png"
               alt="FCR"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/ajuntament-cambrils.png"
               alt="Ajuntament de Cambrils"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/savall.png"
               alt="Savall"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/comaigua.png"
               alt="Comaigua"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/acuamar.png"
               alt="Acuamar"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/revista-cambrils.png"
               alt="Revista Cambrils"
@@ -811,7 +805,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Contact */}
+      {/* Contacte */}
       <section id="contacte" className="py-16 bg-white">
         <SectionTitle kicker="Contacte" title="Parlem?" />
         <div className="max-w-5xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
@@ -856,7 +850,6 @@ export default function App() {
                 >
                   <Instagram className="h-4 w-4" />
                 </a>
-
                 <a
                   href="https://www.facebook.com/vent.destropcambrils"
                   target="_blank"
@@ -866,7 +859,6 @@ export default function App() {
                 >
                   <Facebook className="h-4 w-4" />
                 </a>
-
                 <a
                   href="#"
                   aria-label="YouTube"
@@ -951,7 +943,7 @@ export default function App() {
       </footer>
 
       {/* Sticky join CTA */}
-      <div className="fixed bottom-4 right-4 md:right-6 z-50">
+      <div className="fixed bottom-4 right-4 md:right-6 z-30">
         <a
           href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
           target="_blank"
