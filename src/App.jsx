@@ -252,8 +252,11 @@ export default function App() {
             </SheetTrigger>
 
             <SheetContent
+ <SheetContent
   side="right"
-  className="w-full max-w-xs bg-white !bg-opacity-100 shadow-xl border-l border-slate-200"
+  className="w-full max-w-full bg-white shadow-xl border-slate-200"
+>
+
 style={{ backgroundColor: "rgba(255,255,255,1)" }}
 
 >
