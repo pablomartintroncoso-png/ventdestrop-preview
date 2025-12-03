@@ -252,11 +252,12 @@ export default function App() {
 
             <SheetContent
   side="right"
-  className="w-full max-w-xs bg-white shadow-xl border-l border-slate-200"
+  className="w-full max-w-xs bg-white !bg-opacity-100 shadow-xl border-l border-slate-200"
+
 >
 
    <div className="fixed inset-0 bg-white">
-    <div className="flex flex-col h-full p-4">
+   <div className="flex flex-col h-full bg-white !bg-opacity-100 p-4">
 
       {/* Logo y nombre */}
       <div className="flex items-center gap-2 mb-6">
