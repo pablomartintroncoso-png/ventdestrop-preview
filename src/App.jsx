@@ -162,10 +162,9 @@ export default function App() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const id = setInterval(
-      () => setSlide((s) => (s + 1) % HERO_PHOTOS.length),
-      4000
-    );
+    const id = setInterval(() => {
+      setSlide((s) => (s + 1) % HERO_PHOTOS.length);
+    }, 4000);
     return () => clearInterval(id);
   }, []);
 
@@ -183,8 +182,8 @@ export default function App() {
   return (
     <Shell>
       {/* Header */}
-      <header className="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-3">
+      <header className="sticky top-0 z-40 backdrop-blur bg-white/90 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-3" aria-label="Inici">
             <img
               src={BRAND.logo}
@@ -226,6 +225,7 @@ export default function App() {
               </Button>
             </a>
 
+            {/* Botó per descarregar la fitxa de salut */}
             <a href="/ficha-salut-rem.pdf" download>
               <Button variant="outline" className="border-slate-300">
                 Descarregar fitxa
@@ -242,8 +242,8 @@ export default function App() {
             </Button>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
+          {/* Botón menú móvil */}
+          <div className="flex md:hidden">
             <Button
               size="icon"
               variant="outline"
@@ -258,6 +258,7 @@ export default function App() {
       {/* Mobile menu overlay */}
       {mobileOpen && (
         <div className="fixed inset-0 z-50 bg-white">
+          {/* Barra superior con logo y cerrar */}
           <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between border-b border-slate-200">
             <div className="flex items-center gap-2">
               <img src={BRAND.logo} alt="logo" className="h-7" />
@@ -272,23 +273,26 @@ export default function App() {
             </Button>
           </div>
 
-          <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col h-[calc(100vh-52px)]">
-            <nav className="grid gap-3 mb-6">
-              {NAV.map((n) => (
-                <a
-                  key={n.href}
-                  href={n.href}
-                  className="text-slate-800 text-lg"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {n.label}
-                </a>
-              ))}
-            </nav>
+          {/* Contenido del menú */}
+          <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col h-[calc(100vh-52px)] justify-between gap-6">
+            <div>
+              <nav className="grid gap-3 mb-4">
+                {NAV.map((n) => (
+                  <a
+                    key={n.href}
+                    href={n.href}
+                    className="text-slate-800 text-lg"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {n.label}
+                  </a>
+                ))}
+              </nav>
 
-            <Separator className="my-4" />
+              <Separator className="my-4" />
+            </div>
 
-            <div className="grid gap-3 mt-auto pb-4">
+            <div className="grid gap-3 pb-4">
               <a
                 href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
                 target="_blank"
@@ -360,9 +364,12 @@ export default function App() {
               edats: formació, salut i èxit esportiu en un entorn únic.
             </p>
             <div className="flex flex-wrap gap-3 mt-6">
-              <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
-                Prova una sessió <ChevronRight className="ml-1 h-4 w-4" />
-              </Button>
+              <a href="#contacte">
+                <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
+                  Prova una sessió{" "}
+                  <ChevronRight className="ml-1 h-4 w-4" />
+                </Button>
+              </a>
               <a
                 href="/calendario.jpg"
                 target="_blank"
@@ -409,15 +416,15 @@ export default function App() {
         </div>
       </section>
 
-      {/* --- TODO LO DEMÁS IGUAL QUE YA TENÍAS --- */}
       {/* Schools */}
       <section id="escoles" className="py-16">
         <SectionTitle kicker="Programes" title="Escoles de rem">
-          Iniciació, tecnificació i veterà. Plans adaptats per edat i objectiu,
-          amb horaris flexibles.
+          Iniciació, tecnificació i veterà. Plans adaptats per edat i
+          objectiu, amb horaris flexibles.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
+          {/* Tarjeta 1 – FOTO */}
           <Card className="rounded-2xl shadow-sm overflow-hidden">
             <img
               src="/escola-1.jpg"
@@ -427,6 +434,7 @@ export default function App() {
             <CardHeader></CardHeader>
           </Card>
 
+          {/* Tarjeta 2 – FOTO */}
           <Card className="rounded-2xl shadow-sm overflow-hidden">
             <img
               src="/escola-2.jpg"
@@ -436,12 +444,15 @@ export default function App() {
             <CardHeader></CardHeader>
           </Card>
 
+          {/* Tarjeta 3 – HORARIS + BOTÓ */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <Badge variant="secondary" className="w-fit">
                 Adults
               </Badge>
-              <CardTitle className="mt-2">Salut i competició</CardTitle>
+              <CardTitle className="mt-2">
+                Salut i competició
+              </CardTitle>
               <CardDescription>
                 Grups fitness i equip de llagut.
                 <br />
@@ -460,12 +471,14 @@ export default function App() {
 
             <CardContent>
               <div className="mt-4 flex flex-wrap gap-2">
-                <Button
-                  size="lg"
-                  style={{ backgroundColor: BRAND.primary }}
-                >
-                  Prova una sessió
-                </Button>
+                <a href="#contacte">
+                  <Button
+                    size="lg"
+                    style={{ backgroundColor: BRAND.primary }}
+                  >
+                    Prova una sessió
+                  </Button>
+                </a>
 
                 <Button
                   variant="outline"
@@ -489,6 +502,7 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
+          {/* Foto 1 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/competi-1.jpg"
@@ -497,6 +511,7 @@ export default function App() {
             />
           </div>
 
+          {/* Foto 2 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/competi-2.jpg"
@@ -505,12 +520,13 @@ export default function App() {
             />
           </div>
 
+          {/* Text + horaris */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Equips i entrenaments</CardTitle>
               <CardDescription>
-                Absolut, Veterà, Femení i Mixt. Sessions setmanals per millorar
-                tècnica, resistència i coordinació.
+                Absolut, Veterà, Femení i Mixt. Sessions setmanals per
+                millorar tècnica, resistència i coordinació.
               </CardDescription>
             </CardHeader>
 
@@ -523,12 +539,14 @@ export default function App() {
               </ul>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                <Button
-                  size="lg"
-                  style={{ backgroundColor: BRAND.primary }}
-                >
-                  Prova una sessió
-                </Button>
+                <a href="#contacte">
+                  <Button
+                    size="lg"
+                    style={{ backgroundColor: BRAND.primary }}
+                  >
+                    Prova una sessió
+                  </Button>
+                </a>
 
                 <Button
                   variant="outline"
@@ -548,10 +566,12 @@ export default function App() {
       {/* Social */}
       <section id="social" className="py-16 bg-white">
         <SectionTitle kicker="Social" title="Activitats Socials">
-          Descomptes per famílies, accés a material i activitats exclusives.
+          Descomptes per famílies, accés a material i activitats
+          exclusives.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
+          {/* Foto 1 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/social-1.jpg"
@@ -560,6 +580,7 @@ export default function App() {
             />
           </div>
 
+          {/* Foto 2 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/social-2.jpg"
@@ -568,12 +589,13 @@ export default function App() {
             />
           </div>
 
+          {/* Text + horaris */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Activitats socials</CardTitle>
               <CardDescription>
-                Rem social, jornades familiars, sortides al mar i activitats de
-                comunitat per a totes les edats.
+                Rem social, jornades familiars, sortides al mar i
+                activitats de comunitat per a totes les edats.
               </CardDescription>
             </CardHeader>
 
@@ -586,12 +608,14 @@ export default function App() {
               </ul>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                <Button
-                  size="lg"
-                  style={{ backgroundColor: BRAND.primary }}
-                >
-                  Prova una sessió
-                </Button>
+                <a href="#contacte">
+                  <Button
+                    size="lg"
+                    style={{ backgroundColor: BRAND.primary }}
+                  >
+                    Prova una sessió
+                  </Button>
+                </a>
 
                 <Button
                   variant="outline"
@@ -625,7 +649,9 @@ export default function App() {
                     </div>
                   </div>
                   <div>
-                    <CardTitle className="text-lg">{e.title}</CardTitle>
+                    <CardTitle className="text-lg">
+                      {e.title}
+                    </CardTitle>
                     <CardDescription className="flex items-center gap-2 mt-1">
                       <MapPin className="h-4 w-4" />
                       {e.location}
@@ -665,7 +691,8 @@ export default function App() {
                   variant="ghost"
                   className="px-0 text-[var(--primary)]"
                 >
-                  Llegir més <ChevronRight className="h-4 w-4" />
+                  Llegir més{" "}
+                  <ChevronRight className="h-4 w-4" />
                 </Button>
               </CardContent>
             </Card>
@@ -676,10 +703,12 @@ export default function App() {
       {/* Meteo */}
       <section id="meteo" className="py-16 bg-[var(--light)]">
         <SectionTitle kicker="Meteo" title="Condicions de vent i mar">
-          Informació actualitzada per planificar les sortides amb seguretat.
+          Informació actualitzada per planificar les sortides amb
+          seguretat.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
+          {/* Widget Windy */}
           <div className="rounded-2xl overflow-hidden shadow-lg bg-slate-200 h-[420px]">
             <iframe
               width="100%"
@@ -689,12 +718,13 @@ export default function App() {
             ></iframe>
           </div>
 
+          {/* Explicació */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Vent i condicions del mar</CardTitle>
               <CardDescription>
-                Consulta el vent actual, les ràfegues, l'onatge i l'evolució per
-                hores.
+                Consulta el vent actual, les ràfegues, l'onatge i
+                l'evolució per hores.
               </CardDescription>
             </CardHeader>
 
@@ -702,7 +732,9 @@ export default function App() {
               <ul className="list-disc list-inside space-y-1">
                 <li>Direcció i intensitat del vent</li>
                 <li>Ràfegues i previsió per hores</li>
-                <li>Especificació per nivell del mar i superfície</li>
+                <li>
+                  Especificació per nivell del mar i superfície
+                </li>
                 <li>Model ECMWF (el més fiable del món)</li>
               </ul>
 
@@ -732,41 +764,49 @@ export default function App() {
               alt="Ràdio Cambrils"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/club-nautic-cambrils.png"
               alt="Club Nàutic Cambrils"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/castro.png"
               alt="A.N. Castro"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/fcr.png"
               alt="FCR"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/ajuntament-cambrils.png"
               alt="Ajuntament de Cambrils"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/savall.png"
               alt="Savall"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/comaigua.png"
               alt="Comaigua"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/acuamar.png"
               alt="Acuamar"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/revista-cambrils.png"
               alt="Revista Cambrils"
@@ -784,8 +824,8 @@ export default function App() {
               Ajuda’ns a fer créixer el rem a Cambrils
             </h3>
             <p className="text-white/90 mt-2">
-              Col·labora com a soci o patrocinador. El teu suport impulsa
-              l’esport i la comunitat.
+              Col·labora com a soci o patrocinador. El teu suport
+              impulsa l’esport i la comunitat.
             </p>
           </div>
           <div className="flex gap-3">
@@ -805,7 +845,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Contacte */}
+      {/* Contact */}
       <section id="contacte" className="py-16 bg-white">
         <SectionTitle kicker="Contacte" title="Parlem?" />
         <div className="max-w-5xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
@@ -830,8 +870,8 @@ export default function App() {
             </CardHeader>
             <CardContent className="space-y-3 text-slate-700">
               <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de
-                Cambrils
+                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port
+                de Cambrils
               </p>
               <p className="flex items-center gap-2">
                 <Phone className="h-4 w-4" /> +34 600 000 000
@@ -846,23 +886,25 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
-                  className="p-2 rounded-full border"
+                  className="p-2 rounded-full bg-gradient-to-tr from-purple-500 via-pink-500 to-yellow-500 text-white"
                 >
                   <Instagram className="h-4 w-4" />
                 </a>
+
                 <a
                   href="https://www.facebook.com/vent.destropcambrils"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  className="p-2 rounded-full border"
+                  className="p-2 rounded-full bg-[#1877F2] text-white"
                 >
                   <Facebook className="h-4 w-4" />
                 </a>
+
                 <a
                   href="#"
                   aria-label="YouTube"
-                  className="p-2 rounded-full border"
+                  className="p-2 rounded-full bg-[#FF0000] text-white"
                 >
                   <Youtube className="h-4 w-4" />
                 </a>
@@ -885,8 +927,8 @@ export default function App() {
               {BRAND.name}
             </div>
             <p className="text-slate-400 mt-2 text-sm">
-              Club de rem sense ànim de lucre. Promovem el rem tradicional i de
-              mar a Cambrils.
+              Club de rem sense ànim de lucre. Promovem el rem
+              tradicional i de mar a Cambrils.
             </p>
           </div>
           <div>
@@ -904,7 +946,9 @@ export default function App() {
             </ul>
           </div>
           <div>
-            <div className="font-semibold text-white mb-2">Activitat</div>
+            <div className="font-semibold text-white mb-2">
+              Activitat
+            </div>
             <ul className="space-y-2 text-sm text-slate-300">
               <li>
                 <a href="#agenda">Agenda</a>
@@ -918,13 +962,8 @@ export default function App() {
             </ul>
           </div>
           <div>
-            <div className="font-semibold text-white mb-2">Documents</div>
+            <div className="font-semibold text-white mb-2">Legal</div>
             <ul className="space-y-2 text-sm text-slate-300">
-              <li>
-                <a href="/ficha-salut-rem.pdf" download>
-                  Descarregar fitxa de salut
-                </a>
-              </li>
               <li>Avís legal</li>
               <li>Privacitat</li>
               <li>Cookies</li>
