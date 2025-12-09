@@ -13,8 +13,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import {
   ChevronRight,
+  ChevronLeft,
+  X,
   MapPin,
   Newspaper,
   Phone,
@@ -38,6 +41,12 @@ const HERO_PHOTOS = [
   "/hero-boteescuela.jpg",
   "/hero-botesocial.jpg",
 ];
+
+// === Galería (15 fotos para el carrusel) ===
+const GALLERY_IMAGES = Array.from(
+  { length: 15 },
+  (_, i) => `/galeria-${i + 1}.jpg`
+);
 
 // --- Brand system ---
 const BRAND = {
@@ -159,7 +168,8 @@ function useActiveSection(ids) {
 export default function App() {
   const [slide, setSlide] = useState(0);
   const [lang, setLang] = useState("CAT");
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [galleryIndex, setGalleryIndex] = useState(0);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -179,10 +189,32 @@ export default function App() {
     "contacte",
   ]);
 
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  const openGallery = (startIndex = 0) => {
+    setGalleryIndex(startIndex);
+    setIsGalleryOpen(true);
+  };
+
+  const closeGallery = () => setIsGalleryOpen(false);
+
+  const nextImage = () => {
+    setGalleryIndex((i) => (i + 1) % GALLERY_IMAGES.length);
+  };
+
+  const prevImage = () => {
+    setGalleryIndex((i) => (i - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length);
+  };
+
   return (
     <Shell>
       {/* Header */}
-      <header className="sticky top-0 z-40 backdrop-blur bg-white/90 border-b border-slate-100">
+      <header className="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-3" aria-label="Inici">
             <img
@@ -242,94 +274,88 @@ export default function App() {
             </Button>
           </div>
 
-          {/* Botón menú móvil */}
-          <div className="flex md:hidden">
-            <Button
-              size="icon"
-              variant="outline"
-              onClick={() => setMobileOpen(true)}
+          {/* Menú mòbil */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                size="icon"
+                variant="outline"
+                className="md:hidden border-slate-400 text-slate-800"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+
+            <SheetContent
+              side="right"
+              className="w-full max-w-xs bg-white shadow-xl border-l border-slate-200"
             >
-              <Menu className="h-5 w-5" />
-            </Button>
-          </div>
+              <div className="flex flex-col h-full p-4 bg-white">
+                {/* Logo y botón cerrar */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-2">
+                    <img src={BRAND.logo} alt="logo" className="h-7" />
+                    <span className="font-semibold">{BRAND.name}</span>
+                  </div>
+                  <SheetClose asChild>
+                    <Button variant="ghost" size="sm">
+                      Tancar
+                    </Button>
+                  </SheetClose>
+                </div>
+
+                {/* Enlaces del menú */}
+                <nav className="grid gap-3 mb-6">
+                  {NAV.map((n) => (
+                    <SheetClose asChild key={n.href}>
+                      <a
+                        href={n.href}
+                        className="text-slate-700 text-lg"
+                      >
+                        {n.label}
+                      </a>
+                    </SheetClose>
+                  ))}
+                </nav>
+
+                <Separator className="my-4" />
+
+                {/* Botones */}
+                <div className="grid gap-3 mt-auto">
+                  <a
+                    href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button
+                      style={{ backgroundColor: BRAND.primary }}
+                      className="w-full"
+                    >
+                      Fes-te soci
+                    </Button>
+                  </a>
+
+                  <a href="/ficha-salut-rem.pdf" download>
+                    <Button
+                      variant="outline"
+                      className="w-full border-slate-300"
+                    >
+                      Descarregar fitxa
+                    </Button>
+                  </a>
+
+                  <Button
+                    variant="outline"
+                    onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
+                  >
+                    {lang}
+                  </Button>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </header>
-
-      {/* Mobile menu overlay */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-50 bg-white">
-          {/* Barra superior con logo y cerrar */}
-          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between border-b border-slate-200">
-            <div className="flex items-center gap-2">
-              <img src={BRAND.logo} alt="logo" className="h-7" />
-              <span className="font-semibold">{BRAND.name}</span>
-            </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setMobileOpen(false)}
-            >
-              Tancar
-            </Button>
-          </div>
-
-          {/* Contenido del menú */}
-          <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col h-[calc(100vh-52px)] justify-between gap-6">
-            <div>
-              <nav className="grid gap-3 mb-4">
-                {NAV.map((n) => (
-                  <a
-                    key={n.href}
-                    href={n.href}
-                    className="text-slate-800 text-lg"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {n.label}
-                  </a>
-                ))}
-              </nav>
-
-              <Separator className="my-4" />
-            </div>
-
-            <div className="grid gap-3 pb-4">
-              <a
-                href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMobileOpen(false)}
-              >
-                <Button
-                  style={{ backgroundColor: BRAND.primary }}
-                  className="w-full"
-                >
-                  Fes-te soci
-                </Button>
-              </a>
-
-              <a
-                href="/ficha-salut-rem.pdf"
-                download
-                onClick={() => setMobileOpen(false)}
-              >
-                <Button
-                  variant="outline"
-                  className="w-full border-slate-300"
-                >
-                  Descarregar fitxa
-                </Button>
-              </a>
-
-              <Button
-                variant="outline"
-                onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
-              >
-                {lang}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Hero */}
       <section
@@ -364,12 +390,14 @@ export default function App() {
               edats: formació, salut i èxit esportiu en un entorn únic.
             </p>
             <div className="flex flex-wrap gap-3 mt-6">
-              <a href="#contacte">
-                <Button size="lg" style={{ backgroundColor: BRAND.primary }}>
-                  Prova una sessió{" "}
-                  <ChevronRight className="ml-1 h-4 w-4" />
-                </Button>
-              </a>
+              <Button
+                size="lg"
+                style={{ backgroundColor: BRAND.primary }}
+                onClick={() => scrollToSection("contacte")}
+              >
+                Prova una sessió
+                <ChevronRight className="ml-1 h-4 w-4" />
+              </Button>
               <a
                 href="/calendario.jpg"
                 target="_blank"
@@ -471,21 +499,18 @@ export default function App() {
 
             <CardContent>
               <div className="mt-4 flex flex-wrap gap-2">
-                <a href="#contacte">
-                  <Button
-                    size="lg"
-                    style={{ backgroundColor: BRAND.primary }}
-                  >
-                    Prova una sessió
-                  </Button>
-                </a>
+                <Button
+                  size="lg"
+                  style={{ backgroundColor: BRAND.primary }}
+                  onClick={() => scrollToSection("contacte")}
+                >
+                  Prova una sessió
+                </Button>
 
                 <Button
                   variant="outline"
                   size="lg"
-                  onClick={() => {
-                    window.location.href = "/galeria";
-                  }}
+                  onClick={() => openGallery(0)}
                 >
                   Veure més fotos
                 </Button>
@@ -539,21 +564,18 @@ export default function App() {
               </ul>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                <a href="#contacte">
-                  <Button
-                    size="lg"
-                    style={{ backgroundColor: BRAND.primary }}
-                  >
-                    Prova una sessió
-                  </Button>
-                </a>
+                <Button
+                  size="lg"
+                  style={{ backgroundColor: BRAND.primary }}
+                  onClick={() => scrollToSection("contacte")}
+                >
+                  Prova una sessió
+                </Button>
 
                 <Button
                   variant="outline"
                   size="lg"
-                  onClick={() => {
-                    window.location.href = "/galeria";
-                  }}
+                  onClick={() => openGallery(0)}
                 >
                   Veure més fotos
                 </Button>
@@ -608,21 +630,18 @@ export default function App() {
               </ul>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                <a href="#contacte">
-                  <Button
-                    size="lg"
-                    style={{ backgroundColor: BRAND.primary }}
-                  >
-                    Prova una sessió
-                  </Button>
-                </a>
+                <Button
+                  size="lg"
+                  style={{ backgroundColor: BRAND.primary }}
+                  onClick={() => scrollToSection("contacte")}
+                >
+                  Prova una sessió
+                </Button>
 
                 <Button
                   variant="outline"
                   size="lg"
-                  onClick={() => {
-                    window.location.href = "/galeria";
-                  }}
+                  onClick={() => openGallery(0)}
                 >
                   Veure més fotos
                 </Button>
@@ -886,9 +905,12 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
-                  className="p-2 rounded-full bg-gradient-to-tr from-purple-500 via-pink-500 to-yellow-500 text-white"
+                  className="p-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50"
                 >
-                  <Instagram className="h-4 w-4" />
+                  <Instagram
+                    className="h-4 w-4"
+                    style={{ color: "#E4405F" }}
+                  />
                 </a>
 
                 <a
@@ -896,17 +918,23 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  className="p-2 rounded-full bg-[#1877F2] text-white"
+                  className="p-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50"
                 >
-                  <Facebook className="h-4 w-4" />
+                  <Facebook
+                    className="h-4 w-4"
+                    style={{ color: "#1877F2" }}
+                  />
                 </a>
 
                 <a
                   href="#"
                   aria-label="YouTube"
-                  className="p-2 rounded-full bg-[#FF0000] text-white"
+                  className="p-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50"
                 >
-                  <Youtube className="h-4 w-4" />
+                  <Youtube
+                    className="h-4 w-4"
+                    style={{ color: "#FF0000" }}
+                  />
                 </a>
               </div>
             </CardContent>
@@ -942,6 +970,11 @@ export default function App() {
               </li>
               <li>
                 <a href="#contacte">Contacte</a>
+              </li>
+              <li>
+                <a href="/ficha-salut-rem.pdf" download>
+                  Descarregar fitxa
+                </a>
               </li>
             </ul>
           </div>
@@ -982,7 +1015,7 @@ export default function App() {
       </footer>
 
       {/* Sticky join CTA */}
-      <div className="fixed bottom-4 right-4 md:right-6 z-30">
+      <div className="fixed bottom-4 right-4 md:right-6 z-50">
         <a
           href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
           target="_blank"
@@ -997,6 +1030,41 @@ export default function App() {
           </Button>
         </a>
       </div>
+
+      {/* Modal galeria */}
+      {isGalleryOpen && (
+        <div className="fixed inset-0 z-[60] bg-black/80 flex items-center justify-center">
+          <button
+            className="absolute top-4 right-4 text-white"
+            onClick={closeGallery}
+            aria-label="Tancar galeria"
+          >
+            <X className="h-6 w-6" />
+          </button>
+
+          <button
+            className="absolute left-4 text-white"
+            onClick={prevImage}
+            aria-label="Imatge anterior"
+          >
+            <ChevronLeft className="h-8 w-8" />
+          </button>
+
+          <img
+            src={GALLERY_IMAGES[galleryIndex]}
+            alt="Galeria Vent d'Estrop"
+            className="max-h-[80vh] max-w-[90vw] rounded-xl shadow-2xl object-contain"
+          />
+
+          <button
+            className="absolute right-4 text-white"
+            onClick={nextImage}
+            aria-label="Imatge següent"
+          >
+            <ChevronRight className="h-8 w-8" />
+          </button>
+        </div>
+      )}
     </Shell>
   );
 }
