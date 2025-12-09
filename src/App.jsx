@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   ChevronRight,
   ChevronLeft,
@@ -170,6 +170,7 @@ export default function App() {
   const [lang, setLang] = useState("CAT");
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false); // controla el Sheet móvil
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -275,7 +276,7 @@ export default function App() {
           </div>
 
           {/* Menú mòbil */}
-          <Sheet>
+          <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
             <SheetTrigger asChild>
               <Button
                 size="icon"
@@ -297,24 +298,26 @@ export default function App() {
                     <img src={BRAND.logo} alt="logo" className="h-7" />
                     <span className="font-semibold">{BRAND.name}</span>
                   </div>
-                  <SheetClose asChild>
-                    <Button variant="ghost" size="sm">
-                      Tancar
-                    </Button>
-                  </SheetClose>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Tancar
+                  </Button>
                 </div>
 
                 {/* Enlaces del menú */}
                 <nav className="grid gap-3 mb-6">
                   {NAV.map((n) => (
-                    <SheetClose asChild key={n.href}>
-                      <a
-                        href={n.href}
-                        className="text-slate-700 text-lg"
-                      >
-                        {n.label}
-                      </a>
-                    </SheetClose>
+                    <a
+                      key={n.href}
+                      href={n.href}
+                      className="text-slate-700 text-lg"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      {n.label}
+                    </a>
                   ))}
                 </nav>
 
@@ -326,6 +329,7 @@ export default function App() {
                     href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => setMenuOpen(false)}
                   >
                     <Button
                       style={{ backgroundColor: BRAND.primary }}
@@ -335,7 +339,11 @@ export default function App() {
                     </Button>
                   </a>
 
-                  <a href="/ficha-salut-rem.pdf" download>
+                  <a
+                    href="/ficha-salut-rem.pdf"
+                    download
+                    onClick={() => setMenuOpen(false)}
+                  >
                     <Button
                       variant="outline"
                       className="w-full border-slate-300"
@@ -346,7 +354,10 @@ export default function App() {
 
                   <Button
                     variant="outline"
-                    onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
+                    onClick={() => {
+                      setLang(lang === "CAT" ? "ES" : "CAT");
+                      setMenuOpen(false);
+                    }}
                   >
                     {lang}
                   </Button>
