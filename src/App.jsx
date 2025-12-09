@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   ChevronRight,
   ChevronLeft,
@@ -170,6 +170,7 @@ export default function App() {
   const [lang, setLang] = useState("CAT");
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -275,12 +276,16 @@ export default function App() {
           </div>
 
           {/* Menú mòbil */}
-          <Sheet>
+          <Sheet
+            open={isMobileMenuOpen}
+            onOpenChange={setIsMobileMenuOpen}
+          >
             <SheetTrigger asChild>
               <Button
                 size="icon"
                 variant="outline"
                 className="md:hidden border-slate-400 text-slate-800"
+                onClick={() => setIsMobileMenuOpen(true)}
               >
                 <Menu className="h-5 w-5" />
               </Button>
@@ -297,24 +302,26 @@ export default function App() {
                     <img src={BRAND.logo} alt="logo" className="h-7" />
                     <span className="font-semibold">{BRAND.name}</span>
                   </div>
-                  <SheetClose asChild>
-                    <Button variant="ghost" size="sm">
-                      Tancar
-                    </Button>
-                  </SheetClose>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Tancar
+                  </Button>
                 </div>
 
                 {/* Enlaces del menú */}
                 <nav className="grid gap-3 mb-6">
                   {NAV.map((n) => (
-                    <SheetClose asChild key={n.href}>
-                      <a
-                        href={n.href}
-                        className="text-slate-700 text-lg"
-                      >
-                        {n.label}
-                      </a>
-                    </SheetClose>
+                    <a
+                      key={n.href}
+                      href={n.href}
+                      className="text-slate-700 text-lg"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {n.label}
+                    </a>
                   ))}
                 </nav>
 
