@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   ChevronRight,
   ChevronLeft,
@@ -215,7 +214,7 @@ export default function App() {
   return (
     <Shell>
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-100">
+      <header className="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-3" aria-label="Inici">
             <img
@@ -258,7 +257,6 @@ export default function App() {
               </Button>
             </a>
 
-            {/* Botó per descarregar la fitxa de salut */}
             <a href="/ficha-salut-rem.pdf" download>
               <Button variant="outline" className="border-slate-300">
                 Descarregar fitxa
@@ -275,99 +273,92 @@ export default function App() {
             </Button>
           </div>
 
-          {/* Menú mòbil */}
-          <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-            <SheetTrigger asChild>
-              <Button
-                size="icon"
-                variant="outline"
-                className="md:hidden border-slate-500 text-slate-900"
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-
-            <SheetContent
-              side="right"
-              className="w-full max-w-full shadow-xl border-l border-slate-200 p-0"
-              style={{ backgroundColor: "#ffffff" }}   // <- FORZAMOS FONDO BLANCO
-            >
-              <div className="flex flex-col h-full p-4">
-                {/* Logo y botón cerrar */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-2">
-                    <img src={BRAND.logo} alt="logo" className="h-7" />
-                    <span className="font-semibold">{BRAND.name}</span>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Tancar
-                  </Button>
-                </div>
-
-                {/* Enlaces del menú */}
-                <nav className="grid gap-3 mb-6">
-                  {NAV.map((n) => (
-                    <a
-                      key={n.href}
-                      href={n.href}
-                      className="text-slate-700 text-lg"
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      {n.label}
-                    </a>
-                  ))}
-                </nav>
-
-                <Separator className="my-4" />
-
-                {/* Botones */}
-                <div className="grid gap-3 mt-auto">
-                  <a
-                    href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    <Button
-                      style={{ backgroundColor: BRAND.primary }}
-                      className="w-full"
-                    >
-                      Fes-te soci
-                    </Button>
-                  </a>
-
-                  <a
-                    href="/ficha-salut-rem.pdf"
-                    download
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    <Button
-                      variant="outline"
-                      className="w-full border-slate-300"
-                    >
-                      Descarregar fitxa
-                    </Button>
-                  </a>
-
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setLang(lang === "CAT" ? "ES" : "CAT");
-                      setMenuOpen(false);
-                    }}
-                  >
-                    {lang}
-                  </Button>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+          {/* Botón menú móvil */}
+          <button
+            className="md:hidden inline-flex items-center justify-center rounded-md border border-slate-500 p-2 text-slate-900"
+            onClick={() => setMenuOpen(true)}
+            aria-label="Obrir menú"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
         </div>
       </header>
+
+      {/* MENÚ MÓVIL FULLSCREEN */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-50 bg-white md:hidden">
+          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between border-b border-slate-200">
+            <div className="flex items-center gap-2">
+              <img src={BRAND.logo} alt="logo" className="h-7" />
+              <span className="font-semibold">{BRAND.name}</span>
+            </div>
+            <button
+              className="text-slate-700 text-sm px-3 py-1 rounded-md border border-slate-200"
+              onClick={() => setMenuOpen(false)}
+            >
+              Tancar
+            </button>
+          </div>
+
+          <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col h-[calc(100vh-56px)]">
+            {/* Enlaces nav */}
+            <nav className="grid gap-3 mb-6">
+              {NAV.map((n) => (
+                <a
+                  key={n.href}
+                  href={n.href}
+                  className="text-slate-700 text-lg"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {n.label}
+                </a>
+              ))}
+            </nav>
+
+            <Separator className="my-4" />
+
+            {/* Botones inferiores */}
+            <div className="mt-auto grid gap-3 pb-4">
+              <a
+                href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMenuOpen(false)}
+              >
+                <Button
+                  style={{ backgroundColor: BRAND.primary }}
+                  className="w-full"
+                >
+                  Fes-te soci
+                </Button>
+              </a>
+
+              <a
+                href="/ficha-salut-rem.pdf"
+                download
+                onClick={() => setMenuOpen(false)}
+              >
+                <Button
+                  variant="outline"
+                  className="w-full border-slate-300"
+                >
+                  Descarregar fitxa
+                </Button>
+              </a>
+
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setLang(lang === "CAT" ? "ES" : "CAT");
+                  setMenuOpen(false);
+                }}
+              >
+                {lang}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hero */}
       <section
@@ -739,7 +730,6 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
-          {/* Widget Windy */}
           <div className="rounded-2xl overflow-hidden shadow-lg bg-slate-200 h-[420px]">
             <iframe
               width="100%"
@@ -749,7 +739,6 @@ export default function App() {
             ></iframe>
           </div>
 
-          {/* Explicació */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Vent i condicions del mar</CardTitle>
@@ -876,7 +865,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Contact */}
+      {/* Contacte */}
       <section id="contacte" className="py-16 bg-white">
         <SectionTitle kicker="Contacte" title="Parlem?" />
         <div className="max-w-5xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
@@ -1027,7 +1016,7 @@ export default function App() {
       </footer>
 
       {/* Sticky join CTA */}
-      <div className="fixed bottom-4 right-4 md:right-6 z-50">
+      <div className="fixed bottom-4 right-4 md:right-6 z-30">
         <a
           href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
           target="_blank"
