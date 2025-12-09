@@ -170,7 +170,7 @@ export default function App() {
   const [lang, setLang] = useState("CAT");
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false); // controla el Sheet móvil
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -289,9 +289,10 @@ export default function App() {
 
             <SheetContent
               side="right"
-              className="w-full max-w-full bg-white shadow-xl border-l border-slate-200 p-0"
+              className="w-full max-w-full shadow-xl border-l border-slate-200 p-0"
+              style={{ backgroundColor: "#ffffff" }}   // <- FORZAMOS FONDO BLANCO
             >
-              <div className="flex flex-col h-full p-4 bg-white">
+              <div className="flex flex-col h-full p-4">
                 {/* Logo y botón cerrar */}
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-2">
