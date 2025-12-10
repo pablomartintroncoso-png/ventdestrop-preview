@@ -1,4 +1,5 @@
-// src/components/ui/sheet.jsx
+"use client";
+
 import React, {
   createContext,
   useContext,
@@ -6,7 +7,7 @@ import React, {
   useState,
 } from "react";
 
-// Contexto interno para compartir open / setOpen
+// --- Context intern per compartir open / setOpen ---
 const SheetContext = createContext(null);
 
 function useSheetContext() {
@@ -17,7 +18,7 @@ function useSheetContext() {
   return ctx;
 }
 
-// --- ROOT -------------------------------------------------
+// --- ROOT ---
 function Sheet({ children }) {
   const [open, setOpen] = useState(false);
 
@@ -33,7 +34,7 @@ function Sheet({ children }) {
   );
 }
 
-// --- TRIGGER ----------------------------------------------
+// --- TRIGGER ---
 function SheetTrigger({ asChild, children }) {
   const { setOpen } = useSheetContext();
 
@@ -50,10 +51,14 @@ function SheetTrigger({ asChild, children }) {
     });
   }
 
-  return <button onClick={handleClick}>{children}</button>;
+  return (
+    <button type="button" onClick={handleClick}>
+      {children}
+    </button>
+  );
 }
 
-// --- CLOSE ------------------------------------------------
+// --- CLOSE ---
 function SheetClose({ asChild, children }) {
   const { setOpen } = useSheetContext();
 
@@ -70,10 +75,14 @@ function SheetClose({ asChild, children }) {
     });
   }
 
-  return <button onClick={handleClick}>{children}</button>;
+  return (
+    <button type="button" onClick={handleClick}>
+      {children}
+    </button>
+  );
 }
 
-// --- CONTENT ----------------------------------------------
+// --- CONTENT ---
 function SheetContent({
   side = "right",
   className = "",
@@ -89,22 +98,17 @@ function SheetContent({
       ? "left-0 border-r"
       : "right-0 border-l";
 
-  const classes =
-    "fixed inset-y-0 z-50 w-full max-w-full bg-white shadow-xl border-slate-200 p-4 " +
-    sideClasses +
-    " " +
-    className;
+  const baseClasses =
+    "fixed inset-y-0 z-50 w-full max-w-xs bg-white shadow-xl p-4 border-slate-200 " +
+    sideClasses;
 
   return (
-    <div className={classes} {...props}>
+    <div className={`${baseClasses} ${className}`} {...props}>
       {children}
     </div>
   );
 }
 
-// --- EXPORTS IMPORTANTES ----------------------------------
-// 👉 Estos son EXACTAMENTE los nombres que App.jsx está importando
+// 👇 AQUÍ dejamos CLARÍSIMOS los exports
 export { Sheet, SheetTrigger, SheetClose, SheetContent };
-
-// (opcional, por si en algún lado se importa por defecto)
 export default Sheet;
