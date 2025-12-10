@@ -58,7 +58,7 @@ function SheetTrigger({ asChild, children }) {
   );
 }
 
-// --- CONTENT (con botón de cerrar incorporado) ---
+// --- CONTENT (incluye botón de cerrar propio) ---
 function SheetContent({
   side = "right",
   className = "",
@@ -80,7 +80,6 @@ function SheetContent({
 
   return (
     <div className={`${baseClasses} ${className}`} {...props}>
-      {/* Botón de cerrar propio del Sheet */}
       <div className="flex justify-end mb-4">
         <button
           type="button"
@@ -96,6 +95,5 @@ function SheetContent({
   );
 }
 
-// 🔹 SOLO exportamos estos tres
 export { Sheet, SheetTrigger, SheetContent };
 export default Sheet;
