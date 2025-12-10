@@ -1,24 +1,56 @@
-import React, { useState } from 'react'
+"use client";
 
-export function Sheet({ children }) { return <div>{children}</div> }
-export function SheetTrigger({ asChild, children }) {
-  return React.cloneElement(children, { 'data-sheet-trigger': true })
-}
-export function SheetContent({ side='right', className='', children }) {
-  const [open, setOpen] = useState(false)
-  // Listen to trigger clicks in a naive way
-  React.useEffect(() => {
-    function onClick(e){
-      const t = e.target.closest('[data-sheet-trigger]')
-      if(t) setOpen(true)
-    }
-    document.addEventListener('click', onClick)
-    return () => document.removeEventListener('click', onClick)
-  },[])
-  return open ? (
-    <div className={['fixed top-0 bottom-0', side==='right'?'right-0':'left-0','w-80 bg-white border-l border-slate-200 p-4 shadow-xl z-50', className].join(' ')}>
-      <button className="mb-4 text-sm text-slate-600" onClick={()=>setOpen(false)}>Cerrar</button>
-      {children}
-    </div>
-  ) : null
-}
+import * as React from "react";
+import * as SheetPrimitive from "@radix-ui/react-dialog";
+import { cn } from "@/lib/utils";
+
+const Sheet = SheetPrimitive.Root;
+const SheetTrigger = SheetPrimitive.Trigger;
+const SheetClose = SheetPrimitive.Close;
+
+const SheetPortal = (props) => <SheetPrimitive.Portal {...props} />;
+
+const SheetOverlay = React.forwardRef(function SheetOverlay(
+  { className, ...props },
+  ref
+) {
+  return (
+    <SheetPrimitive.Overlay
+      ref={ref}
+      className={cn(
+        "fixed inset-0 z-40 bg-black/40 backdrop-blur-sm",
+        className
+      )}
+      {...props}
+    />
+  );
+});
+
+const SheetContent = React.forwardRef(function SheetContent(
+  { className, side = "right", ...props },
+  ref
+) {
+  return (
+    <SheetPortal>
+      <SheetOverlay />
+      <SheetPrimitive.Content
+        ref={ref}
+        className={cn(
+          "fixed z-50 bg-white shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out",
+          "data-[state=closed]:duration-200 data-[state=open]:duration-200",
+          side === "right" &&
+            "inset-y-0 right-0 w-full max-w-xs border-l border-slate-200",
+          side === "left" &&
+            "inset-y-0 left-0 w-full max-w-xs border-r border-slate-200",
+          className
+        )}
+        {...props}
+      />
+    </SheetPortal>
+  );
+});
+
+SheetOverlay.displayName = "SheetOverlay";
+SheetContent.displayName = "SheetContent";
+
+export { Sheet, SheetTrigger, SheetContent, SheetClose };
