@@ -1,20 +1,27 @@
 // src/components/ui/sheet.jsx
-import React from "react";
+import React, {
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
-const SheetContext = React.createContext(null);
+// Contexto interno para compartir open / setOpen
+const SheetContext = createContext(null);
 
 function useSheetContext() {
-  const ctx = React.useContext(SheetContext);
+  const ctx = useContext(SheetContext);
   if (!ctx) {
     throw new Error("Sheet components must be used inside <Sheet>");
   }
   return ctx;
 }
 
-export function Sheet({ children }) {
-  const [open, setOpen] = React.useState(false);
+// --- ROOT -------------------------------------------------
+function Sheet({ children }) {
+  const [open, setOpen] = useState(false);
 
-  const value = React.useMemo(
+  const value = useMemo(
     () => ({ open, setOpen }),
     [open]
   );
@@ -26,7 +33,8 @@ export function Sheet({ children }) {
   );
 }
 
-export function SheetTrigger({ asChild, children }) {
+// --- TRIGGER ----------------------------------------------
+function SheetTrigger({ asChild, children }) {
   const { setOpen } = useSheetContext();
 
   const handleClick = (event) => {
@@ -45,7 +53,8 @@ export function SheetTrigger({ asChild, children }) {
   return <button onClick={handleClick}>{children}</button>;
 }
 
-export function SheetClose({ asChild, children }) {
+// --- CLOSE ------------------------------------------------
+function SheetClose({ asChild, children }) {
   const { setOpen } = useSheetContext();
 
   const handleClick = (event) => {
@@ -64,7 +73,8 @@ export function SheetClose({ asChild, children }) {
   return <button onClick={handleClick}>{children}</button>;
 }
 
-export function SheetContent({
+// --- CONTENT ----------------------------------------------
+function SheetContent({
   side = "right",
   className = "",
   children,
@@ -92,5 +102,9 @@ export function SheetContent({
   );
 }
 
-export default Sheet;
+// --- EXPORTS IMPORTANTES ----------------------------------
+// 👉 Estos son EXACTAMENTE los nombres que App.jsx está importando
+export { Sheet, SheetTrigger, SheetClose, SheetContent };
 
+// (opcional, por si en algún lado se importa por defecto)
+export default Sheet;
