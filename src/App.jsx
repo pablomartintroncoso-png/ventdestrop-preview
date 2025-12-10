@@ -14,6 +14,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
+import {
   ChevronRight,
   ChevronLeft,
   X,
@@ -65,7 +71,7 @@ const NAV = [
   { label: "Escoles", href: "#escoles" },
   { label: "Competició", href: "#competicio" },
   { label: "Social", href: "#social" },
-  { label: "Agenda", href: "#agenda" },
+  { label: "Salut", href: "#salut" },
   { label: "Notícies", href: "#noticies" },
   { label: "Contacte", href: "#contacte" },
 ];
@@ -109,6 +115,17 @@ const NEWS = [
   },
 ];
 
+// Textos SALUT
+const VOGADORES_SHORT =
+  "Les Vogadores amb Cor són dones que han superat el càncer de mama i comparteixen la passió pel rem i els beneficis que aquest esport els aporta.";
+const VOGADORES_FULL =
+  "Les Vogadores amb Cor són dones que han superat el càncer de mama, comparteixen la passió pel rem i els beneficis que aquest esport els aporta. Des de fa temps, el Club de Rem Vent d'Estrop Vogadors de Cambrils acull amb entusiasme a dones que han estat afectades per càncer de mama, conegudes com a \"Vogadores amb Cor\". Aquest grup especial comparteix la passió pel rem com a eina de recuperació i benestar, gaudint dels beneficis tant a nivell físic com mental. Per a elles, el rem no només és una activitat esportiva, sinó també una manera de reforçar el compromís, crear relacions socials i afrontar la vida amb més optimisme. La seva participació en el club és un exemple de com l'esport pot ser una eina poderosa per a la recuperació i la millora de la qualitat de vida, fomentant la força interior i la solidaritat entre elles.";
+
+const REM_ADAPTAT_SHORT =
+  "El rem adaptat és una activitat esportiva inclusiva en la qual es surt a la mar amb una tripulació formada tant per persones amb discapacitats diverses com amb socis del club.";
+const REM_ADAPTAT_FULL =
+  "El rem adaptat és una activitat esportiva inclusiva en la qual es surt a la mar amb una tripulació formada tant per persones amb discapacitats diverses com amb socis del club. L'esport adaptat en general es considera un instrument d'integració social. L'esport afavoreix el desenvolupament personal i l'autoestima, crea compromís i autodisciplina, i fomenta l'esperit de lluita i el treball en equip. Vent d'Estrop ha aconseguit obrir les portes a col·lectius amb discapacitat intel·lectual i amb malalties mentals, i per al club cambrilenc és una satisfacció molt gran que aquests col·lectius puguin fruir del rem. Pat Perpinyà va ser la vogadora que va iniciar aquest projecte l'any 2009 i que aquest any ja arriba a la seva sisena temporada consecutiva. El club cambrilenc va ser pioner en aquesta pràctica inclusiva del rem dins del litoral català.";
+
 const Pill = ({ children }) => (
   <span className="px-3 py-1 rounded-full bg-white/80 text-sm text-slate-700 border border-white/60 shadow-sm">
     {children}
@@ -144,7 +161,7 @@ const Shell = ({ children }) => (
   </div>
 );
 
-function useActiveSection(ids) {
+function useActiveSection(ids: string[]) {
   const [active, setActive] = useState(ids?.[0] || "");
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -166,10 +183,11 @@ function useActiveSection(ids) {
 
 export default function App() {
   const [slide, setSlide] = useState(0);
-  const [lang, setLang] = useState("CAT");
+  const [lang, setLang] = useState<"CAT" | "ES">("CAT");
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [showVogadoresMore, setShowVogadoresMore] = useState(false);
+  const [showRemAdaptatMore, setShowRemAdaptatMore] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -182,14 +200,13 @@ export default function App() {
     "club",
     "escoles",
     "competicio",
-    "agenda",
+    "social",
+    "salut",
     "noticies",
-    "galeria",
-    "socis",
     "contacte",
   ]);
 
-  const scrollToSection = (id) => {
+  const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -214,7 +231,7 @@ export default function App() {
   return (
     <Shell>
       {/* Header */}
-      <header className="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-100">
+      <header className="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-3" aria-label="Inici">
             <img
@@ -257,6 +274,7 @@ export default function App() {
               </Button>
             </a>
 
+            {/* Botó per descarregar la fitxa de salut */}
             <a href="/ficha-salut-rem.pdf" download>
               <Button variant="outline" className="border-slate-300">
                 Descarregar fitxa
@@ -273,92 +291,85 @@ export default function App() {
             </Button>
           </div>
 
-          {/* Botón menú móvil */}
-          <button
-            className="md:hidden inline-flex items-center justify-center rounded-md border border-slate-500 p-2 text-slate-900"
-            onClick={() => setMenuOpen(true)}
-            aria-label="Obrir menú"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
+          {/* Menú mòbil */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                size="icon"
+                variant="outline"
+                className="md:hidden border-slate-500 text-slate-900"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+
+            <SheetContent
+              side="right"
+              className="w-full max-w-full bg-white shadow-xl border-l border-slate-200 p-0"
+            >
+              <div className="flex flex-col h-full p-4 bg-white">
+                {/* Logo y botón cerrar */}
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-2">
+                    <img src={BRAND.logo} alt="logo" className="h-7" />
+                    <span className="font-semibold">{BRAND.name}</span>
+                  </div>
+                  <SheetClose asChild>
+                    <Button variant="ghost" size="sm">
+                      Tancar
+                    </Button>
+                  </SheetClose>
+                </div>
+
+                {/* Enlaces del menú */}
+                <nav className="grid gap-3 mb-6">
+                  {NAV.map((n) => (
+                    <SheetClose asChild key={n.href}>
+                      <a href={n.href} className="text-slate-700 text-lg">
+                        {n.label}
+                      </a>
+                    </SheetClose>
+                  ))}
+                </nav>
+
+                <Separator className="my-4" />
+
+                {/* Botones */}
+                <div className="grid gap-3 mt-auto">
+                  <a
+                    href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button
+                      style={{ backgroundColor: BRAND.primary }}
+                      className="w-full"
+                    >
+                      Fes-te soci
+                    </Button>
+                  </a>
+
+                  <a href="/ficha-salut-rem.pdf" download>
+                    <Button
+                      variant="outline"
+                      className="w-full border-slate-300"
+                    >
+                      Descarregar fitxa
+                    </Button>
+                  </a>
+
+                  <Button
+                    variant="outline"
+                    onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
+                  >
+                    {lang}
+                  </Button>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </header>
-
-      {/* MENÚ MÓVIL FULLSCREEN */}
-      {menuOpen && (
-        <div className="fixed inset-0 z-50 bg-white md:hidden">
-          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between border-b border-slate-200">
-            <div className="flex items-center gap-2">
-              <img src={BRAND.logo} alt="logo" className="h-7" />
-              <span className="font-semibold">{BRAND.name}</span>
-            </div>
-            <button
-              className="text-slate-700 text-sm px-3 py-1 rounded-md border border-slate-200"
-              onClick={() => setMenuOpen(false)}
-            >
-              Tancar
-            </button>
-          </div>
-
-          <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col h-[calc(100vh-56px)]">
-            {/* Enlaces nav */}
-            <nav className="grid gap-3 mb-6">
-              {NAV.map((n) => (
-                <a
-                  key={n.href}
-                  href={n.href}
-                  className="text-slate-700 text-lg"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {n.label}
-                </a>
-              ))}
-            </nav>
-
-            <Separator className="my-4" />
-
-            {/* Botones inferiores */}
-            <div className="mt-auto grid gap-3 pb-4">
-              <a
-                href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMenuOpen(false)}
-              >
-                <Button
-                  style={{ backgroundColor: BRAND.primary }}
-                  className="w-full"
-                >
-                  Fes-te soci
-                </Button>
-              </a>
-
-              <a
-                href="/ficha-salut-rem.pdf"
-                download
-                onClick={() => setMenuOpen(false)}
-              >
-                <Button
-                  variant="outline"
-                  className="w-full border-slate-300"
-                >
-                  Descarregar fitxa
-                </Button>
-              </a>
-
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setLang(lang === "CAT" ? "ES" : "CAT");
-                  setMenuOpen(false);
-                }}
-              >
-                {lang}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Hero */}
       <section
@@ -481,9 +492,7 @@ export default function App() {
               <Badge variant="secondary" className="w-fit">
                 Adults
               </Badge>
-              <CardTitle className="mt-2">
-                Salut i competició
-              </CardTitle>
+              <CardTitle className="mt-2">Salut i competició</CardTitle>
               <CardDescription>
                 Grups fitness i equip de llagut.
                 <br />
@@ -654,44 +663,61 @@ export default function App() {
         </div>
       </section>
 
-      {/* Agenda */}
-      <section id="agenda" className="py-16 bg-[var(--light)]">
-        <SectionTitle kicker="Agenda" title="Properes activitats" />
-        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
-          {EVENTS.map((e, i) => (
-            <Card key={i} className="rounded-2xl shadow-sm">
-              <CardHeader>
-                <div className="flex items-start gap-3">
-                  <div className="p-3 rounded-xl bg-white border text-center leading-none">
-                    <div className="font-extrabold text-[var(--primary)]">
-                      {e.date.split(" ")[0]}
-                    </div>
-                    <div className="text-xs text-slate-500">
-                      {e.date.split(" ")[1]}
-                    </div>
-                  </div>
-                  <div>
-                    <CardTitle className="text-lg">
-                      {e.title}
-                    </CardTitle>
-                    <CardDescription className="flex items-center gap-2 mt-1">
-                      <MapPin className="h-4 w-4" />
-                      {e.location}
-                    </CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-slate-700">{e.desc}</p>
-                <Button
-                  variant="outline"
-                  className="mt-4 border-slate-300"
-                >
-                  Més informació
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+      {/* SALUT (antes Agenda) */}
+      <section id="salut" className="py-16 bg-[var(--light)]">
+        <SectionTitle
+          kicker="SALUT"
+          title="Vogadores amb Cor & Rem Adaptat"
+        >
+          Programes especials que combinen esport, inclusió i benestar a través del rem.
+        </SectionTitle>
+
+        <div className="max-w-7xl mx-auto px-4 md:px-6 grid gap-6 md:grid-cols-2">
+          {/* Vogadores amb Cor */}
+          <Card className="rounded-2xl shadow-sm flex flex-col">
+            <CardHeader className="pb-0">
+              {/* Espai per la imatge */}
+              <div className="w-full h-56 rounded-2xl bg-slate-100 mb-4" />
+              <CardTitle>Vogadores amb Cor</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-4 flex flex-col">
+              <p className="text-slate-700 text-sm leading-relaxed">
+                {showVogadoresMore ? VOGADORES_FULL : VOGADORES_SHORT}
+              </p>
+              <Button
+                variant="ghost"
+                className="px-0 mt-2 text-[var(--primary)] w-fit"
+                onClick={() =>
+                  setShowVogadoresMore((prev) => !prev)
+                }
+              >
+                {showVogadoresMore ? "Veure menys" : "Veure més"}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Rem adaptat */}
+          <Card className="rounded-2xl shadow-sm flex flex-col">
+            <CardHeader className="pb-0">
+              {/* Espai per la imatge */}
+              <div className="w-full h-56 rounded-2xl bg-slate-100 mb-4" />
+              <CardTitle>Rem adaptat</CardTitle>
+            </CardHeader>
+            <CardContent className="pt-4 flex flex-col">
+              <p className="text-slate-700 text-sm leading-relaxed">
+                {showRemAdaptatMore ? REM_ADAPTAT_FULL : REM_ADAPTAT_SHORT}
+              </p>
+              <Button
+                variant="ghost"
+                className="px-0 mt-2 text-[var(--primary)] w-fit"
+                onClick={() =>
+                  setShowRemAdaptatMore((prev) => !prev)
+                }
+              >
+                {showRemAdaptatMore ? "Veure menys" : "Veure més"}
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
@@ -730,6 +756,7 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
+          {/* Widget Windy */}
           <div className="rounded-2xl overflow-hidden shadow-lg bg-slate-200 h-[420px]">
             <iframe
               width="100%"
@@ -739,6 +766,7 @@ export default function App() {
             ></iframe>
           </div>
 
+          {/* Explicació */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Vent i condicions del mar</CardTitle>
@@ -865,7 +893,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Contacte */}
+      {/* Contact */}
       <section id="contacte" className="py-16 bg-white">
         <SectionTitle kicker="Contacte" title="Parlem?" />
         <div className="max-w-5xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
@@ -985,7 +1013,7 @@ export default function App() {
             </div>
             <ul className="space-y-2 text-sm text-slate-300">
               <li>
-                <a href="#agenda">Agenda</a>
+                <a href="#salut">Salut</a>
               </li>
               <li>
                 <a href="#escoles">Escoles</a>
@@ -1016,7 +1044,7 @@ export default function App() {
       </footer>
 
       {/* Sticky join CTA */}
-      <div className="fixed bottom-4 right-4 md:right-6 z-30">
+      <div className="fixed bottom-4 right-4 md:right-6 z-50">
         <a
           href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
           target="_blank"
