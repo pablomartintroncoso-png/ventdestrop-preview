@@ -58,38 +58,14 @@ function SheetTrigger({ asChild, children }) {
   );
 }
 
-// --- CLOSE ---
-function SheetClose({ asChild, children }) {
-  const { setOpen } = useSheetContext();
-
-  const handleClick = (event) => {
-    if (React.isValidElement(children) && children.props.onClick) {
-      children.props.onClick(event);
-    }
-    setOpen(false);
-  };
-
-  if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children, {
-      onClick: handleClick,
-    });
-  }
-
-  return (
-    <button type="button" onClick={handleClick}>
-      {children}
-    </button>
-  );
-}
-
-// --- CONTENT ---
+// --- CONTENT (con botón de cerrar incorporado) ---
 function SheetContent({
   side = "right",
   className = "",
   children,
   ...props
 }) {
-  const { open } = useSheetContext();
+  const { open, setOpen } = useSheetContext();
 
   if (!open) return null;
 
@@ -104,11 +80,22 @@ function SheetContent({
 
   return (
     <div className={`${baseClasses} ${className}`} {...props}>
+      {/* Botón de cerrar propio del Sheet */}
+      <div className="flex justify-end mb-4">
+        <button
+          type="button"
+          className="text-sm text-slate-600"
+          onClick={() => setOpen(false)}
+        >
+          Tancar
+        </button>
+      </div>
+
       {children}
     </div>
   );
 }
 
-// 👇 AQUÍ dejamos CLARÍSIMOS los exports
-export { Sheet, SheetTrigger, SheetClose, SheetContent };
+// 🔹 SOLO exportamos estos tres
+export { Sheet, SheetTrigger, SheetContent };
 export default Sheet;
