@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge };
+import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
@@ -74,6 +74,27 @@ const NAV = [
   { label: "Salut", href: "#salut" },
   { label: "Notícies", href: "#noticies" },
   { label: "Contacte", href: "#contacte" },
+];
+
+const EVENTS = [
+  {
+    date: "24 NOV",
+    title: "Regata Llagut Mediterrani – Badia de Cambrils",
+    location: "Port de Cambrils",
+    desc: "Prova del calendari federatiu. Categories absolut i veterà.",
+  },
+  {
+    date: "30 NOV",
+    title: "Jornada de Portes Obertes",
+    location: "Base nàutica",
+    desc: "Sessió gratuïta per a nous remers i famílies.",
+  },
+  {
+    date: "12 DES",
+    title: "Assemblea General Ordinària",
+    location: "Sala Polivalent – Club",
+    desc: "Memòria anual, pressupost i projectes 2026.",
+  },
 ];
 
 const NEWS = [
@@ -140,6 +161,7 @@ const Shell = ({ children }) => (
   </div>
 );
 
+// *** OJO: sin tipos TS ***
 function useActiveSection(ids) {
   const [active, setActive] = useState(ids?.[0] || "");
   useEffect(() => {
@@ -162,17 +184,16 @@ function useActiveSection(ids) {
 
 export default function App() {
   const [slide, setSlide] = useState(0);
-  const [lang, setLang] = useState("CAT");
+  const [lang, setLang] = useState("CAT"); // sin generics TS
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [showVogadoresMore, setShowVogadoresMore] = useState(false);
   const [showRemAdaptatMore, setShowRemAdaptatMore] = useState(false);
 
   useEffect(() => {
-    const id = setInterval(
-      () => setSlide((s) => (s + 1) % HERO_PHOTOS.length),
-      4000
-    );
+    const id = setInterval(() => {
+      setSlide((s) => (s + 1) % HERO_PHOTOS.length);
+    }, 4000);
     return () => clearInterval(id);
   }, []);
 
@@ -188,7 +209,9 @@ export default function App() {
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   const openGallery = (startIndex = 0) => {
@@ -198,11 +221,13 @@ export default function App() {
 
   const closeGallery = () => setIsGalleryOpen(false);
 
-  const nextImage = () =>
+  const nextImage = () => {
     setGalleryIndex((i) => (i + 1) % GALLERY_IMAGES.length);
+  };
 
-  const prevImage = () =>
+  const prevImage = () => {
     setGalleryIndex((i) => (i - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length);
+  };
 
   return (
     <Shell>
@@ -250,6 +275,7 @@ export default function App() {
               </Button>
             </a>
 
+            {/* Botó per descarregar la fitxa de salut */}
             <a href="/ficha-salut-rem.pdf" download>
               <Button variant="outline" className="border-slate-300">
                 Descarregar fitxa
@@ -283,6 +309,7 @@ export default function App() {
               className="w-full max-w-full bg-white shadow-xl border-l border-slate-200 p-0"
             >
               <div className="flex flex-col h-full p-4 bg-white">
+                {/* Logo y botón cerrar */}
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-2">
                     <img src={BRAND.logo} alt="logo" className="h-7" />
@@ -295,6 +322,7 @@ export default function App() {
                   </SheetClose>
                 </div>
 
+                {/* Enlaces del menú */}
                 <nav className="grid gap-3 mb-6">
                   {NAV.map((n) => (
                     <SheetClose asChild key={n.href}>
@@ -307,6 +335,7 @@ export default function App() {
 
                 <Separator className="my-4" />
 
+                {/* Botones */}
                 <div className="grid gap-3 mt-auto">
                   <a
                     href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
@@ -438,24 +467,27 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
+          {/* Tarjeta 1 – FOTO */}
           <Card className="rounded-2xl shadow-sm overflow-hidden">
             <img
               src="/escola-1.jpg"
               alt="Escola infantil"
               className="w-full h-64 object-cover"
             />
-            <CardHeader />
+            <CardHeader></CardHeader>
           </Card>
 
+          {/* Tarjeta 2 – FOTO */}
           <Card className="rounded-2xl shadow-sm overflow-hidden">
             <img
               src="/escola-2.jpg"
               alt="Escola juvenil"
               className="w-full h-64 object-cover"
             />
-            <CardHeader />
+            <CardHeader></CardHeader>
           </Card>
 
+          {/* Tarjeta 3 – HORARIS + BOTÓ */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <Badge variant="secondary" className="w-fit">
@@ -508,6 +540,7 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
+          {/* Foto 1 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/competi-1.jpg"
@@ -516,6 +549,7 @@ export default function App() {
             />
           </div>
 
+          {/* Foto 2 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/competi-2.jpg"
@@ -524,6 +558,7 @@ export default function App() {
             />
           </div>
 
+          {/* Text + horaris */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Equips i entrenaments</CardTitle>
@@ -571,6 +606,7 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
+          {/* Foto 1 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/social-1.jpg"
@@ -579,6 +615,7 @@ export default function App() {
             />
           </div>
 
+          {/* Foto 2 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/social-2.jpg"
@@ -587,6 +624,7 @@ export default function App() {
             />
           </div>
 
+          {/* Text + horaris */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Activitats socials</CardTitle>
@@ -626,18 +664,20 @@ export default function App() {
         </div>
       </section>
 
-      {/* SALUT */}
+      {/* SALUT (antes Agenda) */}
       <section id="salut" className="py-16 bg-[var(--light)]">
         <SectionTitle
           kicker="SALUT"
-          title="Vogadores amb Cor & Rem adaptat"
+          title="Vogadores amb Cor & Rem Adaptat"
         >
           Programes especials que combinen esport, inclusió i benestar a través del rem.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid gap-6 md:grid-cols-2">
+          {/* Vogadores amb Cor */}
           <Card className="rounded-2xl shadow-sm flex flex-col">
             <CardHeader className="pb-0">
+              {/* Espai per la imatge */}
               <div className="w-full h-56 rounded-2xl bg-slate-100 mb-4" />
               <CardTitle>Vogadores amb Cor</CardTitle>
             </CardHeader>
@@ -648,15 +688,19 @@ export default function App() {
               <Button
                 variant="ghost"
                 className="px-0 mt-2 text-[var(--primary)] w-fit"
-                onClick={() => setShowVogadoresMore((prev) => !prev)}
+                onClick={() =>
+                  setShowVogadoresMore((prev) => !prev)
+                }
               >
                 {showVogadoresMore ? "Veure menys" : "Veure més"}
               </Button>
             </CardContent>
           </Card>
 
+          {/* Rem adaptat */}
           <Card className="rounded-2xl shadow-sm flex flex-col">
             <CardHeader className="pb-0">
+              {/* Espai per la imatge */}
               <div className="w-full h-56 rounded-2xl bg-slate-100 mb-4" />
               <CardTitle>Rem adaptat</CardTitle>
             </CardHeader>
@@ -667,7 +711,9 @@ export default function App() {
               <Button
                 variant="ghost"
                 className="px-0 mt-2 text-[var(--primary)] w-fit"
-                onClick={() => setShowRemAdaptatMore((prev) => !prev)}
+                onClick={() =>
+                  setShowRemAdaptatMore((prev) => !prev)
+                }
               >
                 {showRemAdaptatMore ? "Veure menys" : "Veure més"}
               </Button>
@@ -694,7 +740,8 @@ export default function App() {
                   variant="ghost"
                   className="px-0 text-[var(--primary)]"
                 >
-                  Llegir més <ChevronRight className="h-4 w-4" />
+                  Llegir més{" "}
+                  <ChevronRight className="h-4 w-4" />
                 </Button>
               </CardContent>
             </Card>
@@ -710,6 +757,7 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
+          {/* Widget Windy */}
           <div className="rounded-2xl overflow-hidden shadow-lg bg-slate-200 h-[420px]">
             <iframe
               width="100%"
@@ -719,6 +767,7 @@ export default function App() {
             ></iframe>
           </div>
 
+          {/* Explicació */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Vent i condicions del mar</CardTitle>
@@ -732,7 +781,9 @@ export default function App() {
               <ul className="list-disc list-inside space-y-1">
                 <li>Direcció i intensitat del vent</li>
                 <li>Ràfegues i previsió per hores</li>
-                <li>Especificació per nivell del mar i superfície</li>
+                <li>
+                  Especificació per nivell del mar i superfície
+                </li>
                 <li>Model ECMWF (el més fiable del món)</li>
               </ul>
 
@@ -762,41 +813,49 @@ export default function App() {
               alt="Ràdio Cambrils"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/club-nautic-cambrils.png"
               alt="Club Nàutic Cambrils"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/castro.png"
               alt="A.N. Castro"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/fcr.png"
               alt="FCR"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/ajuntament-cambrils.png"
               alt="Ajuntament de Cambrils"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/savall.png"
               alt="Savall"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/comaigua.png"
               alt="Comaigua"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/acuamar.png"
               alt="Acuamar"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
+
             <img
               src="/logos/revista-cambrils.png"
               alt="Revista Cambrils"
@@ -819,7 +878,10 @@ export default function App() {
             </p>
           </div>
           <div className="flex gap-3">
-            <Button variant="secondary" className="text-[var(--dark)]">
+            <Button
+              variant="secondary"
+              className="text-[var(--dark)]"
+            >
               Fes-te soci
             </Button>
             <Button
@@ -832,7 +894,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* Contacte */}
+      {/* Contact */}
       <section id="contacte" className="py-16 bg-white">
         <SectionTitle kicker="Contacte" title="Parlem?" />
         <div className="max-w-5xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
@@ -851,15 +913,14 @@ export default function App() {
               </div>
             </CardContent>
           </Card>
-
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Informació</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-slate-700">
               <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de
-                Cambrils
+                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port
+                de Cambrils
               </p>
               <p className="flex items-center gap-2">
                 <Phone className="h-4 w-4" /> +34 600 000 000
@@ -881,6 +942,7 @@ export default function App() {
                     style={{ color: "#E4405F" }}
                   />
                 </a>
+
                 <a
                   href="https://www.facebook.com/vent.destropcambrils"
                   target="_blank"
@@ -893,6 +955,7 @@ export default function App() {
                     style={{ color: "#1877F2" }}
                   />
                 </a>
+
                 <a
                   href="#"
                   aria-label="YouTube"
@@ -918,10 +981,12 @@ export default function App() {
               alt="logo blanc"
               className="h-8 w-auto mb-2"
             />
-            <div className="font-bold text-white text-lg">{BRAND.name}</div>
+            <div className="font-bold text-white text-lg">
+              {BRAND.name}
+            </div>
             <p className="text-slate-400 mt-2 text-sm">
-              Club de rem sense ànim de lucre. Promovem el rem tradicional i de
-              mar a Cambrils.
+              Club de rem sense ànim de lucre. Promovem el rem
+              tradicional i de mar a Cambrils.
             </p>
           </div>
           <div>
@@ -931,7 +996,7 @@ export default function App() {
                 <a href="#club">Qui som</a>
               </li>
               <li>
-                <a href="#salut">Salut</a>
+                <a href="#socis">Fes-te soci</a>
               </li>
               <li>
                 <a href="#contacte">Contacte</a>
@@ -944,16 +1009,18 @@ export default function App() {
             </ul>
           </div>
           <div>
-            <div className="font-semibold text-white mb-2">Activitat</div>
+            <div className="font-semibold text-white mb-2">
+              Activitat
+            </div>
             <ul className="space-y-2 text-sm text-slate-300">
+              <li>
+                <a href="#salut">Salut</a>
+              </li>
               <li>
                 <a href="#escoles">Escoles</a>
               </li>
               <li>
                 <a href="#competicio">Competició</a>
-              </li>
-              <li>
-                <a href="#social">Social</a>
               </li>
             </ul>
           </div>
