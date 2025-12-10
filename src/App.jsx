@@ -161,7 +161,7 @@ const Shell = ({ children }) => (
   </div>
 );
 
-function useActiveSection(ids: string[]) {
+function useActiveSection(ids) {
   const [active, setActive] = useState(ids?.[0] || "");
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -183,7 +183,7 @@ function useActiveSection(ids: string[]) {
 
 export default function App() {
   const [slide, setSlide] = useState(0);
-  const [lang, setLang] = useState<"CAT" | "ES">("CAT");
+  const [lang, setLang] = useState("CAT");
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [showVogadoresMore, setShowVogadoresMore] = useState(false);
@@ -206,7 +206,7 @@ export default function App() {
     "contacte",
   ]);
 
-  const scrollToSection = (id: string) => {
+  const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
