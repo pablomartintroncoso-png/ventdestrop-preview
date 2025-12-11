@@ -230,7 +230,8 @@ export default function App() {
   return (
     <Shell>
       {/* ================= HEADER ================= */}
-      <header className="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-100">
+      <header className="sticky top-0 z-50 bg-white border-b border-slate-100">
+
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-3" aria-label="Inici">
             <img
