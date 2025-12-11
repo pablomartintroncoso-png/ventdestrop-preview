@@ -19,7 +19,7 @@ function useSheetContext() {
 }
 
 // --- ROOT ---
-function Sheet({ children }) {
+export function Sheet({ children }) {
   const [open, setOpen] = useState(false);
 
   const value = useMemo(
@@ -35,7 +35,7 @@ function Sheet({ children }) {
 }
 
 // --- TRIGGER ---
-function SheetTrigger({ asChild, children }) {
+export function SheetTrigger({ asChild, children }) {
   const { setOpen } = useSheetContext();
 
   const handleClick = (event) => {
@@ -58,14 +58,38 @@ function SheetTrigger({ asChild, children }) {
   );
 }
 
-// --- CONTENT (incluye botón de cerrar propio) ---
-function SheetContent({
+// --- CLOSE ---
+export function SheetClose({ asChild, children }) {
+  const { setOpen } = useSheetContext();
+
+  const handleClick = (event) => {
+    if (React.isValidElement(children) && children.props.onClick) {
+      children.props.onClick(event);
+    }
+    setOpen(false);
+  };
+
+  if (asChild && React.isValidElement(children)) {
+    return React.cloneElement(children, {
+      onClick: handleClick,
+    });
+  }
+
+  return (
+    <button type="button" onClick={handleClick}>
+      {children}
+    </button>
+  );
+}
+
+// --- CONTENT ---
+export function SheetContent({
   side = "right",
   className = "",
   children,
   ...props
 }) {
-  const { open, setOpen } = useSheetContext();
+  const { open } = useSheetContext();
 
   if (!open) return null;
 
@@ -80,20 +104,7 @@ function SheetContent({
 
   return (
     <div className={`${baseClasses} ${className}`} {...props}>
-      <div className="flex justify-end mb-4">
-        <button
-          type="button"
-          className="text-sm text-slate-600"
-          onClick={() => setOpen(false)}
-        >
-          Tancar
-        </button>
-      </div>
-
       {children}
     </div>
   );
 }
-
-export { Sheet, SheetTrigger, SheetContent };
-export default Sheet;
