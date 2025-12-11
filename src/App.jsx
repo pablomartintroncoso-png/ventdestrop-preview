@@ -1,7 +1,6 @@
 import logoAzul from "@/assets/logo-azul.png";
 import logoBlanco from "@/assets/logo-blanco.png";
 import React, { useState, useEffect } from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,7 +19,6 @@ import {
   SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet";
-
 import {
   ChevronRight,
   ChevronLeft,
@@ -40,23 +38,19 @@ import {
   Globe,
   ExternalLink,
 } from "lucide-react";
-
 import { motion } from "framer-motion";
 
-// === Carrusel de imágenes del hero ===
 const HERO_PHOTOS = [
   "/hero-botecompeti.jpg",
   "/hero-boteescuela.jpg",
   "/hero-botesocial.jpg",
 ];
 
-// === Galería (15 fotos para el carrusel) ===
 const GALLERY_IMAGES = Array.from(
   { length: 15 },
   (_, i) => `/galeria-${i + 1}.jpg`
 );
 
-// --- Brand system ---
 const BRAND = {
   name: "Vent d’Estrop",
   tagline: "Club de Rem Cambrils",
@@ -118,7 +112,6 @@ const NEWS = [
   },
 ];
 
-// Textos SALUT
 const VOGADORES_SHORT =
   "Les Vogadores amb Cor són dones que han superat el càncer de mama i comparteixen la passió pel rem i els beneficis que aquest esport els aporta.";
 const VOGADORES_FULL =
@@ -129,7 +122,6 @@ const REM_ADAPTAT_SHORT =
 const REM_ADAPTAT_FULL =
   "El rem adaptat és una activitat esportiva inclusiva en la qual es surt a la mar amb una tripulació formada tant per persones amb discapacitats diverses com amb socis del club. L'esport adaptat en general es considera un instrument d'integració social. L'esport afavoreix el desenvolupament personal i l'autoestima, crea compromís i autodisciplina, i fomenta l'esperit de lluita i el treball en equip. Vent d'Estrop ha aconseguit obrir les portes a col·lectius amb discapacitat intel·lectual i amb malalties mentals, i per al club cambrilenc és una satisfacció molt gran que aquests col·lectius puguin fruir del rem. Pat Perpinyà va ser la vogadora que va iniciar aquest projecte l'any 2009 i que aquest any ja arriba a la seva sisena temporada consecutiva. El club cambrilenc va ser pioner en aquesta pràctica inclusiva del rem dins del litoral català.";
 
-// ---------- UI helpers ----------
 const Pill = ({ children }) => (
   <span className="px-3 py-1 rounded-full bg-white/80 text-sm text-slate-700 border border-white/60 shadow-sm">
     {children}
@@ -165,10 +157,8 @@ const Shell = ({ children }) => (
   </div>
 );
 
-// Hook para sección activa en el menú
 function useActiveSection(ids) {
   const [active, setActive] = useState(ids?.[0] || "");
-
   useEffect(() => {
     const obs = new IntersectionObserver(
       (entries) => {
@@ -178,21 +168,15 @@ function useActiveSection(ids) {
       },
       { rootMargin: "-40% 0px -55% 0px", threshold: [0, 1] }
     );
-
     ids.forEach((id) => {
       const el = document.getElementById(id);
       if (el) obs.observe(el);
     });
-
     return () => obs.disconnect();
   }, [ids]);
-
   return active;
 }
 
-// ======================================================
-//                     APP
-// ======================================================
 export default function App() {
   const [slide, setSlide] = useState(0);
   const [lang, setLang] = useState("CAT");
@@ -242,8 +226,7 @@ export default function App() {
 
   return (
     <Shell>
-      {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur bg-white/90 border-b border-slate-100">
+      <header className="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-3" aria-label="Inici">
             <img
@@ -257,24 +240,22 @@ export default function App() {
             </div>
           </a>
 
-          {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-6 text-sm">
             {NAV.map((n) => (
               <a
                 key={n.href}
                 href={n.href}
-                className={`hover:text-slate-900 ${
+                className={
                   active === n.href
                     ? "text-[var(--primary)] font-medium"
-                    : "text-slate-600"
-                }`}
+                    : "text-slate-600 hover:text-slate-900"
+                }
               >
                 {n.label}
               </a>
             ))}
           </nav>
 
-          {/* Desktop actions */}
           <div className="hidden md:flex items-center gap-2">
             <a
               href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
@@ -286,7 +267,6 @@ export default function App() {
               </Button>
             </a>
 
-            {/* Botó per descarregar la fitxa de salut */}
             <a href="/ficha-salut-rem.pdf" download>
               <Button variant="outline" className="border-slate-300">
                 Descarregar fitxa
@@ -303,25 +283,20 @@ export default function App() {
             </Button>
           </div>
 
-          {/* Menú mòbil */}
           <Sheet>
             <SheetTrigger asChild>
               <Button
                 size="icon"
                 variant="outline"
-                className="md:hidden border-slate-500 text-slate-900 bg-white/90"
+                className="md:hidden border-slate-500 text-slate-900"
               >
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
 
-            <SheetContent
-              side="right"
-              className="w-full max-w-full bg-white flex flex-col"
-            >
-              <div className="flex flex-col h-full p-4 bg-white">
-                {/* Logo y botón cerrar */}
-                <div className="flex items-center justify-between mb-6">
+            <SheetContent side="right">
+              <div className="flex flex-col h-full bg-white pb-24">
+                <div className="flex items-center justify-between mb-6 px-4 pt-4">
                   <div className="flex items-center gap-2">
                     <img src={BRAND.logo} alt="logo" className="h-7" />
                     <span className="font-semibold">{BRAND.name}</span>
@@ -333,8 +308,7 @@ export default function App() {
                   </SheetClose>
                 </div>
 
-                {/* Enlaces del menú */}
-                <nav className="grid gap-3 mb-6">
+                <nav className="grid gap-3 mb-6 px-4">
                   {NAV.map((n) => (
                     <SheetClose asChild key={n.href}>
                       <a href={n.href} className="text-slate-700 text-lg">
@@ -346,8 +320,7 @@ export default function App() {
 
                 <Separator className="my-4" />
 
-                {/* Botones inferior menú móvil */}
-                <div className="grid gap-3 mt-auto mb-16">
+                <div className="grid gap-3 mt-auto px-4">
                   <a
                     href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
                     target="_blank"
@@ -383,7 +356,6 @@ export default function App() {
         </div>
       </header>
 
-      {/* Hero */}
       <section
         className="relative bg-gradient-to-b from-white to-[var(--light)] pb-12 md:pb-20"
         id="top"
@@ -470,7 +442,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* Schools */}
       <section id="escoles" className="py-16">
         <SectionTitle kicker="Programes" title="Escoles de rem">
           Iniciació, tecnificació i veterà. Plans adaptats per edat i
@@ -478,27 +449,24 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
-          {/* Tarjeta 1 – FOTO */}
           <Card className="rounded-2xl shadow-sm overflow-hidden">
             <img
               src="/escola-1.jpg"
               alt="Escola infantil"
               className="w-full h-64 object-cover"
             />
-            <CardHeader></CardHeader>
+            <CardHeader />
           </Card>
 
-          {/* Tarjeta 2 – FOTO */}
           <Card className="rounded-2xl shadow-sm overflow-hidden">
             <img
               src="/escola-2.jpg"
               alt="Escola juvenil"
               className="w-full h-64 object-cover"
             />
-            <CardHeader></CardHeader>
+            <CardHeader />
           </Card>
 
-          {/* Tarjeta 3 – HORARIS + BOTÓ */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <Badge variant="secondary" className="w-fit">
@@ -544,14 +512,12 @@ export default function App() {
         </div>
       </section>
 
-      {/* Competition */}
       <section id="competicio" className="py-16 bg-white">
         <SectionTitle kicker="Competició" title="Equips i resultats">
           Participem en llagut mediterrani, rem de mar i regates locals.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
-          {/* Foto 1 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/competi-1.jpg"
@@ -560,7 +526,6 @@ export default function App() {
             />
           </div>
 
-          {/* Foto 2 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/competi-2.jpg"
@@ -569,7 +534,6 @@ export default function App() {
             />
           </div>
 
-          {/* Text + horaris */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Equips i entrenaments</CardTitle>
@@ -609,7 +573,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* Social */}
       <section id="social" className="py-16 bg-white">
         <SectionTitle kicker="Social" title="Activitats Socials">
           Descomptes per famílies, accés a material i activitats
@@ -617,7 +580,6 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
-          {/* Foto 1 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/social-1.jpg"
@@ -626,7 +588,6 @@ export default function App() {
             />
           </div>
 
-          {/* Foto 2 */}
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
             <img
               src="/social-2.jpg"
@@ -635,7 +596,6 @@ export default function App() {
             />
           </div>
 
-          {/* Text + horaris */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Activitats socials</CardTitle>
@@ -675,7 +635,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* SALUT */}
       <section id="salut" className="py-16 bg-[var(--light)]">
         <SectionTitle
           kicker="SALUT"
@@ -685,10 +644,9 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid gap-6 md:grid-cols-2">
-          {/* Vogadores amb Cor */}
-          <Card className="rounded-2xl shadow-sm flex flex-col overflow-hidden">
+          <Card className="rounded-2xl shadow-sm flex flex-col">
             <CardHeader className="pb-0">
-              <div className="w-full h-56 mb-4 overflow-hidden">
+              <div className="w-full h-56 rounded-2xl bg-slate-100 mb-4 overflow-hidden">
                 <img
                   src="/vogadores-amb-cor.JPG"
                   alt="Vogadores amb Cor"
@@ -713,10 +671,9 @@ export default function App() {
             </CardContent>
           </Card>
 
-          {/* Rem adaptat */}
-          <Card className="rounded-2xl shadow-sm flex flex-col overflow-hidden">
+          <Card className="rounded-2xl shadow-sm flex flex-col">
             <CardHeader className="pb-0">
-              <div className="w-full h-56 mb-4 overflow-hidden">
+              <div className="w-full h-56 rounded-2xl bg-slate-100 mb-4 overflow-hidden">
                 <img
                   src="/rem-adaptat.JPG"
                   alt="Rem adaptat"
@@ -743,7 +700,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* News */}
       <section id="noticies" className="py-16 bg-white">
         <SectionTitle kicker="Actualitat" title="Notícies del club" />
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
@@ -770,7 +726,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* Meteo */}
       <section id="meteo" className="py-16 bg-[var(--light)]">
         <SectionTitle kicker="Meteo" title="Condicions de vent i mar">
           Informació actualitzada per planificar les sortides amb
@@ -778,7 +733,6 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
-          {/* Widget Windy */}
           <div className="rounded-2xl overflow-hidden shadow-lg bg-slate-200 h-[420px]">
             <iframe
               width="100%"
@@ -788,7 +742,6 @@ export default function App() {
             ></iframe>
           </div>
 
-          {/* Explicació */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Vent i condicions del mar</CardTitle>
@@ -825,7 +778,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* Sponsors */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex flex-wrap items-center justify-center gap-10">
@@ -886,7 +838,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="py-16 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white">
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6 items-center">
           <div>
@@ -902,7 +853,6 @@ export default function App() {
             <Button
               variant="secondary"
               className="text-[var(--dark)]"
-              onClick={() => scrollToSection("contacte")}
             >
               Fes-te soci
             </Button>
@@ -916,7 +866,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* Contact */}
       <section id="contacte" className="py-16 bg-white">
         <SectionTitle kicker="Contacte" title="Parlem?" />
         <div className="max-w-5xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
@@ -994,7 +943,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="py-10 bg-[var(--dark)] text-slate-200">
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-4 gap-8">
           <div>
@@ -1018,7 +966,7 @@ export default function App() {
                 <a href="#club">Qui som</a>
               </li>
               <li>
-                <a href="#contacte">Fes-te soci</a>
+                <a href="#socis">Fes-te soci</a>
               </li>
               <li>
                 <a href="#contacte">Contacte</a>
@@ -1066,7 +1014,6 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Sticky join CTA */}
       <div className="fixed bottom-4 right-4 md:right-6 z-50">
         <a
           href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
@@ -1083,7 +1030,6 @@ export default function App() {
         </a>
       </div>
 
-      {/* Modal galeria */}
       {isGalleryOpen && (
         <div className="fixed inset-0 z-[60] bg-black/80 flex items-center justify-center">
           <button
