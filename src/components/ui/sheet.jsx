@@ -19,7 +19,7 @@ function useSheetContext() {
 }
 
 // --- ROOT ---
-export function Sheet({ children }) {
+function Sheet({ children }) {
   const [open, setOpen] = useState(false);
 
   const value = useMemo(
@@ -35,7 +35,7 @@ export function Sheet({ children }) {
 }
 
 // --- TRIGGER ---
-export function SheetTrigger({ asChild, children }) {
+function SheetTrigger({ asChild, children }) {
   const { setOpen } = useSheetContext();
 
   const handleClick = (event) => {
@@ -59,7 +59,7 @@ export function SheetTrigger({ asChild, children }) {
 }
 
 // --- CLOSE ---
-export function SheetClose({ asChild, children }) {
+function SheetClose({ asChild, children }) {
   const { setOpen } = useSheetContext();
 
   const handleClick = (event) => {
@@ -82,14 +82,14 @@ export function SheetClose({ asChild, children }) {
   );
 }
 
-// --- CONTENT ---
-export function SheetContent({
+// --- CONTENT (panel + overlay) ---
+function SheetContent({
   side = "right",
   className = "",
   children,
   ...props
 }) {
-  const { open } = useSheetContext();
+  const { open, setOpen } = useSheetContext();
 
   if (!open) return null;
 
@@ -98,13 +98,28 @@ export function SheetContent({
       ? "left-0 border-r"
       : "right-0 border-l";
 
-  const baseClasses =
+  const panelClasses =
     "fixed inset-y-0 z-50 w-full max-w-xs bg-white shadow-xl p-4 border-slate-200 " +
-    sideClasses;
+    sideClasses +
+    " " +
+    className;
 
   return (
-    <div className={`${baseClasses} ${className}`} {...props}>
-      {children}
-    </div>
+    <>
+      {/* FONDO OSCURO */}
+      <div
+        className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+        onClick={() => setOpen(false)}
+        aria-hidden="true"
+      />
+
+      {/* PANEL */}
+      <div className={panelClasses} {...props}>
+        {children}
+      </div>
+    </>
   );
 }
+
+export { Sheet, SheetTrigger, SheetClose, SheetContent };
+export default Sheet;
