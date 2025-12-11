@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import {
   ChevronRight,
   ChevronLeft,
@@ -171,7 +172,6 @@ export default function App() {
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [showVogadoresMore, setShowVogadoresMore] = useState(false);
   const [showRemAdaptatMore, setShowRemAdaptatMore] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -214,7 +214,7 @@ export default function App() {
 
   return (
     <Shell>
-      <header className="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-100">
+      <header className="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-3" aria-label="Inici">
             <img
@@ -254,11 +254,13 @@ export default function App() {
                 Fes-te soci
               </Button>
             </a>
+
             <a href="/ficha-salut-rem.pdf" download>
               <Button variant="outline" className="border-slate-300">
                 Descarregar fitxa
               </Button>
             </a>
+
             <Button
               variant="outline"
               className="border-slate-300"
@@ -269,89 +271,81 @@ export default function App() {
             </Button>
           </div>
 
-          <div className="md:hidden">
-            <Button
-              size="icon"
-              variant="outline"
-              className="border-slate-500 text-slate-900"
-              onClick={() => setMobileMenuOpen(true)}
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                size="icon"
+                variant="outline"
+                className="md:hidden border-slate-500 text-slate-900"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+
+            <SheetContent
+              side="right"
+              className="w-full max-w-full bg-white shadow-xl border-l border-slate-200 p-0 flex flex-col"
             >
-              <Menu className="h-5 w-5" />
-            </Button>
-          </div>
+              <div className="flex items-center justify-between px-4 pt-4 pb-3 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <img src={BRAND.logo} alt="logo" className="h-7" />
+                  <span className="font-semibold text-slate-900">
+                    {BRAND.name}
+                  </span>
+                </div>
+                <SheetClose asChild>
+                  <Button variant="ghost" size="sm">
+                    Tancar
+                  </Button>
+                </SheetClose>
+              </div>
+
+              <nav className="grid gap-3 px-4 py-4">
+                {NAV.map((n) => (
+                  <SheetClose asChild key={n.href}>
+                    <a
+                      href={n.href}
+                      className="text-slate-800 text-lg py-1 border-b border-slate-100 last:border-none"
+                    >
+                      {n.label}
+                    </a>
+                  </SheetClose>
+                ))}
+              </nav>
+
+              <div className="mt-auto px-4 pb-4 space-y-3">
+                <a
+                  href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button
+                    style={{ backgroundColor: BRAND.primary }}
+                    className="w-full"
+                  >
+                    Fes-te soci
+                  </Button>
+                </a>
+
+                <a href="/ficha-salut-rem.pdf" download>
+                  <Button variant="outline" className="w-full border-slate-300">
+                    Descarregar fitxa
+                  </Button>
+                </a>
+
+                <Button
+                  variant="outline"
+                  className="w-full border-slate-300"
+                  onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
+                >
+                  <Globe className="h-4 w-4 mr-1" />
+                  {lang}
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </header>
-
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-[60] bg-white">
-          <div className="flex flex-col h-full p-4">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2">
-                <img src={BRAND.logo} alt="logo" className="h-7" />
-                <span className="font-semibold">{BRAND.name}</span>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Tancar
-              </Button>
-            </div>
-
-            <nav className="grid gap-3 mb-6">
-              {NAV.map((n) => (
-                <button
-                  key={n.href}
-                  className="text-left text-slate-700 text-lg"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    const id = n.href.replace("#", "");
-                    const el = document.getElementById(id);
-                    if (el) {
-                      el.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      });
-                    }
-                  }}
-                >
-                  {n.label}
-                </button>
-              ))}
-            </nav>
-
-            <div className="mt-auto grid gap-3 pb-4">
-              <a
-                href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  style={{ backgroundColor: BRAND.primary }}
-                  className="w-full"
-                >
-                  Fes-te soci
-                </Button>
-              </a>
-
-              <a href="/ficha-salut-rem.pdf" download>
-                <Button variant="outline" className="w-full border-slate-300">
-                  Descarregar fitxa
-                </Button>
-              </a>
-
-              <Button
-                variant="outline"
-                className="w-full border-slate-300"
-                onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
-              >
-                {lang}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <section
         className="relative bg-gradient-to-b from-white to-[var(--light)] pb-12 md:pb-20"
@@ -408,7 +402,7 @@ export default function App() {
                 </Button>
               </a>
             </div>
-            <div className="flex gap-6 mt-8 text-slate-500">
+            <div className="flex flex-wrap gap-6 mt-8 text-slate-500 text-sm">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4" /> +200 socis
               </div>
@@ -439,10 +433,10 @@ export default function App() {
         </div>
       </section>
 
-      <section id="escoles" className="py-16">
+      <section id="escoles" className="py-16 bg-white">
         <SectionTitle kicker="Programes" title="Escoles de rem">
-          Iniciació, tecnificació i veterà. Plans adaptats per edat i
-          objectiu, amb horaris flexibles.
+          Iniciació, tecnificació i veterà. Plans adaptats per edat i objectiu,
+          amb horaris flexibles.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
@@ -452,7 +446,7 @@ export default function App() {
               alt="Escola infantil"
               className="w-full h-64 object-cover"
             />
-            <CardHeader></CardHeader>
+            <CardHeader />
           </Card>
 
           <Card className="rounded-2xl shadow-sm overflow-hidden">
@@ -461,7 +455,7 @@ export default function App() {
               alt="Escola juvenil"
               className="w-full h-64 object-cover"
             />
-            <CardHeader></CardHeader>
+            <CardHeader />
           </Card>
 
           <Card className="rounded-2xl shadow-sm">
@@ -509,7 +503,7 @@ export default function App() {
         </div>
       </section>
 
-      <section id="competicio" className="py-16 bg-white">
+      <section id="competicio" className="py-16 bg-[var(--light)]">
         <SectionTitle kicker="Competició" title="Equips i resultats">
           Participem en llagut mediterrani, rem de mar i regates locals.
         </SectionTitle>
@@ -535,13 +529,13 @@ export default function App() {
             <CardHeader>
               <CardTitle>Equips i entrenaments</CardTitle>
               <CardDescription>
-                Absolut, Veterà, Femení i Mixt. Sessions setmanals per
-                millorar tècnica, resistència i coordinació.
+                Absolut, Veterà, Femení i Mixt. Sessions setmanals per millorar
+                tècnica, resistència i coordinació.
               </CardDescription>
             </CardHeader>
 
             <CardContent>
-              <ul className="space-y-2 text-slate-700">
+              <ul className="space-y-2 text-slate-700 text-sm">
                 <li>• Absolut – Dl, Dmc, Dvj 20:00–22:00</li>
                 <li>• Veterà – Dm i Dv 19:00–20:30</li>
                 <li>• Femení – Dx i Dv 18:00–19:30</li>
@@ -572,8 +566,7 @@ export default function App() {
 
       <section id="social" className="py-16 bg-white">
         <SectionTitle kicker="Social" title="Activitats Socials">
-          Descomptes per famílies, accés a material i activitats
-          exclusives.
+          Descomptes per famílies, accés a material i activitats exclusives.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
@@ -597,13 +590,13 @@ export default function App() {
             <CardHeader>
               <CardTitle>Activitats socials</CardTitle>
               <CardDescription>
-                Rem social, jornades familiars, sortides al mar i
-                activitats de comunitat per a totes les edats.
+                Rem social, jornades familiars, sortides al mar i activitats de
+                comunitat per a totes les edats.
               </CardDescription>
             </CardHeader>
 
             <CardContent>
-              <ul className="space-y-2 text-slate-700">
+              <ul className="space-y-2 text-slate-700 text-sm">
                 <li>• Rem social – Dm i Dv 17:00–18:30</li>
                 <li>• Sortides familiars – Caps de setmana</li>
                 <li>• Activitats comunitàries mensuals</li>
@@ -634,16 +627,21 @@ export default function App() {
 
       <section id="salut" className="py-16 bg-[var(--light)]">
         <SectionTitle
-          kicker="SALUT"
+          kicker="Salut"
           title="Vogadores amb Cor & Rem Adaptat"
         >
-          Programes especials que combinen esport, inclusió i benestar a través del rem.
+          Programes especials que combinen esport, inclusió i benestar a través
+          del rem.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid gap-6 md:grid-cols-2">
           <Card className="rounded-2xl shadow-sm flex flex-col">
             <CardHeader className="pb-0">
-              <div className="w-full h-56 rounded-2xl bg-slate-100 mb-4" />
+              <img
+                src="/vogadores-amb-cor.JPG"
+                alt="Vogadores amb Cor"
+                className="w-full h-56 rounded-2xl object-cover mb-4"
+              />
               <CardTitle>Vogadores amb Cor</CardTitle>
             </CardHeader>
             <CardContent className="pt-4 flex flex-col">
@@ -653,9 +651,7 @@ export default function App() {
               <Button
                 variant="ghost"
                 className="px-0 mt-2 text-[var(--primary)] w-fit"
-                onClick={() =>
-                  setShowVogadoresMore((prev) => !prev)
-                }
+                onClick={() => setShowVogadoresMore((prev) => !prev)}
               >
                 {showVogadoresMore ? "Veure menys" : "Veure més"}
               </Button>
@@ -664,7 +660,11 @@ export default function App() {
 
           <Card className="rounded-2xl shadow-sm flex flex-col">
             <CardHeader className="pb-0">
-              <div className="w-full h-56 rounded-2xl bg-slate-100 mb-4" />
+              <img
+                src="/rem-adaptat.JPG"
+                alt="Rem adaptat"
+                className="w-full h-56 rounded-2xl object-cover mb-4"
+              />
               <CardTitle>Rem adaptat</CardTitle>
             </CardHeader>
             <CardContent className="pt-4 flex flex-col">
@@ -674,9 +674,7 @@ export default function App() {
               <Button
                 variant="ghost"
                 className="px-0 mt-2 text-[var(--primary)] w-fit"
-                onClick={() =>
-                  setShowRemAdaptatMore((prev) => !prev)
-                }
+                onClick={() => setShowRemAdaptatMore((prev) => !prev)}
               >
                 {showRemAdaptatMore ? "Veure menys" : "Veure més"}
               </Button>
@@ -702,8 +700,7 @@ export default function App() {
                   variant="ghost"
                   className="px-0 text-[var(--primary)]"
                 >
-                  Llegir més{" "}
-                  <ChevronRight className="h-4 w-4" />
+                  Llegir més <ChevronRight className="h-4 w-4" />
                 </Button>
               </CardContent>
             </Card>
@@ -713,8 +710,7 @@ export default function App() {
 
       <section id="meteo" className="py-16 bg-[var(--light)]">
         <SectionTitle kicker="Meteo" title="Condicions de vent i mar">
-          Informació actualitzada per planificar les sortides amb
-          seguretat.
+          Informació actualitzada per planificar les sortides amb seguretat.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
@@ -731,8 +727,8 @@ export default function App() {
             <CardHeader>
               <CardTitle>Vent i condicions del mar</CardTitle>
               <CardDescription>
-                Consulta el vent actual, les ràfegues, l'onatge i
-                l'evolució per hores.
+                Consulta el vent actual, les ràfegues, l'onatge i l'evolució per
+                hores.
               </CardDescription>
             </CardHeader>
 
@@ -740,9 +736,7 @@ export default function App() {
               <ul className="list-disc list-inside space-y-1">
                 <li>Direcció i intensitat del vent</li>
                 <li>Ràfegues i previsió per hores</li>
-                <li>
-                  Especificació per nivell del mar i superfície
-                </li>
+                <li>Especificació per nivell del mar i superfície</li>
                 <li>Model ECMWF (el més fiable del món)</li>
               </ul>
 
@@ -771,49 +765,41 @@ export default function App() {
               alt="Ràdio Cambrils"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/club-nautic-cambrils.png"
               alt="Club Nàutic Cambrils"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/castro.png"
               alt="A.N. Castro"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/fcr.png"
               alt="FCR"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/ajuntament-cambrils.png"
               alt="Ajuntament de Cambrils"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/savall.png"
               alt="Savall"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/comaigua.png"
               alt="Comaigua"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/acuamar.png"
               alt="Acuamar"
               className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
             />
-
             <img
               src="/logos/revista-cambrils.png"
               alt="Revista Cambrils"
@@ -830,15 +816,12 @@ export default function App() {
               Ajuda’ns a fer créixer el rem a Cambrils
             </h3>
             <p className="text-white/90 mt-2">
-              Col·labora com a soci o patrocinador. El teu suport
-              impulsa l’esport i la comunitat.
+              Col·labora com a soci o patrocinador. El teu suport impulsa
+              l’esport i la comunitat.
             </p>
           </div>
           <div className="flex gap-3">
-            <Button
-              variant="secondary"
-              className="text-[var(--dark)]"
-            >
+            <Button variant="secondary" className="text-[var(--dark)]">
               Fes-te soci
             </Button>
             <Button
@@ -873,10 +856,10 @@ export default function App() {
             <CardHeader>
               <CardTitle>Informació</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-slate-700">
+            <CardContent className="space-y-3 text-slate-700 text-sm">
               <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port
-                de Cambrils
+                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de
+                Cambrils
               </p>
               <p className="flex items-center gap-2">
                 <Phone className="h-4 w-4" /> +34 600 000 000
@@ -893,10 +876,7 @@ export default function App() {
                   aria-label="Instagram"
                   className="p-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50"
                 >
-                  <Instagram
-                    className="h-4 w-4"
-                    style={{ color: "#E4405F" }}
-                  />
+                  <Instagram className="h-4 w-4" style={{ color: "#E4405F" }} />
                 </a>
 
                 <a
@@ -906,10 +886,7 @@ export default function App() {
                   aria-label="Facebook"
                   className="p-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50"
                 >
-                  <Facebook
-                    className="h-4 w-4"
-                    style={{ color: "#1877F2" }}
-                  />
+                  <Facebook className="h-4 w-4" style={{ color: "#1877F2" }} />
                 </a>
 
                 <a
@@ -917,10 +894,7 @@ export default function App() {
                   aria-label="YouTube"
                   className="p-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50"
                 >
-                  <Youtube
-                    className="h-4 w-4"
-                    style={{ color: "#FF0000" }}
-                  />
+                  <Youtube className="h-4 w-4" style={{ color: "#FF0000" }} />
                 </a>
               </div>
             </CardContent>
@@ -936,12 +910,10 @@ export default function App() {
               alt="logo blanc"
               className="h-8 w-auto mb-2"
             />
-            <div className="font-bold text-white text-lg">
-              {BRAND.name}
-            </div>
+            <div className="font-bold text-white text-lg">{BRAND.name}</div>
             <p className="text-slate-400 mt-2 text-sm">
-              Club de rem sense ànim de lucre. Promovem el rem
-              tradicional i de mar a Cambrils.
+              Club de rem sense ànim de lucre. Promovem el rem tradicional i de
+              mar a Cambrils.
             </p>
           </div>
           <div>
@@ -964,9 +936,7 @@ export default function App() {
             </ul>
           </div>
           <div>
-            <div className="font-semibold text-white mb-2">
-              Activitat
-            </div>
+            <div className="font-semibold text-white mb-2">Activitat</div>
             <ul className="space-y-2 text-sm text-slate-300">
               <li>
                 <a href="#salut">Salut</a>
