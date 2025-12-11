@@ -98,17 +98,18 @@ function SheetContent({
       ? "left-0 border-r"
       : "right-0 border-l";
 
+  // z-[60] para estar por encima del header (que está en z-50)
   const panelClasses =
-    "fixed inset-y-0 z-50 w-full max-w-xs bg-white shadow-xl p-4 border-slate-200 " +
+    "fixed inset-y-0 z-[60] w-full max-w-xs bg-white shadow-xl p-4 border-slate-200 " +
     sideClasses +
     " " +
     className;
 
   return (
     <>
-      {/* FONDO OSCURO */}
+      {/* FONDO OSCURO SOBRE TODO (z-[55] > header z-50) */}
       <div
-        className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+        className="fixed inset-0 z-[55] bg-black/40 backdrop-blur-sm"
         onClick={() => setOpen(false)}
         aria-hidden="true"
       />
