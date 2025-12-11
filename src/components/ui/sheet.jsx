@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 
-// --- Context intern per compartir open / setOpen ---
+// --- contexto interno ---
 const SheetContext = createContext(null);
 
 function useSheetContext() {
@@ -19,13 +19,9 @@ function useSheetContext() {
 }
 
 // --- ROOT ---
-function Sheet({ children }) {
+export function Sheet({ children }) {
   const [open, setOpen] = useState(false);
-
-  const value = useMemo(
-    () => ({ open, setOpen }),
-    [open]
-  );
+  const value = useMemo(() => ({ open, setOpen }), [open]);
 
   return (
     <SheetContext.Provider value={value}>
@@ -35,7 +31,7 @@ function Sheet({ children }) {
 }
 
 // --- TRIGGER ---
-function SheetTrigger({ asChild, children }) {
+export function SheetTrigger({ asChild, children }) {
   const { setOpen } = useSheetContext();
 
   const handleClick = (event) => {
@@ -46,9 +42,7 @@ function SheetTrigger({ asChild, children }) {
   };
 
   if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children, {
-      onClick: handleClick,
-    });
+    return React.cloneElement(children, { onClick: handleClick });
   }
 
   return (
@@ -59,7 +53,7 @@ function SheetTrigger({ asChild, children }) {
 }
 
 // --- CLOSE ---
-function SheetClose({ asChild, children }) {
+export function SheetClose({ asChild, children }) {
   const { setOpen } = useSheetContext();
 
   const handleClick = (event) => {
@@ -70,9 +64,7 @@ function SheetClose({ asChild, children }) {
   };
 
   if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children, {
-      onClick: handleClick,
-    });
+    return React.cloneElement(children, { onClick: handleClick });
   }
 
   return (
@@ -82,8 +74,8 @@ function SheetClose({ asChild, children }) {
   );
 }
 
-// --- CONTENT (panel + overlay) ---
-function SheetContent({
+// --- CONTENT (panel del menú móvil) ---
+export function SheetContent({
   side = "right",
   className = "",
   children,
@@ -93,34 +85,28 @@ function SheetContent({
 
   if (!open) return null;
 
-  const sideClasses =
-    side === "left"
-      ? "left-0 border-r"
-      : "right-0 border-l";
-
-  // z-[60] para estar por encima del header (que está en z-50)
-  const panelClasses =
-    "fixed inset-y-0 z-[60] w-full max-w-xs bg-white shadow-xl p-4 border-slate-200 " +
-    sideClasses +
-    " " +
-    className;
+  const justify = side === "left" ? "justify-start" : "justify-end";
 
   return (
-    <>
-      {/* FONDO OSCURO SOBRE TODO (z-[55] > header z-50) */}
+    <div className={`fixed inset-0 z-50 flex ${justify}`}>
+      {/* FONDO COMPLETO BLANCO */}
       <div
-        className="fixed inset-0 z-[55] bg-black/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-white"
         onClick={() => setOpen(false)}
-        aria-hidden="true"
       />
 
-      {/* PANEL */}
-      <div className={panelClasses} {...props}>
+      {/* PANEL DESLIZADO */}
+      <div
+        className={
+          "relative h-full w-full max-w-xs bg-white shadow-xl border-slate-200 border-l p-4 " +
+          className
+        }
+        {...props}
+      >
         {children}
       </div>
-    </>
+    </div>
   );
 }
 
-export { Sheet, SheetTrigger, SheetClose, SheetContent };
 export default Sheet;
