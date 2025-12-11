@@ -1,13 +1,7 @@
 "use client";
 
-import React, {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import React, { createContext, useContext, useMemo, useState } from "react";
 
-// --- contexto interno ---
 const SheetContext = createContext(null);
 
 function useSheetContext() {
@@ -18,19 +12,15 @@ function useSheetContext() {
   return ctx;
 }
 
-// --- ROOT ---
 export function Sheet({ children }) {
   const [open, setOpen] = useState(false);
   const value = useMemo(() => ({ open, setOpen }), [open]);
 
   return (
-    <SheetContext.Provider value={value}>
-      {children}
-    </SheetContext.Provider>
+    <SheetContext.Provider value={value}>{children}</SheetContext.Provider>
   );
 }
 
-// --- TRIGGER ---
 export function SheetTrigger({ asChild, children }) {
   const { setOpen } = useSheetContext();
 
@@ -52,7 +42,6 @@ export function SheetTrigger({ asChild, children }) {
   );
 }
 
-// --- CLOSE ---
 export function SheetClose({ asChild, children }) {
   const { setOpen } = useSheetContext();
 
@@ -74,13 +63,7 @@ export function SheetClose({ asChild, children }) {
   );
 }
 
-// --- CONTENT (panel del menú móvil) ---
-export function SheetContent({
-  side = "right",
-  className = "",
-  children,
-  ...props
-}) {
+export function SheetContent({ side = "right", className = "", children, ...props }) {
   const { open, setOpen } = useSheetContext();
 
   if (!open) return null;
@@ -89,13 +72,10 @@ export function SheetContent({
 
   return (
     <div className={`fixed inset-0 z-50 flex ${justify}`}>
-      {/* Fondo blanco sólido en TODA la pantalla */}
       <div
         className="absolute inset-0 bg-white"
         onClick={() => setOpen(false)}
       />
-
-      {/* Panel lateral */}
       <div
         className={
           "relative h-full w-full max-w-xs bg-white shadow-xl border-slate-200 border-l p-4 " +
