@@ -14,12 +14,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetClose,
-} from "@/components/ui/sheet";
-import {
   ChevronRight,
   ChevronLeft,
   X,
@@ -40,16 +34,9 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-const HERO_PHOTOS = [
-  "/hero-botecompeti.jpg",
-  "/hero-boteescuela.jpg",
-  "/hero-botesocial.jpg",
-];
+const HERO_PHOTOS = ["/hero-botecompeti.jpg", "/hero-boteescuela.jpg", "/hero-botesocial.jpg"];
 
-const GALLERY_IMAGES = Array.from(
-  { length: 15 },
-  (_, i) => `/galeria-${i + 1}.jpg`
-);
+const GALLERY_IMAGES = Array.from({ length: 15 }, (_, i) => `/galeria-${i + 1}.jpg`);
 
 const BRAND = {
   name: "Vent d’Estrop",
@@ -184,6 +171,7 @@ export default function App() {
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [showVogadoresMore, setShowVogadoresMore] = useState(false);
   const [showRemAdaptatMore, setShowRemAdaptatMore] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -226,7 +214,7 @@ export default function App() {
 
   return (
     <Shell>
-      <header className="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-100">
+      <header className="sticky top-0 z-40 backdrop-blur bg-white/80 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-3" aria-label="Inici">
             <img
@@ -245,11 +233,11 @@ export default function App() {
               <a
                 key={n.href}
                 href={n.href}
-                className={
+                className={`hover:text-slate-900 ${
                   active === n.href
                     ? "text-[var(--primary)] font-medium"
-                    : "text-slate-600 hover:text-slate-900"
-                }
+                    : "text-slate-600"
+                }`}
               >
                 {n.label}
               </a>
@@ -266,13 +254,11 @@ export default function App() {
                 Fes-te soci
               </Button>
             </a>
-
             <a href="/ficha-salut-rem.pdf" download>
               <Button variant="outline" className="border-slate-300">
                 Descarregar fitxa
               </Button>
             </a>
-
             <Button
               variant="outline"
               className="border-slate-300"
@@ -283,78 +269,89 @@ export default function App() {
             </Button>
           </div>
 
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                size="icon"
-                variant="outline"
-                className="md:hidden border-slate-500 text-slate-900"
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-
-            <SheetContent side="right">
-              <div className="flex flex-col h-full bg-white pb-24">
-                <div className="flex items-center justify-between mb-6 px-4 pt-4">
-                  <div className="flex items-center gap-2">
-                    <img src={BRAND.logo} alt="logo" className="h-7" />
-                    <span className="font-semibold">{BRAND.name}</span>
-                  </div>
-                  <SheetClose asChild>
-                    <Button variant="ghost" size="sm">
-                      Tancar
-                    </Button>
-                  </SheetClose>
-                </div>
-
-                <nav className="grid gap-3 mb-6 px-4">
-                  {NAV.map((n) => (
-                    <SheetClose asChild key={n.href}>
-                      <a href={n.href} className="text-slate-700 text-lg">
-                        {n.label}
-                      </a>
-                    </SheetClose>
-                  ))}
-                </nav>
-
-                <Separator className="my-4" />
-
-                <div className="grid gap-3 mt-auto px-4">
-                  <a
-                    href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button
-                      style={{ backgroundColor: BRAND.primary }}
-                      className="w-full"
-                    >
-                      Fes-te soci
-                    </Button>
-                  </a>
-
-                  <a href="/ficha-salut-rem.pdf" download>
-                    <Button
-                      variant="outline"
-                      className="w-full border-slate-300"
-                    >
-                      Descarregar fitxa
-                    </Button>
-                  </a>
-
-                  <Button
-                    variant="outline"
-                    onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
-                  >
-                    {lang}
-                  </Button>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <div className="md:hidden">
+            <Button
+              size="icon"
+              variant="outline"
+              className="border-slate-500 text-slate-900"
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </header>
+
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-[60] bg-white">
+          <div className="flex flex-col h-full p-4">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <img src={BRAND.logo} alt="logo" className="h-7" />
+                <span className="font-semibold">{BRAND.name}</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Tancar
+              </Button>
+            </div>
+
+            <nav className="grid gap-3 mb-6">
+              {NAV.map((n) => (
+                <button
+                  key={n.href}
+                  className="text-left text-slate-700 text-lg"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    const id = n.href.replace("#", "");
+                    const el = document.getElementById(id);
+                    if (el) {
+                      el.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
+                    }
+                  }}
+                >
+                  {n.label}
+                </button>
+              ))}
+            </nav>
+
+            <div className="mt-auto grid gap-3 pb-4">
+              <a
+                href="https://app.cluber.es/clubes/68ff44c49f856547379716/inscripcion"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button
+                  style={{ backgroundColor: BRAND.primary }}
+                  className="w-full"
+                >
+                  Fes-te soci
+                </Button>
+              </a>
+
+              <a href="/ficha-salut-rem.pdf" download>
+                <Button variant="outline" className="w-full border-slate-300">
+                  Descarregar fitxa
+                </Button>
+              </a>
+
+              <Button
+                variant="outline"
+                className="w-full border-slate-300"
+                onClick={() => setLang(lang === "CAT" ? "ES" : "CAT")}
+              >
+                {lang}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <section
         className="relative bg-gradient-to-b from-white to-[var(--light)] pb-12 md:pb-20"
@@ -455,7 +452,7 @@ export default function App() {
               alt="Escola infantil"
               className="w-full h-64 object-cover"
             />
-            <CardHeader />
+            <CardHeader></CardHeader>
           </Card>
 
           <Card className="rounded-2xl shadow-sm overflow-hidden">
@@ -464,7 +461,7 @@ export default function App() {
               alt="Escola juvenil"
               className="w-full h-64 object-cover"
             />
-            <CardHeader />
+            <CardHeader></CardHeader>
           </Card>
 
           <Card className="rounded-2xl shadow-sm">
@@ -646,13 +643,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid gap-6 md:grid-cols-2">
           <Card className="rounded-2xl shadow-sm flex flex-col">
             <CardHeader className="pb-0">
-              <div className="w-full h-56 rounded-2xl bg-slate-100 mb-4 overflow-hidden">
-                <img
-                  src="/vogadores-amb-cor.JPG"
-                  alt="Vogadores amb Cor"
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <div className="w-full h-56 rounded-2xl bg-slate-100 mb-4" />
               <CardTitle>Vogadores amb Cor</CardTitle>
             </CardHeader>
             <CardContent className="pt-4 flex flex-col">
@@ -673,13 +664,7 @@ export default function App() {
 
           <Card className="rounded-2xl shadow-sm flex flex-col">
             <CardHeader className="pb-0">
-              <div className="w-full h-56 rounded-2xl bg-slate-100 mb-4 overflow-hidden">
-                <img
-                  src="/rem-adaptat.JPG"
-                  alt="Rem adaptat"
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <div className="w-full h-56 rounded-2xl bg-slate-100 mb-4" />
               <CardTitle>Rem adaptat</CardTitle>
             </CardHeader>
             <CardContent className="pt-4 flex flex-col">
