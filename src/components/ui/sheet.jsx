@@ -89,13 +89,13 @@ export function SheetContent({
 
   return (
     <div className={`fixed inset-0 z-50 flex ${justify}`}>
-      {/* FONDO COMPLETO BLANCO */}
+      {/* Fondo blanco sólido en TODA la pantalla */}
       <div
         className="absolute inset-0 bg-white"
         onClick={() => setOpen(false)}
       />
 
-      {/* PANEL DESLIZADO */}
+      {/* Panel lateral */}
       <div
         className={
           "relative h-full w-full max-w-xs bg-white shadow-xl border-slate-200 border-l p-4 " +
