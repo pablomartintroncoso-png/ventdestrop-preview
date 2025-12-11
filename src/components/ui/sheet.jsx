@@ -64,21 +64,17 @@ export function SheetClose({ asChild, children }) {
 }
 
 export function SheetContent({ side = "right", className = "", children, ...props }) {
-  const { open, setOpen } = useSheetContext();
+  const { open } = useSheetContext();
 
   if (!open) return null;
 
   const justify = side === "left" ? "justify-start" : "justify-end";
 
   return (
-    <div className={`fixed inset-0 z-50 flex ${justify}`}>
-      <div
-        className="absolute inset-0 bg-white"
-        onClick={() => setOpen(false)}
-      />
+    <div className={`fixed inset-0 z-[80] flex bg-white ${justify}`}>
       <div
         className={
-          "relative h-full w-full max-w-xs bg-white shadow-xl border-slate-200 border-l p-4 " +
+          "h-full w-full max-w-xs bg-white shadow-xl border-slate-200 border-l p-4 " +
           className
         }
         {...props}
