@@ -1,88 +1,45 @@
-"use client";
+import * as React from "react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { cn } from "@/lib/utils";
 
-import React, { createContext, useContext, useMemo, useState } from "react";
+const Sheet = DialogPrimitive.Root;
+const SheetTrigger = DialogPrimitive.Trigger;
+const SheetClose = DialogPrimitive.Close;
+const SheetPortal = DialogPrimitive.Portal;
 
-const SheetContext = createContext(null);
+const SheetOverlay = React.forwardRef(({ className, ...props }, ref) => (
+  <DialogPrimitive.Overlay
+    ref={ref}
+    className={cn(
+      "fixed inset-0 z-50 bg-black/40 backdrop-blur-sm",
+      className
+    )}
+    {...props}
+  />
+));
+SheetOverlay.displayName = "SheetOverlay";
 
-function useSheetContext() {
-  const ctx = useContext(SheetContext);
-  if (!ctx) {
-    throw new Error("Sheet components must be used inside <Sheet>");
-  }
-  return ctx;
-}
-
-export function Sheet({ children }) {
-  const [open, setOpen] = useState(false);
-  const value = useMemo(() => ({ open, setOpen }), [open]);
-
-  return (
-    <SheetContext.Provider value={value}>{children}</SheetContext.Provider>
-  );
-}
-
-export function SheetTrigger({ asChild, children }) {
-  const { setOpen } = useSheetContext();
-
-  const handleClick = (event) => {
-    if (React.isValidElement(children) && children.props.onClick) {
-      children.props.onClick(event);
-    }
-    setOpen(true);
-  };
-
-  if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children, { onClick: handleClick });
-  }
-
-  return (
-    <button type="button" onClick={handleClick}>
-      {children}
-    </button>
-  );
-}
-
-export function SheetClose({ asChild, children }) {
-  const { setOpen } = useSheetContext();
-
-  const handleClick = (event) => {
-    if (React.isValidElement(children) && children.props.onClick) {
-      children.props.onClick(event);
-    }
-    setOpen(false);
-  };
-
-  if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children, { onClick: handleClick });
-  }
-
-  return (
-    <button type="button" onClick={handleClick}>
-      {children}
-    </button>
-  );
-}
-
-export function SheetContent({ side = "right", className = "", children, ...props }) {
-  const { open } = useSheetContext();
-
-  if (!open) return null;
-
-  const justify = side === "left" ? "justify-start" : "justify-end";
-
-  return (
-    <div className={`fixed inset-0 z-[80] flex bg-white ${justify}`}>
-      <div
-        className={
-          "h-full w-full max-w-xs bg-white shadow-xl border-slate-200 border-l p-4 " +
+const SheetContent = React.forwardRef(
+  ({ className, side = "right", ...props }, ref) => (
+    <SheetPortal>
+      <SheetOverlay />
+      <DialogPrimitive.Content
+        ref={ref}
+        style={{ backgroundColor: "#ffffff", opacity: 1 }}
+        className={cn(
+          "fixed z-50 shadow-xl outline-none",
+          "w-full max-w-full md:max-w-md",
+          side === "right"
+            ? "inset-y-0 right-0 border-l border-slate-200"
+            : "inset-y-0 left-0 border-r border-slate-200",
+          "bg-white",
           className
-        }
+        )}
         {...props}
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
+      />
+    </SheetPortal>
+  )
+);
+SheetContent.displayName = "SheetContent";
 
-export default Sheet;
+export { Sheet, SheetTrigger, SheetContent, SheetClose };
