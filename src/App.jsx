@@ -36,7 +36,6 @@ import {
 import { motion } from "framer-motion";
 
 const HERO_PHOTOS = ["/hero-botecompeti.jpg", "/hero-boteescuela.jpg", "/hero-botesocial.jpg"];
-
 const GALLERY_IMAGES = Array.from({ length: 15 }, (_, i) => `/galeria-${i + 1}.jpg`);
 
 const BRAND = {
@@ -118,12 +117,8 @@ const Pill = ({ children }) => (
 
 const SectionTitle = ({ kicker, title, children }) => (
   <div className="max-w-5xl mx-auto text-center mb-10">
-    <p className="uppercase tracking-widest text-sm text-slate-500">
-      {kicker}
-    </p>
-    <h2 className="text-3xl md:text-4xl font-bold mt-1 text-slate-900">
-      {title}
-    </h2>
+    <p className="uppercase tracking-widest text-sm text-slate-500">{kicker}</p>
+    <h2 className="text-3xl md:text-4xl font-bold mt-1 text-slate-900">{title}</h2>
     {children && (
       <p className="text-slate-600 mt-4 max-w-3xl mx-auto">{children}</p>
     )}
@@ -192,9 +187,7 @@ export default function App() {
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const openGallery = (startIndex = 0) => {
@@ -284,7 +277,8 @@ export default function App() {
 
             <SheetContent
               side="right"
-              className="w-full max-w-full bg-white shadow-xl border-l border-slate-200 p-0 flex flex-col"
+              className="w-full max-w-full shadow-xl border-l border-slate-200 p-0 flex flex-col"
+              style={{ backgroundColor: "#ffffff", opacity: 1 }}
             >
               <div className="flex items-center justify-between px-4 pt-4 pb-3 border-b border-slate-100">
                 <div className="flex items-center gap-2">
