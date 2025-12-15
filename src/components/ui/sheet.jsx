@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 
 const SheetCtx = createContext(null);
 
@@ -8,9 +9,16 @@ function useSheet() {
   return ctx;
 }
 
-export function Sheet({ children }) {
-  const [open, setOpen] = useState(false);
+export function Sheet({ children, defaultOpen = false, onOpenChange }) {
+  const [open, setOpenState] = useState(defaultOpen);
+
+  const setOpen = (next) => {
+    setOpenState(next);
+    if (typeof onOpenChange === "function") onOpenChange(next);
+  };
+
   const value = useMemo(() => ({ open, setOpen }), [open]);
+
   return <SheetCtx.Provider value={value}>{children}</SheetCtx.Provider>;
 }
 
@@ -72,6 +80,7 @@ export function SheetContent({
     };
 
     document.addEventListener("keydown", onKey);
+
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
@@ -85,19 +94,27 @@ export function SheetContent({
 
   const sidePos = side === "left" ? "left-0 border-r" : "right-0 border-l";
 
-  return (
+  return createPortal(
     <>
       <div
-        className="fixed inset-0 z-[9998] bg-black/40 backdrop-blur-sm"
+        className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
         onClick={() => setOpen(false)}
       />
       <div
-        className={`fixed inset-y-0 ${sidePos} z-[9999] w-full max-w-full md:max-w-md shadow-xl border-slate-200 ${className}`}
+        className={[
+          "fixed top-0 bottom-0 z-[60]",
+          "w-full max-w-full md:max-w-md",
+          "shadow-xl outline-none overflow-y-auto",
+          "border-slate-200",
+          sidePos,
+          className,
+        ].join(" ")}
         style={{ backgroundColor: "#ffffff", opacity: 1 }}
         {...props}
       >
         {children}
       </div>
-    </>
+    </>,
+    document.body
   );
 }
