@@ -10,9 +10,7 @@ function useSheet() {
 
 export function Sheet({ children }) {
   const [open, setOpen] = useState(false);
-
   const value = useMemo(() => ({ open, setOpen }), [open]);
-
   return <SheetCtx.Provider value={value}>{children}</SheetCtx.Provider>;
 }
 
@@ -58,19 +56,28 @@ export function SheetClose({ asChild, children }) {
   );
 }
 
-export function SheetContent({ side = "right", className = "", children, ...props }) {
+export function SheetContent({
+  side = "right",
+  className = "",
+  children,
+  ...props
+}) {
   const { open, setOpen } = useSheet();
 
   useEffect(() => {
     if (!open) return;
+
     const onKey = (e) => {
       if (e.key === "Escape") setOpen(false);
     };
+
     document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
+      document.body.style.overflow = prevOverflow;
     };
   }, [open, setOpen]);
 
@@ -81,11 +88,11 @@ export function SheetContent({ side = "right", className = "", children, ...prop
   return (
     <>
       <div
-        className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
+        className="fixed inset-0 z-[9998] bg-black/40 backdrop-blur-sm"
         onClick={() => setOpen(false)}
       />
       <div
-        className={`fixed inset-y-0 ${sidePos} z-[60] w-full max-w-full md:max-w-md bg-white opacity-100 shadow-xl border-slate-200 ${className}`}
+        className={`fixed inset-y-0 ${sidePos} z-[9999] w-full max-w-full md:max-w-md shadow-xl border-slate-200 ${className}`}
         style={{ backgroundColor: "#ffffff", opacity: 1 }}
         {...props}
       >
