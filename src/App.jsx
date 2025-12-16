@@ -655,7 +655,7 @@ export default function App() {
           <Card className="rounded-2xl shadow-sm flex flex-col">
             <CardHeader className="pb-0">
               <img
-                src="/rem-adaptat.JPG"
+                src="/rem-adaptat.jpg"
                 alt="Rem adaptat"
                 className="w-full h-56 rounded-2xl object-cover mb-4"
               />
