@@ -632,7 +632,7 @@ export default function App() {
           <Card className="rounded-2xl shadow-sm flex flex-col">
             <CardHeader className="pb-0">
               <img
-                src="/vogadores-amb-cor.JPG"
+                src="/vogadores-amb-cor.jpg"
                 alt="Vogadores amb Cor"
                 className="w-full h-56 rounded-2xl object-cover mb-4"
               />
