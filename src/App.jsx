@@ -25,7 +25,6 @@ import {
   X,
   MapPin,
   Newspaper,
-  Phone,
   Mail,
   Users,
   Instagram,
@@ -45,11 +44,12 @@ const HERO_PHOTOS = [
   "/hero-boteescuela.jpg",
   "/hero-botesocial.jpg",
 ];
-
 const GALLERY_IMAGES = Array.from(
   { length: 15 },
   (_, i) => `/galeria-${i + 1}.jpg`
 );
+
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mblnnvjp";
 
 const BRAND = {
   name: "Vent d’Estrop",
@@ -234,39 +234,31 @@ export default function App() {
     setContactError("");
 
     try {
-      const res = await fetch("https://formspree.io/f/mblnnvjp", {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
         headers: {
-          Accept: "application/json",
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify({
           name: contactName,
           email: contactEmail,
           message: contactMessage,
-          source: "ventdestrop.com",
         }),
       });
 
-      const data = await res.json().catch(() => ({}));
-
-      if (!res.ok) {
-        const msg =
-          (data &&
-            data.errors &&
-            data.errors[0] &&
-            data.errors[0].message) ||
-          "No s’ha pogut enviar el missatge. Torna-ho a provar.";
-        throw new Error(msg);
+      if (res.ok) {
+        setContactStatus("success");
+        setContactName("");
+        setContactEmail("");
+        setContactMessage("");
+      } else {
+        setContactStatus("error");
+        setContactError("No s'ha pogut enviar. Torna-ho a provar en un moment.");
       }
-
-      setContactStatus("success");
-      setContactName("");
-      setContactEmail("");
-      setContactMessage("");
     } catch (err) {
       setContactStatus("error");
-      setContactError(err?.message || "Error enviant el formulari.");
+      setContactError("Error de connexió. Revisa internet i torna-ho a provar.");
     }
   };
 
@@ -308,9 +300,7 @@ export default function App() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button style={{ backgroundColor: BRAND.primary }}>
-                Fes-te soci
-              </Button>
+              <Button style={{ backgroundColor: BRAND.primary }}>Fes-te soci</Button>
             </a>
 
             <a href="/ficha-salut-rem.pdf" download>
@@ -481,7 +471,9 @@ export default function App() {
                 className="w-full h-full object-cover transition-opacity duration-1000"
               />
             </div>
-            <div className="mt-3 text-xs text-slate-500">Foto: equip Vent d’Estrop</div>
+            <div className="mt-3 text-xs text-slate-500">
+              Foto: equip Vent d’Estrop
+            </div>
           </motion.div>
         </div>
       </section>
@@ -494,12 +486,20 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
           <Card className="rounded-2xl shadow-sm overflow-hidden">
-            <img src="/escola-1.jpg" alt="Escola infantil" className="w-full h-64 object-cover" />
+            <img
+              src="/escola-1.jpg"
+              alt="Escola infantil"
+              className="w-full h-64 object-cover"
+            />
             <CardHeader />
           </Card>
 
           <Card className="rounded-2xl shadow-sm overflow-hidden">
-            <img src="/escola-2.jpg" alt="Escola juvenil" className="w-full h-64 object-cover" />
+            <img
+              src="/escola-2.jpg"
+              alt="Escola juvenil"
+              className="w-full h-64 object-cover"
+            />
             <CardHeader />
           </Card>
 
@@ -551,11 +551,19 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
-            <img src="/competi-1.jpg" alt="Entrenaments de competició" className="w-full h-full object-cover" />
+            <img
+              src="/competi-1.jpg"
+              alt="Entrenaments de competició"
+              className="w-full h-full object-cover"
+            />
           </div>
 
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
-            <img src="/competi-2.jpg" alt="Equip de regates" className="w-full h-full object-cover" />
+            <img
+              src="/competi-2.jpg"
+              alt="Equip de regates"
+              className="w-full h-full object-cover"
+            />
           </div>
 
           <Card className="rounded-2xl shadow-sm">
@@ -600,11 +608,19 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
-            <img src="/social-1.jpg" alt="Activitat social del club" className="w-full h-full object-cover" />
+            <img
+              src="/social-1.jpg"
+              alt="Activitat social del club"
+              className="w-full h-full object-cover"
+            />
           </div>
 
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
-            <img src="/social-2.jpg" alt="Esdeveniment comunitari" className="w-full h-full object-cover" />
+            <img
+              src="/social-2.jpg"
+              alt="Esdeveniment comunitari"
+              className="w-full h-full object-cover"
+            />
           </div>
 
           <Card className="rounded-2xl shadow-sm">
@@ -768,15 +784,51 @@ export default function App() {
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex flex-wrap items-center justify-center gap-10">
-            <img src="/logos/radio-cambrils.png" alt="Ràdio Cambrils" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-            <img src="/logos/club-nautic-cambrils.png" alt="Club Nàutic Cambrils" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-            <img src="/logos/castro.png" alt="A.N. Castro" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-            <img src="/logos/fcr.png" alt="FCR" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-            <img src="/logos/ajuntament-cambrils.png" alt="Ajuntament de Cambrils" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-            <img src="/logos/savall.png" alt="Savall" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-            <img src="/logos/comaigua.png" alt="Comaigua" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-            <img src="/logos/acuamar.png" alt="Acuamar" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
-            <img src="/logos/revista-cambrils.png" alt="Revista Cambrils" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img
+              src="/logos/radio-cambrils.png"
+              alt="Ràdio Cambrils"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/club-nautic-cambrils.png"
+              alt="Club Nàutic Cambrils"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/castro.png"
+              alt="A.N. Castro"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/fcr.png"
+              alt="FCR"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/ajuntament-cambrils.png"
+              alt="Ajuntament de Cambrils"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/savall.png"
+              alt="Savall"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/comaigua.png"
+              alt="Comaigua"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/acuamar.png"
+              alt="Acuamar"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/revista-cambrils.png"
+              alt="Revista Cambrils"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
           </div>
         </div>
       </section>
@@ -811,22 +863,13 @@ export default function App() {
               <CardTitle>Formulari de contacte</CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={submitContact} className="grid gap-3">
-                <input
-                  type="text"
-                  name="_gotcha"
-                  className="hidden"
-                  tabIndex={-1}
-                  autoComplete="off"
-                />
-
+              <form className="grid gap-3" onSubmit={submitContact}>
                 <Input
                   placeholder="Nom i cognoms"
                   value={contactName}
                   onChange={(e) => setContactName(e.target.value)}
                   required
                 />
-
                 <Input
                   type="email"
                   placeholder="Correu"
@@ -834,23 +877,21 @@ export default function App() {
                   onChange={(e) => setContactEmail(e.target.value)}
                   required
                 />
-
                 <Textarea
                   placeholder="Missatge"
                   value={contactMessage}
                   onChange={(e) => setContactMessage(e.target.value)}
                   required
-                  rows={5}
                 />
 
                 {contactStatus === "success" && (
-                  <div className="text-sm rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-800 p-3">
+                  <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-800">
                     Missatge enviat amb èxit. Gràcies!
                   </div>
                 )}
 
                 {contactStatus === "error" && (
-                  <div className="text-sm rounded-lg border border-red-200 bg-red-50 text-red-800 p-3">
+                  <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-800">
                     {contactError}
                   </div>
                 )}
@@ -859,6 +900,7 @@ export default function App() {
                   type="submit"
                   style={{ backgroundColor: BRAND.primary }}
                   disabled={contactStatus === "sending"}
+                  className={contactStatus === "sending" ? "opacity-80" : ""}
                 >
                   {contactStatus === "sending" ? "Enviant..." : "Enviar"}
                 </Button>
@@ -872,10 +914,8 @@ export default function App() {
             </CardHeader>
             <CardContent className="space-y-3 text-slate-700 text-sm">
               <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de Cambrils
-              </p>
-              <p className="flex items-center gap-2">
-                <Phone className="h-4 w-4" /> +34 600 000 000
+                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de
+                Cambrils
               </p>
               <p className="flex items-center gap-2">
                 <Mail className="h-4 w-4" /> info@ventdestrop.com
@@ -918,27 +958,48 @@ export default function App() {
       <footer className="py-10 bg-[var(--dark)] text-slate-200">
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-4 gap-8">
           <div>
-            <img src={BRAND.logoAlt} alt="logo blanc" className="h-8 w-auto mb-2" />
+            <img
+              src={BRAND.logoAlt}
+              alt="logo blanc"
+              className="h-8 w-auto mb-2"
+            />
             <div className="font-bold text-white text-lg">{BRAND.name}</div>
             <p className="text-slate-400 mt-2 text-sm">
-              Club de rem sense ànim de lucre. Promovem el rem tradicional i de mar a Cambrils.
+              Club de rem sense ànim de lucre. Promovem el rem tradicional i de
+              mar a Cambrils.
             </p>
           </div>
           <div>
             <div className="font-semibold text-white mb-2">Club</div>
             <ul className="space-y-2 text-sm text-slate-300">
-              <li><a href="#club">Qui som</a></li>
-              <li><a href="#socis">Fes-te soci</a></li>
-              <li><a href="#contacte">Contacte</a></li>
-              <li><a href="/ficha-salut-rem.pdf" download>Descarregar fitxa</a></li>
+              <li>
+                <a href="#club">Qui som</a>
+              </li>
+              <li>
+                <a href="#socis">Fes-te soci</a>
+              </li>
+              <li>
+                <a href="#contacte">Contacte</a>
+              </li>
+              <li>
+                <a href="/ficha-salut-rem.pdf" download>
+                  Descarregar fitxa
+                </a>
+              </li>
             </ul>
           </div>
           <div>
             <div className="font-semibold text-white mb-2">Activitat</div>
             <ul className="space-y-2 text-sm text-slate-300">
-              <li><a href="#salut">Salut</a></li>
-              <li><a href="#escoles">Escoles</a></li>
-              <li><a href="#competicio">Competició</a></li>
+              <li>
+                <a href="#salut">Salut</a>
+              </li>
+              <li>
+                <a href="#escoles">Escoles</a>
+              </li>
+              <li>
+                <a href="#competicio">Competició</a>
+              </li>
             </ul>
           </div>
           <div>
