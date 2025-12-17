@@ -13,7 +13,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet";
 import {
   ChevronRight,
   ChevronLeft,
@@ -35,8 +40,16 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-const HERO_PHOTOS = ["/hero-botecompeti.jpg", "/hero-boteescuela.jpg", "/hero-botesocial.jpg"];
-const GALLERY_IMAGES = Array.from({ length: 15 }, (_, i) => `/galeria-${i + 1}.jpg`);
+const HERO_PHOTOS = [
+  "/hero-botecompeti.jpg",
+  "/hero-boteescuela.jpg",
+  "/hero-botesocial.jpg",
+];
+
+const GALLERY_IMAGES = Array.from(
+  { length: 15 },
+  (_, i) => `/galeria-${i + 1}.jpg`
+);
 
 const BRAND = {
   name: "Vent d’Estrop",
@@ -118,7 +131,9 @@ const Pill = ({ children }) => (
 const SectionTitle = ({ kicker, title, children }) => (
   <div className="max-w-5xl mx-auto text-center mb-10">
     <p className="uppercase tracking-widest text-sm text-slate-500">{kicker}</p>
-    <h2 className="text-3xl md:text-4xl font-bold mt-1 text-slate-900">{title}</h2>
+    <h2 className="text-3xl md:text-4xl font-bold mt-1 text-slate-900">
+      {title}
+    </h2>
     {children && (
       <p className="text-slate-600 mt-4 max-w-3xl mx-auto">{children}</p>
     )}
@@ -168,6 +183,12 @@ export default function App() {
   const [showVogadoresMore, setShowVogadoresMore] = useState(false);
   const [showRemAdaptatMore, setShowRemAdaptatMore] = useState(false);
 
+  const [contactName, setContactName] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactMessage, setContactMessage] = useState("");
+  const [contactStatus, setContactStatus] = useState("idle");
+  const [contactError, setContactError] = useState("");
+
   useEffect(() => {
     const id = setInterval(() => {
       setSlide((s) => (s + 1) % HERO_PHOTOS.length);
@@ -202,7 +223,51 @@ export default function App() {
   };
 
   const prevImage = () => {
-    setGalleryIndex((i) => (i - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length);
+    setGalleryIndex(
+      (i) => (i - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length
+    );
+  };
+
+  const submitContact = async (e) => {
+    e.preventDefault();
+    setContactStatus("sending");
+    setContactError("");
+
+    try {
+      const res = await fetch("https://formspree.io/f/mblnnvjp", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: contactName,
+          email: contactEmail,
+          message: contactMessage,
+          source: "ventdestrop.com",
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        const msg =
+          (data &&
+            data.errors &&
+            data.errors[0] &&
+            data.errors[0].message) ||
+          "No s’ha pogut enviar el missatge. Torna-ho a provar.";
+        throw new Error(msg);
+      }
+
+      setContactStatus("success");
+      setContactName("");
+      setContactEmail("");
+      setContactMessage("");
+    } catch (err) {
+      setContactStatus("error");
+      setContactError(err?.message || "Error enviant el formulari.");
+    }
   };
 
   return (
@@ -369,8 +434,8 @@ export default function App() {
               </span>
             </h1>
             <p className="text-lg text-slate-600 mt-4">
-              Promovem el rem tradicional i de competició per a totes les
-              edats: formació, salut i èxit esportiu en un entorn únic.
+              Promovem el rem tradicional i de competició per a totes les edats:
+              formació, salut i èxit esportiu en un entorn únic.
             </p>
             <div className="flex flex-wrap gap-3 mt-6">
               <Button
@@ -387,11 +452,7 @@ export default function App() {
                 rel="noopener"
                 aria-label="Calendari d’activitats (imatge)"
               >
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-slate-300"
-                >
+                <Button size="lg" variant="outline" className="border-slate-300">
                   Calendari d’activitats
                 </Button>
               </a>
@@ -420,9 +481,7 @@ export default function App() {
                 className="w-full h-full object-cover transition-opacity duration-1000"
               />
             </div>
-            <div className="mt-3 text-xs text-slate-500">
-              Foto: equip Vent d’Estrop
-            </div>
+            <div className="mt-3 text-xs text-slate-500">Foto: equip Vent d’Estrop</div>
           </motion.div>
         </div>
       </section>
@@ -435,20 +494,12 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
           <Card className="rounded-2xl shadow-sm overflow-hidden">
-            <img
-              src="/escola-1.jpg"
-              alt="Escola infantil"
-              className="w-full h-64 object-cover"
-            />
+            <img src="/escola-1.jpg" alt="Escola infantil" className="w-full h-64 object-cover" />
             <CardHeader />
           </Card>
 
           <Card className="rounded-2xl shadow-sm overflow-hidden">
-            <img
-              src="/escola-2.jpg"
-              alt="Escola juvenil"
-              className="w-full h-64 object-cover"
-            />
+            <img src="/escola-2.jpg" alt="Escola juvenil" className="w-full h-64 object-cover" />
             <CardHeader />
           </Card>
 
@@ -484,11 +535,7 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => openGallery(0)}
-                >
+                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
                   Veure més fotos
                 </Button>
               </div>
@@ -504,19 +551,11 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
-            <img
-              src="/competi-1.jpg"
-              alt="Entrenaments de competició"
-              className="w-full h-full object-cover"
-            />
+            <img src="/competi-1.jpg" alt="Entrenaments de competició" className="w-full h-full object-cover" />
           </div>
 
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
-            <img
-              src="/competi-2.jpg"
-              alt="Equip de regates"
-              className="w-full h-full object-cover"
-            />
+            <img src="/competi-2.jpg" alt="Equip de regates" className="w-full h-full object-cover" />
           </div>
 
           <Card className="rounded-2xl shadow-sm">
@@ -545,11 +584,7 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => openGallery(0)}
-                >
+                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
                   Veure més fotos
                 </Button>
               </div>
@@ -565,19 +600,11 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
-            <img
-              src="/social-1.jpg"
-              alt="Activitat social del club"
-              className="w-full h-full object-cover"
-            />
+            <img src="/social-1.jpg" alt="Activitat social del club" className="w-full h-full object-cover" />
           </div>
 
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
-            <img
-              src="/social-2.jpg"
-              alt="Esdeveniment comunitari"
-              className="w-full h-full object-cover"
-            />
+            <img src="/social-2.jpg" alt="Esdeveniment comunitari" className="w-full h-full object-cover" />
           </div>
 
           <Card className="rounded-2xl shadow-sm">
@@ -606,11 +633,7 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => openGallery(0)}
-                >
+                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
                   Veure més fotos
                 </Button>
               </div>
@@ -620,10 +643,7 @@ export default function App() {
       </section>
 
       <section id="salut" className="py-16 bg-[var(--light)]">
-        <SectionTitle
-          kicker="Salut"
-          title="Vogadores amb Cor & Rem Adaptat"
-        >
+        <SectionTitle kicker="Salut" title="Vogadores amb Cor & Rem Adaptat">
           Programes especials que combinen esport, inclusió i benestar a través
           del rem.
         </SectionTitle>
@@ -632,7 +652,7 @@ export default function App() {
           <Card className="rounded-2xl shadow-sm flex flex-col">
             <CardHeader className="pb-0">
               <img
-                src="/vogadores-amb-cor.JPG"
+                src="/vogadores-amb-cor.jpg"
                 alt="Vogadores amb Cor"
                 className="w-full h-56 rounded-2xl object-cover mb-4"
               />
@@ -655,7 +675,7 @@ export default function App() {
           <Card className="rounded-2xl shadow-sm flex flex-col">
             <CardHeader className="pb-0">
               <img
-                src="/rem-adaptat.JPG"
+                src="/rem-adaptat.jpg"
                 alt="Rem adaptat"
                 className="w-full h-56 rounded-2xl object-cover mb-4"
               />
@@ -690,10 +710,7 @@ export default function App() {
                 <CardDescription>{n.excerpt}</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button
-                  variant="ghost"
-                  className="px-0 text-[var(--primary)]"
-                >
+                <Button variant="ghost" className="px-0 text-[var(--primary)]">
                   Llegir més <ChevronRight className="h-4 w-4" />
                 </Button>
               </CardContent>
@@ -739,10 +756,7 @@ export default function App() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button
-                  variant="outline"
-                  className="mt-2 border-slate-300"
-                >
+                <Button variant="outline" className="mt-2 border-slate-300">
                   Obrir totes les capes meteorològiques
                 </Button>
               </a>
@@ -754,51 +768,15 @@ export default function App() {
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex flex-wrap items-center justify-center gap-10">
-            <img
-              src="/logos/radio-cambrils.png"
-              alt="Ràdio Cambrils"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/club-nautic-cambrils.png"
-              alt="Club Nàutic Cambrils"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/castro.png"
-              alt="A.N. Castro"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/fcr.png"
-              alt="FCR"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/ajuntament-cambrils.png"
-              alt="Ajuntament de Cambrils"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/savall.png"
-              alt="Savall"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/comaigua.png"
-              alt="Comaigua"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/acuamar.png"
-              alt="Acuamar"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/revista-cambrils.png"
-              alt="Revista Cambrils"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
+            <img src="/logos/radio-cambrils.png" alt="Ràdio Cambrils" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/club-nautic-cambrils.png" alt="Club Nàutic Cambrils" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/castro.png" alt="A.N. Castro" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/fcr.png" alt="FCR" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/ajuntament-cambrils.png" alt="Ajuntament de Cambrils" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/savall.png" alt="Savall" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/comaigua.png" alt="Comaigua" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/acuamar.png" alt="Acuamar" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/revista-cambrils.png" alt="Revista Cambrils" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
           </div>
         </div>
       </section>
@@ -818,10 +796,7 @@ export default function App() {
             <Button variant="secondary" className="text-[var(--dark)]">
               Fes-te soci
             </Button>
-            <Button
-              variant="outline"
-              className="border-white text-white"
-            >
+            <Button variant="outline" className="border-white text-white">
               Converteix-te en patrocinador
             </Button>
           </div>
@@ -836,24 +811,68 @@ export default function App() {
               <CardTitle>Formulari de contacte</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-3">
-                <Input placeholder="Nom i cognoms" />
-                <Input type="email" placeholder="Correu" />
-                <Textarea placeholder="Missatge" />
-                <Button style={{ backgroundColor: BRAND.primary }}>
-                  Enviar
+              <form onSubmit={submitContact} className="grid gap-3">
+                <input
+                  type="text"
+                  name="_gotcha"
+                  className="hidden"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+
+                <Input
+                  placeholder="Nom i cognoms"
+                  value={contactName}
+                  onChange={(e) => setContactName(e.target.value)}
+                  required
+                />
+
+                <Input
+                  type="email"
+                  placeholder="Correu"
+                  value={contactEmail}
+                  onChange={(e) => setContactEmail(e.target.value)}
+                  required
+                />
+
+                <Textarea
+                  placeholder="Missatge"
+                  value={contactMessage}
+                  onChange={(e) => setContactMessage(e.target.value)}
+                  required
+                  rows={5}
+                />
+
+                {contactStatus === "success" && (
+                  <div className="text-sm rounded-lg border border-emerald-200 bg-emerald-50 text-emerald-800 p-3">
+                    Missatge enviat amb èxit. Gràcies!
+                  </div>
+                )}
+
+                {contactStatus === "error" && (
+                  <div className="text-sm rounded-lg border border-red-200 bg-red-50 text-red-800 p-3">
+                    {contactError}
+                  </div>
+                )}
+
+                <Button
+                  type="submit"
+                  style={{ backgroundColor: BRAND.primary }}
+                  disabled={contactStatus === "sending"}
+                >
+                  {contactStatus === "sending" ? "Enviant..." : "Enviar"}
                 </Button>
-              </div>
+              </form>
             </CardContent>
           </Card>
+
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Informació</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-slate-700 text-sm">
               <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de
-                Cambrils
+                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de Cambrils
               </p>
               <p className="flex items-center gap-2">
                 <Phone className="h-4 w-4" /> +34 600 000 000
@@ -899,48 +918,27 @@ export default function App() {
       <footer className="py-10 bg-[var(--dark)] text-slate-200">
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-4 gap-8">
           <div>
-            <img
-              src={BRAND.logoAlt}
-              alt="logo blanc"
-              className="h-8 w-auto mb-2"
-            />
+            <img src={BRAND.logoAlt} alt="logo blanc" className="h-8 w-auto mb-2" />
             <div className="font-bold text-white text-lg">{BRAND.name}</div>
             <p className="text-slate-400 mt-2 text-sm">
-              Club de rem sense ànim de lucre. Promovem el rem tradicional i de
-              mar a Cambrils.
+              Club de rem sense ànim de lucre. Promovem el rem tradicional i de mar a Cambrils.
             </p>
           </div>
           <div>
             <div className="font-semibold text-white mb-2">Club</div>
             <ul className="space-y-2 text-sm text-slate-300">
-              <li>
-                <a href="#club">Qui som</a>
-              </li>
-              <li>
-                <a href="#socis">Fes-te soci</a>
-              </li>
-              <li>
-                <a href="#contacte">Contacte</a>
-              </li>
-              <li>
-                <a href="/ficha-salut-rem.pdf" download>
-                  Descarregar fitxa
-                </a>
-              </li>
+              <li><a href="#club">Qui som</a></li>
+              <li><a href="#socis">Fes-te soci</a></li>
+              <li><a href="#contacte">Contacte</a></li>
+              <li><a href="/ficha-salut-rem.pdf" download>Descarregar fitxa</a></li>
             </ul>
           </div>
           <div>
             <div className="font-semibold text-white mb-2">Activitat</div>
             <ul className="space-y-2 text-sm text-slate-300">
-              <li>
-                <a href="#salut">Salut</a>
-              </li>
-              <li>
-                <a href="#escoles">Escoles</a>
-              </li>
-              <li>
-                <a href="#competicio">Competició</a>
-              </li>
+              <li><a href="#salut">Salut</a></li>
+              <li><a href="#escoles">Escoles</a></li>
+              <li><a href="#competicio">Competició</a></li>
             </ul>
           </div>
           <div>
@@ -954,8 +952,7 @@ export default function App() {
         </div>
         <div className="max-w-7xl mx-auto px-4 md:px-6 mt-8 flex items-center justify-between text-xs text-slate-400">
           <p>
-            © {new Date().getFullYear()} {BRAND.name}. Tots els drets
-            reservats.
+            © {new Date().getFullYear()} {BRAND.name}. Tots els drets reservats.
           </p>
           <p className="flex items-center gap-1">
             <Heart className="h-3 w-3" /> Fet amb passió pel mar
