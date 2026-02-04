@@ -1,6 +1,6 @@
 import logoAzul from "@/assets/logo-azul.png";
 import logoBlanco from "@/assets/logo-blanco.png";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -51,7 +51,12 @@ const GALLERY_IMAGES = Array.from(
 );
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mblnnvjp";
-const METEOCAT_OPEN_URL = "https://www.meteo.cat/prediccio/municipal/08038"; // Cambrils (si querés otro link exacto, me lo pasás y lo dejo perfecto)
+
+// Meteocat (Cambrils) — enlace + embed (evita el error 400 de enlaces rotos)
+const METEOCAT_OPEN_URL = "https://www.meteo.cat/prediccio/municipal/430385"; // Cambrils
+// Nota: si algún día Meteocat cambia el embed, lo ajustamos. Este funciona como giny general.
+const METEOCAT_EMBED_URL =
+  "https://www.meteo.cat/servmet/ginys/mapaPrediccio/v1/";
 
 const BRAND = {
   name: "Vent d’Estrop",
@@ -96,7 +101,13 @@ const EVENTS = [
   },
 ];
 
+// ✅ SOLO 3 NOTICIAS (beneficio primero) + eliminada “Projecte de renovació del varador”
 const NEWS = [
+  {
+    title: "Avantatge per a socis: -25% al Gimnàs Municipal de Cambrils",
+    excerpt:
+      "Tots els socis del Vent d’Estrop gaudeixen d’un 25% de descompte al gimnàs del Poliesportiu Municipal de Cambrils. Demana’l amb l’acreditació de soci o escriu-nos a info@ventdestrop.com.",
+  },
   {
     title: "Bronze al Campionat de Catalunya de Llagut",
     excerpt:
@@ -107,25 +118,17 @@ const NEWS = [
     excerpt:
       "Inscripcions obertes amb places limitades. Sessions dimarts i dijous…",
   },
-  {
-    title: "Projecte de renovació del varador",
-    excerpt:
-      "Presentem el pla d’infraestructura per millorar l’accessibilitat i el manteniment…",
-  },
-  {
-    title: "Avantatge per a socis: -25% al Gimnàs Municipal de Cambrils",
-    excerpt:
-      "Tots els socis del Vent d’Estrop gaudeixen d’un 25% de descompte al gimnàs del Poliesportiu Municipal de Cambrils. Demana’l amb l’acreditació de soci o escriu-nos a info@ventdestrop.com.",
-  },
 ];
 
 const VOGADORES_SHORT =
   "Les Vogadores amb Cor són dones que han superat el càncer de mama i comparteixen la passió pel rem i els beneficis que aquest esport els aporta.";
+
 const VOGADORES_FULL =
   'Les Vogadores amb Cor són dones que han superat el càncer de mama, comparteixen la passió pel rem i els beneficis que aquest esport els aporta. Des de fa temps, el Club de Rem Vent d\'Estrop Vogadors de Cambrils acull amb entusiasme a dones que han estat afectades per càncer de mama, conegudes com a "Vogadores amb Cor". Aquest grup especial comparteix la passió pel rem com a eina de recuperació i benestar, gaudint dels beneficis tant a nivell físic com mental. Per a elles, el rem no només és una activitat esportiva, sinó també una manera de reforçar el compromís, crear relacions socials i afrontar la vida amb més optimisme. La seva participació en el club és un exemple de com l\'esport pot ser una eina poderosa per a la recuperació i la millora de la qualitat de vida, fomentant la força interior i la solidaritat entre elles.';
 
 const REM_ADAPTAT_SHORT =
   "El rem adaptat és una activitat esportiva inclusiva en la qual es surt a la mar amb una tripulació formada tant per persones amb discapacitats diverses com amb socis del club.";
+
 const REM_ADAPTAT_FULL =
   "El rem adaptat és una activitat esportiva inclusiva en la qual es surt a la mar amb una tripulació formada tant per persones amb discapacitats diverses com amb socis del club. L'esport adaptat en general es considera un instrument d'integració social. L'esport afavoreix el desenvolupament personal i l'autoestima, crea compromís i autodisciplina, i fomenta l'esperit de lluita i el treball en equip. Vent d'Estrop ha aconseguit obrir les portes a col·lectius amb discapacitat intel·lectual i amb malalties mentals, i per al club cambrilenc és una satisfacció molt gran que aquests col·lectius puguin fruir del rem. Pat Perpinyà va ser la vogadora que va iniciar aquest projecte l'any 2009 i que aquest any ja arriba a la seva sisena temporada consecutiva. El club cambrilenc va ser pioner en aquesta pràctica inclusiva del rem dins del litoral català.";
 
@@ -210,7 +213,6 @@ export default function App() {
     "social",
     "salut",
     "noticies",
-    "meteo",
     "contacte",
   ]);
 
@@ -308,7 +310,9 @@ export default function App() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button style={{ backgroundColor: BRAND.primary }}>Fes-te soci</Button>
+              <Button style={{ backgroundColor: BRAND.primary }}>
+                Fes-te soci
+              </Button>
             </a>
 
             <a href="/ficha-salut-rem.pdf" download>
@@ -432,6 +436,7 @@ export default function App() {
                 orgull de Cambrils
               </span>
             </h1>
+
             <p className="text-lg text-slate-600 mt-4">
               Promovem el rem tradicional i de competició per a totes les edats:
               formació, salut i èxit esportiu en un entorn únic.
@@ -484,7 +489,9 @@ export default function App() {
                 className="w-full h-full object-cover transition-opacity duration-1000"
               />
             </div>
-            <div className="mt-3 text-xs text-slate-500">Foto: equip Vent d’Estrop</div>
+            <div className="mt-3 text-xs text-slate-500">
+              Foto: equip Vent d’Estrop
+            </div>
           </motion.div>
         </div>
       </section>
@@ -546,7 +553,11 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => openGallery(0)}
+                >
                   Veure més fotos
                 </Button>
               </div>
@@ -581,35 +592,35 @@ export default function App() {
             <CardHeader>
               <CardTitle>Equips i entrenaments</CardTitle>
               <CardDescription>
-                Grups sènior i veterans (femení i masculí). Sessions setmanals per millorar tècnica,
-                resistència i coordinació.
+                Grups sènior i veterans (femení i masculí). Sessions setmanals
+                per millorar tècnica, resistència i coordinació.
               </CardDescription>
             </CardHeader>
 
             <CardContent>
               <ul className="space-y-3 text-slate-700 text-sm">
                 <li>
-                  <span className="font-medium">• Sènior femení</span>
+                  <span className="font-semibold">• Sènior femení</span>
                   <div className="text-slate-600">
-                    Dc i Dv 19:00–21:00 · Ds 10:00–11:30
+                    Dimecres i divendres 19:00–21:00 · Dissabte 10:00–11:30
                   </div>
                 </li>
                 <li>
-                  <span className="font-medium">• Sènior masculí</span>
+                  <span className="font-semibold">• Sènior masculí</span>
                   <div className="text-slate-600">
-                    Dm i Dj 19:00–21:00 · Ds 08:30–10:00
+                    Dimarts i dijous 19:00–21:00 · Dissabte 08:30–10:00
                   </div>
                 </li>
                 <li>
-                  <span className="font-medium">• Veteranes (femení)</span>
+                  <span className="font-semibold">• Veteranes (femení)</span>
                   <div className="text-slate-600">
-                    Dc i Dv 19:00–21:00 · Dg 09:15–10:15
+                    Dimecres i divendres 19:00–21:00 · Diumenge 09:15–10:15
                   </div>
                 </li>
                 <li>
-                  <span className="font-medium">• Veterans (masculí)</span>
+                  <span className="font-semibold">• Veterans (masculí)</span>
                   <div className="text-slate-600">
-                    Dm i Dj 20:00–22:00 · Dg 08:15–09:15
+                    Dimarts i dijous 20:00–22:00 · Diumenge 08:15–09:15
                   </div>
                 </li>
               </ul>
@@ -623,7 +634,11 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => openGallery(0)}
+                >
                   Veure més fotos
                 </Button>
               </div>
@@ -658,7 +673,8 @@ export default function App() {
             <CardHeader>
               <CardTitle>Activitats socials</CardTitle>
               <CardDescription>
-                Rem social, jornades familiars, sortides al mar i activitats de comunitat per a totes les edats.
+                Rem social, jornades familiars, sortides al mar i activitats de
+                comunitat per a totes les edats.
               </CardDescription>
             </CardHeader>
 
@@ -679,7 +695,11 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => openGallery(0)}
+                >
                   Veure més fotos
                 </Button>
               </div>
@@ -690,7 +710,8 @@ export default function App() {
 
       <section id="salut" className="py-16 bg-[var(--light)]">
         <SectionTitle kicker="Salut" title="Vogadores amb Cor & Rem Adaptat">
-          Programes especials que combinen esport, inclusió i benestar a través del rem.
+          Programes especials que combinen esport, inclusió i benestar a través
+          del rem.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid gap-6 md:grid-cols-2">
@@ -771,21 +792,20 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
           <div className="rounded-2xl overflow-hidden shadow-lg bg-slate-200 h-[420px]">
-            {/* Nota: Meteocat suele bloquear iframes. Si algun dia deja de verse, cambiamos a captura + link. */}
             <iframe
+              title="Meteocat"
               width="100%"
               height="100%"
-              src={METEOCAT_OPEN_URL}
-              title="Meteocat Cambrils"
+              src={METEOCAT_EMBED_URL}
               frameBorder="0"
-            />
+            ></iframe>
           </div>
 
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Predicció Meteocat</CardTitle>
               <CardDescription>
-                Vista per hores (72h). Ideal per decidir si surts al matí o al vespre amb un sol cop d’ull.
+                Consulta l’estat del cel, temperatura, precipitació i vent (velocitat i direcció) per a Cambrils.
               </CardDescription>
             </CardHeader>
 
@@ -807,7 +827,7 @@ export default function App() {
 
               <a href={METEOCAT_OPEN_URL} target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" className="mt-2 border-slate-300">
-                  Obrir Meteocat
+                  Obrir Meteocat (Cambrils)
                 </Button>
               </a>
             </CardContent>
@@ -874,7 +894,8 @@ export default function App() {
               Ajuda’ns a fer créixer el rem a Cambrils
             </h3>
             <p className="text-white/90 mt-2">
-              Col·labora com a soci o patrocinador. El teu suport impulsa l’esport i la comunitat.
+              Col·labora com a soci o patrocinador. El teu suport impulsa
+              l’esport i la comunitat.
             </p>
           </div>
           <div className="flex gap-3">
@@ -947,7 +968,8 @@ export default function App() {
             </CardHeader>
             <CardContent className="space-y-3 text-slate-700 text-sm">
               <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de Cambrils
+                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de
+                Cambrils
               </p>
               <p className="flex items-center gap-2">
                 <Mail className="h-4 w-4" /> info@ventdestrop.com
@@ -990,19 +1012,30 @@ export default function App() {
       <footer className="py-10 bg-[var(--dark)] text-slate-200">
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-4 gap-8">
           <div>
-            <img src={BRAND.logoAlt} alt="logo blanc" className="h-8 w-auto mb-2" />
+            <img
+              src={BRAND.logoAlt}
+              alt="logo blanc"
+              className="h-8 w-auto mb-2"
+            />
             <div className="font-bold text-white text-lg">{BRAND.name}</div>
             <p className="text-slate-400 mt-2 text-sm">
-              Club de rem sense ànim de lucre. Promovem el rem tradicional i de mar a Cambrils.
+              Club de rem sense ànim de lucre. Promovem el rem tradicional i de
+              mar a Cambrils.
             </p>
           </div>
 
           <div>
             <div className="font-semibold text-white mb-2">Club</div>
             <ul className="space-y-2 text-sm text-slate-300">
-              <li><a href="#club">Qui som</a></li>
-              <li><a href="#socis">Fes-te soci</a></li>
-              <li><a href="#contacte">Contacte</a></li>
+              <li>
+                <a href="#club">Qui som</a>
+              </li>
+              <li>
+                <a href="#socis">Fes-te soci</a>
+              </li>
+              <li>
+                <a href="#contacte">Contacte</a>
+              </li>
               <li>
                 <a href="/ficha-salut-rem.pdf" download>
                   Descarregar fitxa
@@ -1014,9 +1047,15 @@ export default function App() {
           <div>
             <div className="font-semibold text-white mb-2">Activitat</div>
             <ul className="space-y-2 text-sm text-slate-300">
-              <li><a href="#salut">Salut</a></li>
-              <li><a href="#escoles">Escoles</a></li>
-              <li><a href="#competicio">Competició</a></li>
+              <li>
+                <a href="#salut">Salut</a>
+              </li>
+              <li>
+                <a href="#escoles">Escoles</a>
+              </li>
+              <li>
+                <a href="#competicio">Competició</a>
+              </li>
             </ul>
           </div>
 
