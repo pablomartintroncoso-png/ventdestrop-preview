@@ -51,9 +51,11 @@ const GALLERY_IMAGES = Array.from(
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mblnnvjp";
 
-// Meteocat giny (72h per hores). Si cal, ajustem el location.
-const METEOCAT_GINY_72H =
-  "https://static-m.meteo.cat/ginys/municipal72h?color=0B5DAA&language=ca&location=430385&target=_blank&tempFormat=%C2%BAC";
+// Meteocat (72h) - widget embeddable
+const METEOCAT_IFRAME_SRC =
+  "https://static-m.meteo.cat/ginys/municipal72h?color=0b5daa&language=ca&location=430385&target=_blank&tempFormat=%C2%BAC";
+const METEOCAT_OPEN_URL =
+  "https://www.meteo.cat/wpweb/prediccio/"; // página oficial de predicción (segura como fallback)
 
 const BRAND = {
   name: "Vent d’Estrop",
@@ -207,6 +209,7 @@ export default function App() {
     "social",
     "salut",
     "noticies",
+    "meteo",
     "contacte",
   ]);
 
@@ -304,7 +307,9 @@ export default function App() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button style={{ backgroundColor: BRAND.primary }}>Fes-te soci</Button>
+              <Button style={{ backgroundColor: BRAND.primary }}>
+                Fes-te soci
+              </Button>
             </a>
 
             <a href="/ficha-salut-rem.pdf" download>
@@ -539,7 +544,11 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => openGallery(0)}
+                >
                   Veure més fotos
                 </Button>
               </div>
@@ -574,32 +583,35 @@ export default function App() {
             <CardHeader>
               <CardTitle>Equips i entrenaments</CardTitle>
               <CardDescription>
-                Grups sènior i veterans (femení i masculí). Sessions setmanals per
-                millorar tècnica, resistència i coordinació.
+                Grups sènior i veterans (femení i masculí). Sessions setmanals
+                per millorar tècnica, resistència i coordinació.
               </CardDescription>
             </CardHeader>
 
             <CardContent>
-              <ul className="space-y-3 text-slate-700 text-sm">
+              <ul className="space-y-3 text-slate-700 text-sm leading-relaxed">
                 <li>
-                  <span className="font-medium">• Sènior femení</span>
+                  <strong>• Sènior femení</strong>
                   <br />
-                  Dc i Dv 19:00–21:00 · Ds 10:00–11:30
+                  Dimecres i divendres 19:00–21:00 · Dissabte 10:00–11:30
                 </li>
+
                 <li>
-                  <span className="font-medium">• Sènior masculí</span>
+                  <strong>• Sènior masculí</strong>
                   <br />
-                  Dm i Dj 19:00–21:00 · Ds 08:30–10:00
+                  Dimarts i dijous 19:00–21:00 · Dissabte 08:30–10:00
                 </li>
+
                 <li>
-                  <span className="font-medium">• Veteranes (femení)</span>
+                  <strong>• Veteranes (femení)</strong>
                   <br />
-                  Dc i Dv 19:00–21:00 · Dg 09:15–10:15
+                  Dimecres i divendres 19:00–21:00 · Diumenge 09:15–10:15
                 </li>
+
                 <li>
-                  <span className="font-medium">• Veterans (masculí)</span>
+                  <strong>• Veterans (masculí)</strong>
                   <br />
-                  Dm i Dj 20:00–22:00 · Dg 08:15–09:15
+                  Dimarts i dijous 20:00–22:00 · Diumenge 08:15–09:15
                 </li>
               </ul>
 
@@ -612,7 +624,11 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => openGallery(0)}
+                >
                   Veure més fotos
                 </Button>
               </div>
@@ -654,7 +670,7 @@ export default function App() {
 
             <CardContent>
               <ul className="space-y-2 text-slate-700 text-sm">
-                <li>• Rem social – Dm i Dv 17:00–18:30</li>
+                <li>• Rem social – Dimarts i divendres 17:00–18:30</li>
                 <li>• Sortides familiars – Caps de setmana</li>
                 <li>• Activitats comunitàries mensuals</li>
                 <li>• Sessions d’iniciació per nous membres</li>
@@ -669,7 +685,11 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => openGallery(0)}
+                >
                   Veure més fotos
                 </Button>
               </div>
@@ -756,20 +776,19 @@ export default function App() {
       </section>
 
       <section id="meteo" className="py-16 bg-[var(--light)]">
-        <SectionTitle kicker="Meteo" title="Condicions de vent i temps">
+        <SectionTitle kicker="Meteo" title="Condicions de vent i mar">
           Predicció oficial de Meteocat per planificar les sortides amb seguretat.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
-          <div className="rounded-2xl overflow-hidden shadow-lg bg-slate-200 h-[520px]">
+          <div className="rounded-2xl overflow-hidden shadow-lg bg-white">
             <iframe
-              title="Predicció Meteocat (Cambrils) - 72 hores"
+              title="Predicció Meteocat (72h) - Cambrils"
               width="100%"
-              height="100%"
-              src={METEOCAT_GINY_72H}
+              height="420"
+              src={METEOCAT_IFRAME_SRC}
               frameBorder="0"
-              loading="lazy"
-            />
+            ></iframe>
           </div>
 
           <Card className="rounded-2xl shadow-sm">
@@ -781,7 +800,7 @@ export default function App() {
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-4 text-slate-700 text-sm">
+            <CardContent className="space-y-3 text-slate-700 text-sm">
               <ul className="list-disc list-inside space-y-1">
                 <li>Estat del cel i evolució per hores</li>
                 <li>Temperatura</li>
@@ -790,16 +809,16 @@ export default function App() {
               </ul>
 
               <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900">
-                <div className="font-medium">Avís de seguretat</div>
-                <p className="mt-1">
+                <strong>Avís de seguretat</strong>
+                <div className="mt-1">
                   Si hi ha avisos oficials (vent fort / mala mar) o indicacions del club,
                   la sortida es pot anul·lar. En cas de dubte: seguretat primer.
-                </p>
+                </div>
               </div>
 
-              <a href={METEOCAT_GINY_72H} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" className="mt-1 border-slate-300">
-                  Obrir Meteocat (Cambrils)
+              <a href={METEOCAT_OPEN_URL} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="mt-2 border-slate-300">
+                  Obrir Meteocat
                 </Button>
               </a>
             </CardContent>
@@ -1025,6 +1044,9 @@ export default function App() {
               </li>
               <li>
                 <a href="#competicio">Competició</a>
+              </li>
+              <li>
+                <a href="#meteo">Meteo</a>
               </li>
             </ul>
           </div>
