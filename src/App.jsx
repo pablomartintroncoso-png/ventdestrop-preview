@@ -51,6 +51,10 @@ const GALLERY_IMAGES = Array.from(
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mblnnvjp";
 
+// Meteocat giny (72h per hores). Si cal, ajustem el location.
+const METEOCAT_GINY_72H =
+  "https://static-m.meteo.cat/ginys/municipal72h?color=0B5DAA&language=ca&location=430385&target=_blank&tempFormat=%C2%BAC";
+
 const BRAND = {
   name: "Vent d’Estrop",
   tagline: "Club de Rem Cambrils",
@@ -300,9 +304,7 @@ export default function App() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button style={{ backgroundColor: BRAND.primary }}>
-                Fes-te soci
-              </Button>
+              <Button style={{ backgroundColor: BRAND.primary }}>Fes-te soci</Button>
             </a>
 
             <a href="/ficha-salut-rem.pdf" download>
@@ -537,11 +539,7 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => openGallery(0)}
-                >
+                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
                   Veure més fotos
                 </Button>
               </div>
@@ -576,39 +574,32 @@ export default function App() {
             <CardHeader>
               <CardTitle>Equips i entrenaments</CardTitle>
               <CardDescription>
-                Grups sènior i veterans (femení i masculí). Sessions setmanals
-                per millorar tècnica, resistència i coordinació.
+                Grups sènior i veterans (femení i masculí). Sessions setmanals per
+                millorar tècnica, resistència i coordinació.
               </CardDescription>
             </CardHeader>
 
             <CardContent>
-              <ul className="space-y-3 text-slate-700 text-sm leading-snug">
-                <li className="flex flex-col">
-                  <span className="font-semibold text-slate-800">
-                    • Sènior femení
-                  </span>
-                  <span>Dc i Dv 19:00–21:00 · Ds 10:00–11:30</span>
+              <ul className="space-y-3 text-slate-700 text-sm">
+                <li>
+                  <span className="font-medium">• Sènior femení</span>
+                  <br />
+                  Dc i Dv 19:00–21:00 · Ds 10:00–11:30
                 </li>
-
-                <li className="flex flex-col">
-                  <span className="font-semibold text-slate-800">
-                    • Sènior masculí
-                  </span>
-                  <span>Dm i Dj 19:00–21:00 · Ds 08:30–10:00</span>
+                <li>
+                  <span className="font-medium">• Sènior masculí</span>
+                  <br />
+                  Dm i Dj 19:00–21:00 · Ds 08:30–10:00
                 </li>
-
-                <li className="flex flex-col">
-                  <span className="font-semibold text-slate-800">
-                    • Veteranes
-                  </span>
-                  <span>Dc i Dv 19:00–21:00 · Dg 09:15–10:15</span>
+                <li>
+                  <span className="font-medium">• Veteranes (femení)</span>
+                  <br />
+                  Dc i Dv 19:00–21:00 · Dg 09:15–10:15
                 </li>
-
-                <li className="flex flex-col">
-                  <span className="font-semibold text-slate-800">
-                    • Veterans
-                  </span>
-                  <span>Dm i Dj 20:00–22:00 · Dg 08:15–09:15</span>
+                <li>
+                  <span className="font-medium">• Veterans (masculí)</span>
+                  <br />
+                  Dm i Dj 20:00–22:00 · Dg 08:15–09:15
                 </li>
               </ul>
 
@@ -621,11 +612,7 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => openGallery(0)}
-                >
+                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
                   Veure més fotos
                 </Button>
               </div>
@@ -682,11 +669,7 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => openGallery(0)}
-                >
+                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
                   Veure més fotos
                 </Button>
               </div>
@@ -778,39 +761,44 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
-          <div className="rounded-2xl overflow-hidden shadow-lg bg-white h-[420px]">
+          <div className="rounded-2xl overflow-hidden shadow-lg bg-slate-200 h-[520px]">
             <iframe
-              title="Predicció Meteocat Cambrils"
+              title="Predicció Meteocat (Cambrils) - 72 hores"
               width="100%"
               height="100%"
-              src="https://static-m.meteo.cat/ginys/municipal72h?color=23e1cb&language=ca&location=430385&mainChart=estCel&secondaryChart=true&target=_blank&tempFormat=%C2%BAC&windSpeedFormat=km%2Fh"
+              src={METEOCAT_GINY_72H}
               frameBorder="0"
-            ></iframe>
+              loading="lazy"
+            />
           </div>
 
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Predicció Meteocat</CardTitle>
               <CardDescription>
-                Consulta l’estat del cel, temperatura, precipitació i vent (velocitat i direcció)
-                per a Cambrils.
+                Vista per hores (72h). Ideal per decidir si surts al matí o al vespre
+                amb un sol cop d’ull.
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-3 text-slate-700 text-sm">
+            <CardContent className="space-y-4 text-slate-700 text-sm">
               <ul className="list-disc list-inside space-y-1">
                 <li>Estat del cel i evolució per hores</li>
-                <li>Temperatura i humitat</li>
-                <li>Precipitació prevista</li>
+                <li>Temperatura</li>
+                <li>Precipitació</li>
                 <li>Vent: velocitat i direcció</li>
               </ul>
 
-              <a
-                href="https://www.meteo.cat/prediccio/municipal/430385"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="outline" className="mt-2 border-slate-300">
+              <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900">
+                <div className="font-medium">Avís de seguretat</div>
+                <p className="mt-1">
+                  Si hi ha avisos oficials (vent fort / mala mar) o indicacions del club,
+                  la sortida es pot anul·lar. En cas de dubte: seguretat primer.
+                </p>
+              </div>
+
+              <a href={METEOCAT_GINY_72H} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="mt-1 border-slate-300">
                   Obrir Meteocat (Cambrils)
                 </Button>
               </a>
