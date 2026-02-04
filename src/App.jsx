@@ -300,7 +300,9 @@ export default function App() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button style={{ backgroundColor: BRAND.primary }}>Fes-te soci</Button>
+              <Button style={{ backgroundColor: BRAND.primary }}>
+                Fes-te soci
+              </Button>
             </a>
 
             <a href="/ficha-salut-rem.pdf" download>
@@ -535,7 +537,11 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => openGallery(0)}
+                >
                   Veure més fotos
                 </Button>
               </div>
@@ -570,17 +576,40 @@ export default function App() {
             <CardHeader>
               <CardTitle>Equips i entrenaments</CardTitle>
               <CardDescription>
-                Absolut, Veterà, Femení i Mixt. Sessions setmanals per millorar
-                tècnica, resistència i coordinació.
+                Grups sènior i veterans (femení i masculí). Sessions setmanals
+                per millorar tècnica, resistència i coordinació.
               </CardDescription>
             </CardHeader>
 
             <CardContent>
-              <ul className="space-y-2 text-slate-700 text-sm">
-                <li>• Absolut – Dl, Dmc, Dvj 20:00–22:00</li>
-                <li>• Veterà – Dm i Dv 19:00–20:30</li>
-                <li>• Femení – Dx i Dv 18:00–19:30</li>
-                <li>• Mixt – Ds 09:00–11:00</li>
+              <ul className="space-y-3 text-slate-700 text-sm leading-snug">
+                <li className="flex flex-col">
+                  <span className="font-semibold text-slate-800">
+                    • Sènior femení
+                  </span>
+                  <span>Dc i Dv 19:00–21:00 · Ds 10:00–11:30</span>
+                </li>
+
+                <li className="flex flex-col">
+                  <span className="font-semibold text-slate-800">
+                    • Sènior masculí
+                  </span>
+                  <span>Dm i Dj 19:00–21:00 · Ds 08:30–10:00</span>
+                </li>
+
+                <li className="flex flex-col">
+                  <span className="font-semibold text-slate-800">
+                    • Veteranes
+                  </span>
+                  <span>Dc i Dv 19:00–21:00 · Dg 09:15–10:15</span>
+                </li>
+
+                <li className="flex flex-col">
+                  <span className="font-semibold text-slate-800">
+                    • Veterans
+                  </span>
+                  <span>Dm i Dj 20:00–22:00 · Dg 08:15–09:15</span>
+                </li>
               </ul>
 
               <div className="mt-4 flex flex-wrap gap-2">
@@ -592,7 +621,11 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => openGallery(0)}
+                >
                   Veure més fotos
                 </Button>
               </div>
@@ -649,7 +682,11 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => openGallery(0)}
+                >
                   Veure més fotos
                 </Button>
               </div>
@@ -736,44 +773,45 @@ export default function App() {
       </section>
 
       <section id="meteo" className="py-16 bg-[var(--light)]">
-        <SectionTitle kicker="Meteo" title="Condicions de vent i mar">
-          Informació actualitzada per planificar les sortides amb seguretat.
+        <SectionTitle kicker="Meteo" title="Condicions de vent i temps">
+          Predicció oficial de Meteocat per planificar les sortides amb seguretat.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
-          <div className="rounded-2xl overflow-hidden shadow-lg bg-slate-200 h-[420px]">
+          <div className="rounded-2xl overflow-hidden shadow-lg bg-white h-[420px]">
             <iframe
+              title="Predicció Meteocat Cambrils"
               width="100%"
               height="100%"
-              src="https://embed.windy.com/embed2.html?lat=41.0743&lon=1.0564&detailLat=41.0743&detailLon=1.0564&zoom=11&level=surface&overlay=wind&product=ecmwf&menu=&message=&marker=&calendar=&pressure=&type=map&location=coordinates&detail=&metricWind=km%2Fh&metricTemp=%C2%B0C"
+              src="https://static-m.meteo.cat/ginys/municipal72h?color=23e1cb&language=ca&location=430385&mainChart=estCel&secondaryChart=true&target=_blank&tempFormat=%C2%BAC&windSpeedFormat=km%2Fh"
               frameBorder="0"
             ></iframe>
           </div>
 
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
-              <CardTitle>Vent i condicions del mar</CardTitle>
+              <CardTitle>Predicció Meteocat</CardTitle>
               <CardDescription>
-                Consulta el vent actual, les ràfegues, l'onatge i l'evolució per
-                hores.
+                Consulta l’estat del cel, temperatura, precipitació i vent (velocitat i direcció)
+                per a Cambrils.
               </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-3 text-slate-700 text-sm">
               <ul className="list-disc list-inside space-y-1">
-                <li>Direcció i intensitat del vent</li>
-                <li>Ràfegues i previsió per hores</li>
-                <li>Especificació per nivell del mar i superfície</li>
-                <li>Model ECMWF (el més fiable del món)</li>
+                <li>Estat del cel i evolució per hores</li>
+                <li>Temperatura i humitat</li>
+                <li>Precipitació prevista</li>
+                <li>Vent: velocitat i direcció</li>
               </ul>
 
               <a
-                href="https://www.windy.com/?41.0743,1.0564,11"
+                href="https://www.meteo.cat/prediccio/municipal/430385"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <Button variant="outline" className="mt-2 border-slate-300">
-                  Obrir totes les capes meteorològiques
+                  Obrir Meteocat (Cambrils)
                 </Button>
               </a>
             </CardContent>
