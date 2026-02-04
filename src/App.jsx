@@ -52,11 +52,11 @@ const GALLERY_IMAGES = Array.from(
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mblnnvjp";
 
-// Meteocat (Cambrils) — enlace + embed (evita el error 400 de enlaces rotos)
-const METEOCAT_OPEN_URL = "https://www.meteo.cat/prediccio/municipal/430385"; // Cambrils
-// Nota: si algún día Meteocat cambia el embed, lo ajustamos. Este funciona como giny general.
-const METEOCAT_EMBED_URL =
-  "https://www.meteo.cat/servmet/ginys/mapaPrediccio/v1/";
+// Meteocat (sin iframe porque Meteocat suele bloquear/caducar embeds -> errores 400/410)
+const METEOCAT_OPEN_URL =
+  "https://www.meteo.cat/prediccio/municipal/08038"; // Cambrils (código INE). Si algún día cambia, lo actualizamos.
+const METEOCAT_RADAR_URL =
+  "https://www.meteo.cat/prediccio/general/radar";
 
 const BRAND = {
   name: "Vent d’Estrop",
@@ -80,6 +80,7 @@ const NAV = [
   { label: "Contacte", href: "#contacte" },
 ];
 
+// (No lo estás mostrando ahora, lo dejo por si lo reactivas)
 const EVENTS = [
   {
     date: "24 NOV",
@@ -101,12 +102,13 @@ const EVENTS = [
   },
 ];
 
-// ✅ SOLO 3 NOTICIAS (beneficio primero) + eliminada “Projecte de renovació del varador”
+// ✅ SOLO 3 NOTICIAS, y la del 25% va primera.
+// ❌ Se elimina la que marcaste (“Projecte de renovació del varador”)
 const NEWS = [
   {
     title: "Avantatge per a socis: -25% al Gimnàs Municipal de Cambrils",
     excerpt:
-      "Tots els socis del Vent d’Estrop gaudeixen d’un 25% de descompte al gimnàs del Poliesportiu Municipal de Cambrils. Demana’l amb l’acreditació de soci o escriu-nos a info@ventdestrop.com.",
+      "Tots els socis del Vent d’Estrop gaudeixen d’un 25% de descompte al gimnàs del Poliesportiu Municipal. Demana l’acreditació de soci o escriu-nos a info@ventdestrop.com.",
   },
   {
     title: "Bronze al Campionat de Catalunya de Llagut",
@@ -122,13 +124,11 @@ const NEWS = [
 
 const VOGADORES_SHORT =
   "Les Vogadores amb Cor són dones que han superat el càncer de mama i comparteixen la passió pel rem i els beneficis que aquest esport els aporta.";
-
 const VOGADORES_FULL =
   'Les Vogadores amb Cor són dones que han superat el càncer de mama, comparteixen la passió pel rem i els beneficis que aquest esport els aporta. Des de fa temps, el Club de Rem Vent d\'Estrop Vogadors de Cambrils acull amb entusiasme a dones que han estat afectades per càncer de mama, conegudes com a "Vogadores amb Cor". Aquest grup especial comparteix la passió pel rem com a eina de recuperació i benestar, gaudint dels beneficis tant a nivell físic com mental. Per a elles, el rem no només és una activitat esportiva, sinó també una manera de reforçar el compromís, crear relacions socials i afrontar la vida amb més optimisme. La seva participació en el club és un exemple de com l\'esport pot ser una eina poderosa per a la recuperació i la millora de la qualitat de vida, fomentant la força interior i la solidaritat entre elles.';
 
 const REM_ADAPTAT_SHORT =
   "El rem adaptat és una activitat esportiva inclusiva en la qual es surt a la mar amb una tripulació formada tant per persones amb discapacitats diverses com amb socis del club.";
-
 const REM_ADAPTAT_FULL =
   "El rem adaptat és una activitat esportiva inclusiva en la qual es surt a la mar amb una tripulació formada tant per persones amb discapacitats diverses com amb socis del club. L'esport adaptat en general es considera un instrument d'integració social. L'esport afavoreix el desenvolupament personal i l'autoestima, crea compromís i autodisciplina, i fomenta l'esperit de lluita i el treball en equip. Vent d'Estrop ha aconseguit obrir les portes a col·lectius amb discapacitat intel·lectual i amb malalties mentals, i per al club cambrilenc és una satisfacció molt gran que aquests col·lectius puguin fruir del rem. Pat Perpinyà va ser la vogadora que va iniciar aquest projecte l'any 2009 i que aquest any ja arriba a la seva sisena temporada consecutiva. El club cambrilenc va ser pioner en aquesta pràctica inclusiva del rem dins del litoral català.";
 
@@ -422,7 +422,6 @@ export default function App() {
             style={{ background: BRAND.accent }}
           />
         </div>
-
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-10 items-center py-12 md:py-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -436,12 +435,10 @@ export default function App() {
                 orgull de Cambrils
               </span>
             </h1>
-
             <p className="text-lg text-slate-600 mt-4">
               Promovem el rem tradicional i de competició per a totes les edats:
               formació, salut i èxit esportiu en un entorn únic.
             </p>
-
             <div className="flex flex-wrap gap-3 mt-6">
               <Button
                 size="lg"
@@ -451,7 +448,6 @@ export default function App() {
                 Prova una sessió
                 <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
-
               <a
                 href="/calendario.jpg"
                 target="_blank"
@@ -463,7 +459,6 @@ export default function App() {
                 </Button>
               </a>
             </div>
-
             <div className="flex flex-wrap gap-6 mt-8 text-slate-500 text-sm">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4" /> +200 socis
@@ -553,11 +548,7 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => openGallery(0)}
-                >
+                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
                   Veure més fotos
                 </Button>
               </div>
@@ -600,28 +591,24 @@ export default function App() {
             <CardContent>
               <ul className="space-y-3 text-slate-700 text-sm">
                 <li>
-                  <span className="font-semibold">• Sènior femení</span>
-                  <div className="text-slate-600">
-                    Dimecres i divendres 19:00–21:00 · Dissabte 10:00–11:30
-                  </div>
+                  • <strong>Sènior femení</strong>
+                  <br />
+                  Dimecres i divendres 19:00–21:00 · Dissabte 10:00–11:30
                 </li>
                 <li>
-                  <span className="font-semibold">• Sènior masculí</span>
-                  <div className="text-slate-600">
-                    Dimarts i dijous 19:00–21:00 · Dissabte 08:30–10:00
-                  </div>
+                  • <strong>Sènior masculí</strong>
+                  <br />
+                  Dimarts i dijous 19:00–21:00 · Dissabte 08:30–10:00
                 </li>
                 <li>
-                  <span className="font-semibold">• Veteranes (femení)</span>
-                  <div className="text-slate-600">
-                    Dimecres i divendres 19:00–21:00 · Diumenge 09:15–10:15
-                  </div>
+                  • <strong>Veteranes (femení)</strong>
+                  <br />
+                  Dimecres i divendres 19:00–21:00 · Diumenge 09:15–10:15
                 </li>
                 <li>
-                  <span className="font-semibold">• Veterans (masculí)</span>
-                  <div className="text-slate-600">
-                    Dimarts i dijous 20:00–22:00 · Diumenge 08:15–09:15
-                  </div>
+                  • <strong>Veterans (masculí)</strong>
+                  <br />
+                  Dimarts i dijous 20:00–22:00 · Diumenge 08:15–09:15
                 </li>
               </ul>
 
@@ -634,11 +621,7 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => openGallery(0)}
-                >
+                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
                   Veure més fotos
                 </Button>
               </div>
@@ -680,7 +663,7 @@ export default function App() {
 
             <CardContent>
               <ul className="space-y-2 text-slate-700 text-sm">
-                <li>• Rem social – Dm i Dv 17:00–18:30</li>
+                <li>• Rem social – Dimarts i divendres 17:00–18:30</li>
                 <li>• Sortides familiars – Caps de setmana</li>
                 <li>• Activitats comunitàries mensuals</li>
                 <li>• Sessions d’iniciació per nous membres</li>
@@ -695,11 +678,7 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => openGallery(0)}
-                >
+                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
                   Veure més fotos
                 </Button>
               </div>
@@ -791,21 +770,31 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
-          <div className="rounded-2xl overflow-hidden shadow-lg bg-slate-200 h-[420px]">
-            <iframe
-              title="Meteocat"
-              width="100%"
-              height="100%"
-              src={METEOCAT_EMBED_URL}
-              frameBorder="0"
-            ></iframe>
+          {/* En lugar de iframe (que Meteocat bloquea/caduca), mostramos una vista con imagen + botones */}
+          <div className="rounded-2xl overflow-hidden shadow-lg bg-slate-200 h-[420px] flex items-center justify-center">
+            <div className="w-full h-full bg-white flex items-center justify-center p-4">
+              <img
+                src="/meteocat-preview.jpg"
+                alt="Vista Meteocat (Cambrils)"
+                className="max-h-full max-w-full object-contain"
+                onError={(e) => {
+                  // fallback visual si no existe la imagen
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+              {/* fallback texto si no hay imagen */}
+              <div className="text-slate-500 text-sm text-center">
+                Consulta Meteocat per veure la previsió per hores a Cambrils.
+              </div>
+            </div>
           </div>
 
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Predicció Meteocat</CardTitle>
               <CardDescription>
-                Consulta l’estat del cel, temperatura, precipitació i vent (velocitat i direcció) per a Cambrils.
+                Vista per hores (72h). Ideal per decidir si surts al matí o al vespre
+                amb un sol cop d’ull.
               </CardDescription>
             </CardHeader>
 
@@ -825,11 +814,27 @@ export default function App() {
                 </div>
               </div>
 
-              <a href={METEOCAT_OPEN_URL} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" className="mt-2 border-slate-300">
-                  Obrir Meteocat (Cambrils)
-                </Button>
-              </a>
+              <div className="flex flex-wrap gap-2">
+                <a
+                  href={METEOCAT_OPEN_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline" className="mt-2 border-slate-300">
+                    Obrir Meteocat (Cambrils)
+                  </Button>
+                </a>
+
+                <a
+                  href={METEOCAT_RADAR_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="outline" className="mt-2 border-slate-300">
+                    Obrir Radar
+                  </Button>
+                </a>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -1023,7 +1028,6 @@ export default function App() {
               mar a Cambrils.
             </p>
           </div>
-
           <div>
             <div className="font-semibold text-white mb-2">Club</div>
             <ul className="space-y-2 text-sm text-slate-300">
@@ -1043,7 +1047,6 @@ export default function App() {
               </li>
             </ul>
           </div>
-
           <div>
             <div className="font-semibold text-white mb-2">Activitat</div>
             <ul className="space-y-2 text-sm text-slate-300">
@@ -1058,7 +1061,6 @@ export default function App() {
               </li>
             </ul>
           </div>
-
           <div>
             <div className="font-semibold text-white mb-2">Legal</div>
             <ul className="space-y-2 text-sm text-slate-300">
@@ -1068,7 +1070,6 @@ export default function App() {
             </ul>
           </div>
         </div>
-
         <div className="max-w-7xl mx-auto px-4 md:px-6 mt-8 flex items-center justify-between text-xs text-slate-400">
           <p>
             © {new Date().getFullYear()} {BRAND.name}. Tots els drets reservats.
