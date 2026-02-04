@@ -44,7 +44,6 @@ const HERO_PHOTOS = [
   "/hero-boteescuela.jpg",
   "/hero-botesocial.jpg",
 ];
-
 const GALLERY_IMAGES = Array.from(
   { length: 15 },
   (_, i) => `/galeria-${i + 1}.jpg`
@@ -52,12 +51,9 @@ const GALLERY_IMAGES = Array.from(
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mblnnvjp";
 
-// ✅ Pegá aquí tu SRC real (el que ya te funciona)
-const METEOCAT_IFRAME_SRC =
-  "PEGAR_AQUI_LA_URL_REAL_DE_TU_IFRAME_METEOCAT";
-
-// Link externo de Meteocat (Cambrils)
-const METEOCAT_LINK = "https://www.meteo.cat";
+// Meteocat giny (72h per hores). Si cal, ajustem el location.
+const METEOCAT_GINY_72H =
+  "https://static-m.meteo.cat/ginys/municipal72h?color=0B5DAA&language=ca&location=430385&target=_blank&tempFormat=%C2%BAC";
 
 const BRAND = {
   name: "Vent d’Estrop",
@@ -79,6 +75,27 @@ const NAV = [
   { label: "Salut", href: "#salut" },
   { label: "Notícies", href: "#noticies" },
   { label: "Contacte", href: "#contacte" },
+];
+
+const EVENTS = [
+  {
+    date: "24 NOV",
+    title: "Regata Llagut Mediterrani – Badia de Cambrils",
+    location: "Port de Cambrils",
+    desc: "Prova del calendari federatiu. Categories absolut i veterà.",
+  },
+  {
+    date: "30 NOV",
+    title: "Jornada de Portes Obertes",
+    location: "Base nàutica",
+    desc: "Sessió gratuïta per a nous remers i famílies.",
+  },
+  {
+    date: "12 DES",
+    title: "Assemblea General Ordinària",
+    location: "Sala Polivalent – Club",
+    desc: "Memòria anual, pressupost i projectes 2026.",
+  },
 ];
 
 const NEWS = [
@@ -190,7 +207,6 @@ export default function App() {
     "social",
     "salut",
     "noticies",
-    "meteo",
     "contacte",
   ]);
 
@@ -288,9 +304,7 @@ export default function App() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button style={{ backgroundColor: BRAND.primary }}>
-                Fes-te soci
-              </Button>
+              <Button style={{ backgroundColor: BRAND.primary }}>Fes-te soci</Button>
             </a>
 
             <a href="/ficha-salut-rem.pdf" download>
@@ -400,7 +414,6 @@ export default function App() {
             style={{ background: BRAND.accent }}
           />
         </div>
-
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-10 items-center py-12 md:py-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -408,19 +421,16 @@ export default function App() {
             transition={{ duration: 0.5 }}
           >
             <Pill>Club esportiu · Comunitat · Mar</Pill>
-
             <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mt-6 md:mt-8 text-slate-900 leading-[1.2] md:leading-[1.28]">
               Rem al Mediterrani,
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">
                 orgull de Cambrils
               </span>
             </h1>
-
             <p className="text-lg text-slate-600 mt-4">
               Promovem el rem tradicional i de competició per a totes les edats:
               formació, salut i èxit esportiu en un entorn únic.
             </p>
-
             <div className="flex flex-wrap gap-3 mt-6">
               <Button
                 size="lg"
@@ -430,7 +440,6 @@ export default function App() {
                 Prova una sessió
                 <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
-
               <a
                 href="/calendario.jpg"
                 target="_blank"
@@ -442,7 +451,6 @@ export default function App() {
                 </Button>
               </a>
             </div>
-
             <div className="flex flex-wrap gap-6 mt-8 text-slate-500 text-sm">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4" /> +200 socis
@@ -455,7 +463,6 @@ export default function App() {
               </div>
             </div>
           </motion.div>
-
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -532,11 +539,7 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => openGallery(0)}
-                >
+                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
                   Veure més fotos
                 </Button>
               </div>
@@ -571,55 +574,36 @@ export default function App() {
             <CardHeader>
               <CardTitle>Equips i entrenaments</CardTitle>
               <CardDescription>
-                Grups sènior i veterans (femení i masculí). Sessions setmanals
-                per millorar tècnica, resistència i coordinació.
+                Grups sènior i veterans (femení i masculí). Sessions setmanals per
+                millorar tècnica, resistència i coordinació.
               </CardDescription>
             </CardHeader>
 
             <CardContent>
-              <ul className="space-y-4 text-slate-700 text-sm">
-                <li className="flex flex-col gap-1">
-                  <span className="font-semibold">• Sènior femení</span>
-                  <span className="text-slate-600">
-                    Dimecres i divendres: 19:00–21:00
-                  </span>
-                  <span className="text-slate-600">
-                    Dissabte: 10:00–11:30
-                  </span>
+              <ul className="space-y-3 text-slate-700 text-sm">
+                <li>
+                  <span className="font-medium">• Sènior femení</span>
+                  <br />
+                  Dc i Dv 19:00–21:00 · Ds 10:00–11:30
                 </li>
-
-                <li className="flex flex-col gap-1">
-                  <span className="font-semibold">• Sènior masculí</span>
-                  <span className="text-slate-600">
-                    Dimarts i dijous: 19:00–21:00
-                  </span>
-                  <span className="text-slate-600">
-                    Dissabte: 08:30–10:00
-                  </span>
+                <li>
+                  <span className="font-medium">• Sènior masculí</span>
+                  <br />
+                  Dm i Dj 19:00–21:00 · Ds 08:30–10:00
                 </li>
-
-                <li className="flex flex-col gap-1">
-                  <span className="font-semibold">• Veteranes (femení)</span>
-                  <span className="text-slate-600">
-                    Dimecres i divendres: 19:00–21:00
-                  </span>
-                  <span className="text-slate-600">
-                    Diumenge: 09:15–10:15
-                  </span>
+                <li>
+                  <span className="font-medium">• Veteranes (femení)</span>
+                  <br />
+                  Dc i Dv 19:00–21:00 · Dg 09:15–10:15
                 </li>
-
-                <li className="flex flex-col gap-1">
-                  <span className="font-semibold">• Veterans (masculí)</span>
-                  <span className="text-slate-600">
-                    Dimarts i dijous: 20:00–22:00
-                  </span>
-                  <span className="text-slate-600">
-                    Diumenge: 08:15–09:15
-                  </span>
+                <li>
+                  <span className="font-medium">• Veterans (masculí)</span>
+                  <br />
+                  Dm i Dj 20:00–22:00 · Dg 08:15–09:15
                 </li>
               </ul>
 
-              <div className="mt-6 flex flex-wrap gap-2">
+              <div className="mt-4 flex flex-wrap gap-2">
                 <Button
                   size="lg"
                   style={{ backgroundColor: BRAND.primary }}
@@ -628,11 +612,7 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => openGallery(0)}
-                >
+                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
                   Veure més fotos
                 </Button>
               </div>
@@ -674,7 +654,7 @@ export default function App() {
 
             <CardContent>
               <ul className="space-y-2 text-slate-700 text-sm">
-                <li>• Rem social – Dimarts i divendres 17:00–18:30</li>
+                <li>• Rem social – Dm i Dv 17:00–18:30</li>
                 <li>• Sortides familiars – Caps de setmana</li>
                 <li>• Activitats comunitàries mensuals</li>
                 <li>• Sessions d’iniciació per nous membres</li>
@@ -689,11 +669,7 @@ export default function App() {
                   Prova una sessió
                 </Button>
 
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => openGallery(0)}
-                >
+                <Button variant="outline" size="lg" onClick={() => openGallery(0)}>
                   Veure més fotos
                 </Button>
               </div>
@@ -779,32 +755,29 @@ export default function App() {
         </div>
       </section>
 
-      {/* ✅ Meteo */}
       <section id="meteo" className="py-16 bg-[var(--light)]">
         <SectionTitle kicker="Meteo" title="Condicions de vent i temps">
           Predicció oficial de Meteocat per planificar les sortides amb seguretat.
         </SectionTitle>
 
-        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6 items-start">
-          {/* Contenidor PROPORCIONAT */}
-          <div className="rounded-2xl overflow-hidden shadow-lg bg-white border border-slate-200">
-            <div className="h-[420px] md:h-[460px] lg:h-[520px]">
-              <iframe
-                title="Meteocat Cambrils"
-                width="100%"
-                height="100%"
-                src={METEOCAT_IFRAME_SRC}
-                frameBorder="0"
-                className="block w-full h-full"
-              ></iframe>
-            </div>
+        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
+          <div className="rounded-2xl overflow-hidden shadow-lg bg-slate-200 h-[520px]">
+            <iframe
+              title="Predicció Meteocat (Cambrils) - 72 hores"
+              width="100%"
+              height="100%"
+              src={METEOCAT_GINY_72H}
+              frameBorder="0"
+              loading="lazy"
+            />
           </div>
 
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Predicció Meteocat</CardTitle>
               <CardDescription>
-                Vista per hores (72h). Ideal per decidir si surts al matí o al vespre amb un sol cop d’ull.
+                Vista per hores (72h). Ideal per decidir si surts al matí o al vespre
+                amb un sol cop d’ull.
               </CardDescription>
             </CardHeader>
 
@@ -817,18 +790,94 @@ export default function App() {
               </ul>
 
               <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900">
-                <div className="font-semibold mb-1">Avís de seguretat</div>
-                Si hi ha avisos oficials (vent fort / mala mar) o indicacions del club, la sortida es pot anul·lar.
-                En cas de dubte: seguretat primer.
+                <div className="font-medium">Avís de seguretat</div>
+                <p className="mt-1">
+                  Si hi ha avisos oficials (vent fort / mala mar) o indicacions del club,
+                  la sortida es pot anul·lar. En cas de dubte: seguretat primer.
+                </p>
               </div>
 
-              <a href={METEOCAT_LINK} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" className="border-slate-300">
+              <a href={METEOCAT_GINY_72H} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="mt-1 border-slate-300">
                   Obrir Meteocat (Cambrils)
                 </Button>
               </a>
             </CardContent>
           </Card>
+        </div>
+      </section>
+
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
+          <div className="flex flex-wrap items-center justify-center gap-10">
+            <img
+              src="/logos/radio-cambrils.png"
+              alt="Ràdio Cambrils"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/club-nautic-cambrils.png"
+              alt="Club Nàutic Cambrils"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/castro.png"
+              alt="A.N. Castro"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/fcr.png"
+              alt="FCR"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/ajuntament-cambrils.png"
+              alt="Ajuntament de Cambrils"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/savall.png"
+              alt="Savall"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/comaigua.png"
+              alt="Comaigua"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/acuamar.png"
+              alt="Acuamar"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+            <img
+              src="/logos/revista-cambrils.png"
+              alt="Revista Cambrils"
+              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6 items-center">
+          <div>
+            <h3 className="text-2xl md:text-3xl font-bold">
+              Ajuda’ns a fer créixer el rem a Cambrils
+            </h3>
+            <p className="text-white/90 mt-2">
+              Col·labora com a soci o patrocinador. El teu suport impulsa
+              l’esport i la comunitat.
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <Button variant="secondary" className="text-[var(--dark)]">
+              Fes-te soci
+            </Button>
+            <Button variant="outline" className="border-white text-white">
+              Converteix-te en patrocinador
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -891,14 +940,13 @@ export default function App() {
             </CardHeader>
             <CardContent className="space-y-3 text-slate-700 text-sm">
               <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de Cambrils
+                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de
+                Cambrils
               </p>
               <p className="flex items-center gap-2">
                 <Mail className="h-4 w-4" /> info@ventdestrop.com
               </p>
-
               <Separator />
-
               <div className="flex items-center gap-4">
                 <a
                   href="https://www.instagram.com/ventdestrop"
@@ -907,7 +955,7 @@ export default function App() {
                   aria-label="Instagram"
                   className="p-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50"
                 >
-                  <Instagram className="h-4 w-4" />
+                  <Instagram className="h-4 w-4" style={{ color: "#E4405F" }} />
                 </a>
 
                 <a
@@ -917,7 +965,7 @@ export default function App() {
                   aria-label="Facebook"
                   className="p-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50"
                 >
-                  <Facebook className="h-4 w-4" />
+                  <Facebook className="h-4 w-4" style={{ color: "#1877F2" }} />
                 </a>
 
                 <a
@@ -925,7 +973,7 @@ export default function App() {
                   aria-label="YouTube"
                   className="p-2 rounded-full border border-slate-200 bg-white hover:bg-slate-50"
                 >
-                  <Youtube className="h-4 w-4" />
+                  <Youtube className="h-4 w-4" style={{ color: "#FF0000" }} />
                 </a>
               </div>
             </CardContent>
@@ -947,7 +995,6 @@ export default function App() {
               mar a Cambrils.
             </p>
           </div>
-
           <div>
             <div className="font-semibold text-white mb-2">Club</div>
             <ul className="space-y-2 text-sm text-slate-300">
@@ -967,7 +1014,6 @@ export default function App() {
               </li>
             </ul>
           </div>
-
           <div>
             <div className="font-semibold text-white mb-2">Activitat</div>
             <ul className="space-y-2 text-sm text-slate-300">
@@ -980,12 +1026,8 @@ export default function App() {
               <li>
                 <a href="#competicio">Competició</a>
               </li>
-              <li>
-                <a href="#meteo">Meteo</a>
-              </li>
             </ul>
           </div>
-
           <div>
             <div className="font-semibold text-white mb-2">Legal</div>
             <ul className="space-y-2 text-sm text-slate-300">
@@ -995,7 +1037,6 @@ export default function App() {
             </ul>
           </div>
         </div>
-
         <div className="max-w-7xl mx-auto px-4 md:px-6 mt-8 flex items-center justify-between text-xs text-slate-400">
           <p>
             © {new Date().getFullYear()} {BRAND.name}. Tots els drets reservats.
