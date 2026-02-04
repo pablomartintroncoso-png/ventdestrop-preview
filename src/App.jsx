@@ -812,7 +812,8 @@ export default function App() {
                 <strong>Avís de seguretat</strong>
                 <div className="mt-1">
                   Si hi ha avisos oficials (vent fort / mala mar) o indicacions del club,
-                  la sortida es pot anul·lar. En cas de dubte: seguretat primer.
+                  la sortida es pot anul·lar. En cas de dubte, prioritzeu la seguretat.
+
                 </div>
               </div>
 
