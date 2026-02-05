@@ -1,6 +1,6 @@
 import logoAzul from "@/assets/logo-azul.png";
 import logoBlanco from "@/assets/logo-blanco.png";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -36,6 +36,9 @@ import {
   Menu,
   Globe,
   ExternalLink,
+  Wind,
+  CloudSun,
+  Radar,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -53,13 +56,16 @@ const GALLERY_IMAGES = Array.from(
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mblnnvjp";
 
 /**
- * Meteocat “giny” (widget) estable 72h.
- * Importante: algunos iframes de meteocat cambian / expiran. Este formato suele ser el más robusto.
- * location=430635 corresponde a Cambrils (según el giny municipal).
+ * Meteocat
+ * - Usamos el giny oficial “municipal72h” (hecho para embeber).
+ * - Cambrils: código municipal 430380 (formato 6 dígitos).
  */
-const METEOCAT_IFRAME_URL =
-  "https://static-m.meteo.cat/ginys/municipal72h/municipal72h.html?lang=ca&location=430635";
-const METEOCAT_OPEN_URL = "https://www.meteo.cat/prediccio/municipal/430635";
+const METEOCAT_LOCATION = "430380";
+const METEOCAT_WIDGET_URL = `https://static-m.meteo.cat/ginys/municipal72h?color=23e1cb&language=ca&location=${METEOCAT_LOCATION}&mainChart=estCel&secondaryChart=true&target=_blank&tempFormat=%C2%BAC&windSpeedFormat=km%2Fh`;
+
+// Enlaces “por si acaso” (abre Meteocat/Radar en pestaña nueva)
+const METEOCAT_OPEN_URL =
+  "https://www.meteo.cat/prediccio/municipal"; // el usuario elige Cambrils si quiere
 const METEOCAT_RADAR_URL = "https://www.meteo.cat/observacions/radar";
 
 const BRAND = {
@@ -84,6 +90,7 @@ const NAV = [
   { label: "Contacte", href: "#contacte" },
 ];
 
+// (si más adelante quieres reactivar eventos, están listos)
 const EVENTS = [
   {
     date: "24 NOV",
@@ -106,9 +113,10 @@ const EVENTS = [
 ];
 
 /**
- * ✅ SOLO 3 NOTICIAS
- * ✅ La del 25% va PRIMERA
- * ✅ Eliminamos la que marcaste (varador)
+ * NEWS
+ * - Solo 3 noticias
+ * - La del 25% va primera
+ * - Se elimina “Projecte de renovació del varador”
  */
 const NEWS = [
   {
@@ -124,7 +132,7 @@ const NEWS = [
   {
     title: "Nova escola de rem per a infants (8–12)",
     excerpt:
-      "Inscripcions obertes amb places limitades. Sessions dimarts i dijous…",
+      "Inscripcions oberes amb places limitades. Sessions dimarts i dijous…",
   },
 ];
 
@@ -205,6 +213,8 @@ export default function App() {
   const [contactStatus, setContactStatus] = useState("idle");
   const [contactError, setContactError] = useState("");
 
+  const [meteoLoaded, setMeteoLoaded] = useState(false);
+
   useEffect(() => {
     const id = setInterval(() => {
       setSlide((s) => (s + 1) % HERO_PHOTOS.length);
@@ -219,6 +229,7 @@ export default function App() {
     "social",
     "salut",
     "noticies",
+    "meteo",
     "contacte",
   ]);
 
@@ -277,29 +288,6 @@ export default function App() {
       setContactError("Error de connexió. Revisa internet i torna-ho a provar.");
     }
   };
-
-  // Horaris “Competició” con días completos y sin confusiones
-  const COMPETICIO_HORARIS = useMemo(
-    () => [
-      {
-        label: "Sènior femení",
-        lines: ["Dimecres i divendres 19:00–21:00", "Dissabte 10:00–11:30"],
-      },
-      {
-        label: "Sènior masculí",
-        lines: ["Dimarts i dijous 19:00–21:00", "Dissabte 08:30–10:00"],
-      },
-      {
-        label: "Veteranes (femení)",
-        lines: ["Dimecres i divendres 19:00–21:00", "Diumenge 09:15–10:15"],
-      },
-      {
-        label: "Veterans (masculí)",
-        lines: ["Dimarts i dijous 20:00–22:00", "Diumenge 08:15–09:15"],
-      },
-    ],
-    []
-  );
 
   return (
     <Shell>
@@ -616,16 +604,30 @@ export default function App() {
 
             <CardContent>
               <ul className="space-y-3 text-slate-700 text-sm">
-                {COMPETICIO_HORARIS.map((h) => (
-                  <li key={h.label} className="leading-relaxed">
-                    <div className="font-semibold">• {h.label}</div>
-                    <div className="text-slate-700">
-                      {h.lines.map((line, idx) => (
-                        <div key={idx}>{line}</div>
-                      ))}
-                    </div>
-                  </li>
-                ))}
+                <li>
+                  <strong>• Sènior femení</strong>
+                  <div className="mt-1 text-slate-600">
+                    Dmc i Dv 19:00–21:00 · Ds 10:00–11:30
+                  </div>
+                </li>
+                <li>
+                  <strong>• Sènior masculí</strong>
+                  <div className="mt-1 text-slate-600">
+                    Dm i Dj 19:00–21:00 · Ds 08:30–10:00
+                  </div>
+                </li>
+                <li>
+                  <strong>• Veteranes femení</strong>
+                  <div className="mt-1 text-slate-600">
+                    Dmc i Dv 19:00–21:00 · Dg 09:15–10:15
+                  </div>
+                </li>
+                <li>
+                  <strong>• Veterans masculí</strong>
+                  <div className="mt-1 text-slate-600">
+                    Dm i Dj 20:00–22:00 · Dg 08:15–09:15
+                  </div>
+                </li>
               </ul>
 
               <div className="mt-5 flex flex-wrap gap-2">
@@ -679,7 +681,7 @@ export default function App() {
 
             <CardContent>
               <ul className="space-y-2 text-slate-700 text-sm">
-                <li>• Rem social – Dimarts i divendres 17:00–18:30</li>
+                <li>• Rem social – Dm i Dv 17:00–18:30</li>
                 <li>• Sortides familiars – Caps de setmana</li>
                 <li>• Activitats comunitàries mensuals</li>
                 <li>• Sessions d’iniciació per nous membres</li>
@@ -780,40 +782,58 @@ export default function App() {
         </div>
       </section>
 
+      {/* METEO */}
       <section id="meteo" className="py-16 bg-[var(--light)]">
         <SectionTitle kicker="Meteo" title="Condicions de vent i temps">
           Predicció oficial de Meteocat per planificar les sortides amb seguretat.
         </SectionTitle>
 
-        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6 items-stretch">
-          {/* PANEL IZQUIERDO: “widget” embebido y recortado para que quede lindo */}
+        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
           <div className="rounded-2xl overflow-hidden shadow-lg bg-white border border-slate-200 h-[420px] relative">
-            {/* Marco + “recorte” suave */}
-            <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-slate-50" />
-            <div className="absolute inset-0">
-              {/* Truco: el giny suele traer márgenes/espacios; lo “encuadramos” ampliando un poco y centrando */}
-              <iframe
-                title="Predicció Meteocat (72h) - Cambrils"
-                src={METEOCAT_IFRAME_URL}
-                className="w-[120%] h-[120%] -translate-x-[10%] -translate-y-[6%]"
-                frameBorder="0"
-              />
-            </div>
+            {/* Placeholder bonito mientras carga */}
+            {!meteoLoaded && (
+              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+                <div className="text-center px-6">
+                  <div className="mx-auto w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center border border-slate-200">
+                    <CloudSun className="h-6 w-6 text-slate-700" />
+                  </div>
+                  <div className="mt-3 font-medium text-slate-800">
+                    Carregant Meteocat (Cambrils)…
+                  </div>
+                  <div className="text-sm text-slate-500 mt-1">
+                    Vista per hores (72h)
+                  </div>
+                </div>
+              </div>
+            )}
 
-            {/* Sombra superior suave para que parezca widget */}
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-white to-transparent" />
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-white to-transparent" />
+            <iframe
+              title="Predicció Meteocat per hores (Cambrils)"
+              width="100%"
+              height="100%"
+              src={METEOCAT_WIDGET_URL}
+              frameBorder="0"
+              loading="lazy"
+              onLoad={() => setMeteoLoaded(true)}
+              // sandbox para permitir scripts del widget sin romper seguridad básica
+              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+              className="bg-white"
+            />
           </div>
 
-          <Card className="rounded-2xl shadow-sm h-[420px] flex flex-col">
+          <Card className="rounded-2xl shadow-sm">
             <CardHeader>
-              <CardTitle>Predicció Meteocat</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Wind className="h-5 w-5" />
+                Predicció Meteocat
+              </CardTitle>
               <CardDescription>
-                Vista per hores (72h). Ideal per decidir si surts al matí o al vespre amb un sol cop d’ull.
+                Vista per hores (72h). Ideal per decidir si surts al matí o al vespre
+                amb un sol cop d’ull.
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-4 text-slate-700 text-sm flex-1 flex flex-col">
+            <CardContent className="space-y-3 text-slate-700 text-sm">
               <ul className="list-disc list-inside space-y-1">
                 <li>Estat del cel i evolució per hores</li>
                 <li>Temperatura</li>
@@ -824,19 +844,21 @@ export default function App() {
               <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900">
                 <strong>Avís de seguretat</strong>
                 <div className="mt-1">
-                  Si hi ha avisos oficials (vent fort / mala mar) o indicacions del club, la sortida es pot anul·lar.
-                  En cas de dubte, prioritzeu la seguretat.
+                  Si hi ha avisos oficials (vent fort / mala mar) o indicacions del
+                  club, la sortida es pot anul·lar. En cas de dubte, prioritzeu la
+                  seguretat.
                 </div>
               </div>
 
-              <div className="mt-auto flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 pt-1">
                 <a href={METEOCAT_OPEN_URL} target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="border-slate-300">
+                  <Button variant="outline" className="mt-1 border-slate-300">
                     Obrir Meteocat (Cambrils)
                   </Button>
                 </a>
                 <a href={METEOCAT_RADAR_URL} target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="border-slate-300">
+                  <Button variant="outline" className="mt-1 border-slate-300">
+                    <Radar className="h-4 w-4 mr-1" />
                     Obrir Radar
                   </Button>
                 </a>
@@ -979,8 +1001,7 @@ export default function App() {
             </CardHeader>
             <CardContent className="space-y-3 text-slate-700 text-sm">
               <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de
-                Cambrils
+                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de Cambrils
               </p>
               <p className="flex items-center gap-2">
                 <Mail className="h-4 w-4" /> info@ventdestrop.com
