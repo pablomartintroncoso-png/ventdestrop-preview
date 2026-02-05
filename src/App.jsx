@@ -1,6 +1,6 @@
 import logoAzul from "@/assets/logo-azul.png";
 import logoBlanco from "@/assets/logo-blanco.png";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -38,6 +38,8 @@ import {
   ExternalLink,
   Wind,
   CloudSun,
+  Waves,
+  Thermometer,
   Radar,
 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -54,19 +56,6 @@ const GALLERY_IMAGES = Array.from(
 );
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mblnnvjp";
-
-/**
- * Meteocat
- * - Usamos el giny oficial “municipal72h” (hecho para embeber).
- * - Cambrils: código municipal 430380 (formato 6 dígitos).
- */
-const METEOCAT_LOCATION = "430380";
-const METEOCAT_WIDGET_URL = `https://static-m.meteo.cat/ginys/municipal72h?color=23e1cb&language=ca&location=${METEOCAT_LOCATION}&mainChart=estCel&secondaryChart=true&target=_blank&tempFormat=%C2%BAC&windSpeedFormat=km%2Fh`;
-
-// Enlaces “por si acaso” (abre Meteocat/Radar en pestaña nueva)
-const METEOCAT_OPEN_URL =
-  "https://www.meteo.cat/prediccio/municipal"; // el usuario elige Cambrils si quiere
-const METEOCAT_RADAR_URL = "https://www.meteo.cat/observacions/radar";
 
 const BRAND = {
   name: "Vent d’Estrop",
@@ -90,39 +79,16 @@ const NAV = [
   { label: "Contacte", href: "#contacte" },
 ];
 
-// (si más adelante quieres reactivar eventos, están listos)
-const EVENTS = [
-  {
-    date: "24 NOV",
-    title: "Regata Llagut Mediterrani – Badia de Cambrils",
-    location: "Port de Cambrils",
-    desc: "Prova del calendari federatiu. Categories absolut i veterà.",
-  },
-  {
-    date: "30 NOV",
-    title: "Jornada de Portes Obertes",
-    location: "Base nàutica",
-    desc: "Sessió gratuïta per a nous remers i famílies.",
-  },
-  {
-    date: "12 DES",
-    title: "Assemblea General Ordinària",
-    location: "Sala Polivalent – Club",
-    desc: "Memòria anual, pressupost i projectes 2026.",
-  },
-];
+// Meteocat (Cambrils)
+const METEOCAT_LOCATION = "430385"; // Cambrils
+const METEOCAT_OPEN_URL = `https://www.meteo.cat/prediccio/municipal/${METEOCAT_LOCATION}`;
+const METEOCAT_RADAR_URL = "https://www.meteo.cat/observacions/radar";
 
-/**
- * NEWS
- * - Solo 3 noticias
- * - La del 25% va primera
- * - Se elimina “Projecte de renovació del varador”
- */
 const NEWS = [
   {
     title: "Avantatge per a socis: -25% al Gimnàs Municipal de Cambrils",
     excerpt:
-      "Tots els socis del Vent d’Estrop gaudeixen d’un 25% de descompte al gimnàs del Poliesportiu Municipal de Cambrils. Demana’l amb l’acreditació de soci o escriu-nos a info@ventdestrop.com.",
+      "Tots els socis del Vent d’Estrop gaudeixen d’un 25% de descompte al gimnàs del Poliesportiu Municipal. Demana’l amb l’acreditació de soci o escriu-nos a info@ventdestrop.com.",
   },
   {
     title: "Bronze al Campionat de Catalunya de Llagut",
@@ -132,7 +98,7 @@ const NEWS = [
   {
     title: "Nova escola de rem per a infants (8–12)",
     excerpt:
-      "Inscripcions oberes amb places limitades. Sessions dimarts i dijous…",
+      "Inscripcions obertes amb places limitades. Sessions dimarts i dijous…",
   },
 ];
 
@@ -202,8 +168,10 @@ function useActiveSection(ids) {
 export default function App() {
   const [slide, setSlide] = useState(0);
   const [lang, setLang] = useState("CAT");
+
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
+
   const [showVogadoresMore, setShowVogadoresMore] = useState(false);
   const [showRemAdaptatMore, setShowRemAdaptatMore] = useState(false);
 
@@ -212,8 +180,6 @@ export default function App() {
   const [contactMessage, setContactMessage] = useState("");
   const [contactStatus, setContactStatus] = useState("idle");
   const [contactError, setContactError] = useState("");
-
-  const [meteoLoaded, setMeteoLoaded] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -250,9 +216,7 @@ export default function App() {
   };
 
   const prevImage = () => {
-    setGalleryIndex(
-      (i) => (i - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length
-    );
+    setGalleryIndex((i) => (i - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length);
   };
 
   const submitContact = async (e) => {
@@ -327,7 +291,9 @@ export default function App() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button style={{ backgroundColor: BRAND.primary }}>Fes-te soci</Button>
+              <Button style={{ backgroundColor: BRAND.primary }}>
+                Fes-te soci
+              </Button>
             </a>
 
             <a href="/ficha-salut-rem.pdf" download>
@@ -365,9 +331,7 @@ export default function App() {
               <div className="flex items-center justify-between px-4 pt-4 pb-3 border-b border-slate-100">
                 <div className="flex items-center gap-2">
                   <img src={BRAND.logo} alt="logo" className="h-7" />
-                  <span className="font-semibold text-slate-900">
-                    {BRAND.name}
-                  </span>
+                  <span className="font-semibold text-slate-900">{BRAND.name}</span>
                 </div>
                 <SheetClose asChild>
                   <Button variant="ghost" size="sm">
@@ -437,6 +401,7 @@ export default function App() {
             style={{ background: BRAND.accent }}
           />
         </div>
+
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-10 items-center py-12 md:py-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -444,25 +409,28 @@ export default function App() {
             transition={{ duration: 0.5 }}
           >
             <Pill>Club esportiu · Comunitat · Mar</Pill>
+
             <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mt-6 md:mt-8 text-slate-900 leading-[1.2] md:leading-[1.28]">
               Rem al Mediterrani,
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--accent)]">
                 orgull de Cambrils
               </span>
             </h1>
+
             <p className="text-lg text-slate-600 mt-4">
               Promovem el rem tradicional i de competició per a totes les edats:
               formació, salut i èxit esportiu en un entorn únic.
             </p>
+
             <div className="flex flex-wrap gap-3 mt-6">
               <Button
                 size="lg"
                 style={{ backgroundColor: BRAND.primary }}
                 onClick={() => scrollToSection("contacte")}
               >
-                Prova una sessió
-                <ChevronRight className="ml-1 h-4 w-4" />
+                Prova una sessió <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
+
               <a
                 href="/calendario.jpg"
                 target="_blank"
@@ -474,6 +442,7 @@ export default function App() {
                 </Button>
               </a>
             </div>
+
             <div className="flex flex-wrap gap-6 mt-8 text-slate-500 text-sm">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4" /> +200 socis
@@ -486,6 +455,7 @@ export default function App() {
               </div>
             </div>
           </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -498,9 +468,7 @@ export default function App() {
                 className="w-full h-full object-cover transition-opacity duration-1000"
               />
             </div>
-            <div className="mt-3 text-xs text-slate-500">
-              Foto: equip Vent d’Estrop
-            </div>
+            <div className="mt-3 text-xs text-slate-500">Foto: equip Vent d’Estrop</div>
           </motion.div>
         </div>
       </section>
@@ -605,28 +573,23 @@ export default function App() {
             <CardContent>
               <ul className="space-y-3 text-slate-700 text-sm">
                 <li>
-                  <strong>• Sènior femení</strong>
-                  <div className="mt-1 text-slate-600">
-                    Dmc i Dv 19:00–21:00 · Ds 10:00–11:30
-                  </div>
+                  <div className="font-semibold">• Sènior femení</div>
+                  <div className="text-slate-600">Dc i Dv 19:00–21:00 · Ds 10:00–11:30</div>
                 </li>
+
                 <li>
-                  <strong>• Sènior masculí</strong>
-                  <div className="mt-1 text-slate-600">
-                    Dm i Dj 19:00–21:00 · Ds 08:30–10:00
-                  </div>
+                  <div className="font-semibold">• Sènior masculí</div>
+                  <div className="text-slate-600">Dm i Dj 19:00–21:00 · Ds 08:30–10:00</div>
                 </li>
+
                 <li>
-                  <strong>• Veteranes femení</strong>
-                  <div className="mt-1 text-slate-600">
-                    Dmc i Dv 19:00–21:00 · Dg 09:15–10:15
-                  </div>
+                  <div className="font-semibold">• Veteranes (femení)</div>
+                  <div className="text-slate-600">Dc i Dv 19:00–21:00 · Dg 09:15–10:15</div>
                 </li>
+
                 <li>
-                  <strong>• Veterans masculí</strong>
-                  <div className="mt-1 text-slate-600">
-                    Dm i Dj 20:00–22:00 · Dg 08:15–09:15
-                  </div>
+                  <div className="font-semibold">• Veterans (masculí)</div>
+                  <div className="text-slate-600">Dm i Dj 20:00–22:00 · Dg 08:15–09:15</div>
                 </li>
               </ul>
 
@@ -782,54 +745,98 @@ export default function App() {
         </div>
       </section>
 
-      {/* METEO */}
+      {/* METEO (bonic + estable: sense iframes que trenquen) */}
       <section id="meteo" className="py-16 bg-[var(--light)]">
         <SectionTitle kicker="Meteo" title="Condicions de vent i temps">
           Predicció oficial de Meteocat per planificar les sortides amb seguretat.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
-          <div className="rounded-2xl overflow-hidden shadow-lg bg-white border border-slate-200 h-[420px] relative">
-            {/* Placeholder bonito mientras carga */}
-            {!meteoLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-                <div className="text-center px-6">
-                  <div className="mx-auto w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center border border-slate-200">
-                    <CloudSun className="h-6 w-6 text-slate-700" />
+          <Card className="rounded-2xl shadow-lg overflow-hidden border border-slate-200">
+            <div className="bg-gradient-to-r from-[var(--accent)] to-[var(--primary)] text-white px-5 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <CloudSun className="h-5 w-5" />
+                <div className="font-semibold">Meteocat · Cambrils</div>
+              </div>
+              <Badge className="bg-white/20 text-white border-white/20">
+                Vista 72h
+              </Badge>
+            </div>
+
+            <CardContent className="p-5">
+              <div className="grid grid-cols-3 gap-3">
+                <div className="rounded-xl border border-slate-200 bg-white p-3">
+                  <div className="text-xs text-slate-500">Avui</div>
+                  <div className="mt-2 flex items-center gap-2 text-slate-800">
+                    <Wind className="h-4 w-4" />
+                    <span className="text-sm">Vent</span>
                   </div>
-                  <div className="mt-3 font-medium text-slate-800">
-                    Carregant Meteocat (Cambrils)…
+                  <div className="mt-1 text-xs text-slate-500">
+                    Consulta per hores
                   </div>
-                  <div className="text-sm text-slate-500 mt-1">
-                    Vista per hores (72h)
+                </div>
+
+                <div className="rounded-xl border border-slate-200 bg-white p-3">
+                  <div className="text-xs text-slate-500">Demà</div>
+                  <div className="mt-2 flex items-center gap-2 text-slate-800">
+                    <Thermometer className="h-4 w-4" />
+                    <span className="text-sm">Temperatura</span>
+                  </div>
+                  <div className="mt-1 text-xs text-slate-500">
+                    Evolució 24h
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-slate-200 bg-white p-3">
+                  <div className="text-xs text-slate-500">+48h</div>
+                  <div className="mt-2 flex items-center gap-2 text-slate-800">
+                    <Waves className="h-4 w-4" />
+                    <span className="text-sm">Mar</span>
+                  </div>
+                  <div className="mt-1 text-xs text-slate-500">
+                    Estat i canvis
                   </div>
                 </div>
               </div>
-            )}
 
-            <iframe
-              title="Predicció Meteocat per hores (Cambrils)"
-              width="100%"
-              height="100%"
-              src={METEOCAT_WIDGET_URL}
-              frameBorder="0"
-              loading="lazy"
-              onLoad={() => setMeteoLoaded(true)}
-              // sandbox para permitir scripts del widget sin romper seguridad básica
-              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-              className="bg-white"
-            />
-          </div>
+              <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
+                <div className="flex items-start gap-3">
+                  <div className="rounded-lg bg-slate-50 border border-slate-200 p-2">
+                    <Wind className="h-4 w-4 text-slate-700" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-semibold text-slate-900">
+                      Resum ràpid (per hores)
+                    </div>
+                    <div className="text-sm text-slate-600 mt-1">
+                      Meteocat ofereix la vista per hores (72h). Ideal per decidir
+                      si surts al matí o al vespre amb un sol cop d’ull.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                <a href={METEOCAT_OPEN_URL} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" className="border-slate-300">
+                    Obrir Meteocat (Cambrils)
+                  </Button>
+                </a>
+                <a href={METEOCAT_RADAR_URL} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" className="border-slate-300">
+                    <Radar className="h-4 w-4 mr-2" />
+                    Obrir Radar
+                  </Button>
+                </a>
+              </div>
+            </CardContent>
+          </Card>
 
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Wind className="h-5 w-5" />
-                Predicció Meteocat
-              </CardTitle>
+              <CardTitle>Predicció Meteocat</CardTitle>
               <CardDescription>
-                Vista per hores (72h). Ideal per decidir si surts al matí o al vespre
-                amb un sol cop d’ull.
+                Consulta l’estat del cel, temperatura, precipitació i vent (velocitat i direcció) per a Cambrils.
               </CardDescription>
             </CardHeader>
 
@@ -844,13 +851,12 @@ export default function App() {
               <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900">
                 <strong>Avís de seguretat</strong>
                 <div className="mt-1">
-                  Si hi ha avisos oficials (vent fort / mala mar) o indicacions del
-                  club, la sortida es pot anul·lar. En cas de dubte, prioritzeu la
-                  seguretat.
+                  Si hi ha avisos oficials (vent fort / mala mar) o indicacions del club, la sortida es pot anul·lar.
+                  En cas de dubte, prioritzeu la seguretat.
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2 pt-1">
+              <div className="flex flex-wrap gap-2">
                 <a href={METEOCAT_OPEN_URL} target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="mt-1 border-slate-300">
                     Obrir Meteocat (Cambrils)
@@ -858,7 +864,6 @@ export default function App() {
                 </a>
                 <a href={METEOCAT_RADAR_URL} target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="mt-1 border-slate-300">
-                    <Radar className="h-4 w-4 mr-1" />
                     Obrir Radar
                   </Button>
                 </a>
@@ -927,8 +932,7 @@ export default function App() {
               Ajuda’ns a fer créixer el rem a Cambrils
             </h3>
             <p className="text-white/90 mt-2">
-              Col·labora com a soci o patrocinador. El teu suport impulsa
-              l’esport i la comunitat.
+              Col·labora com a soci o patrocinador. El teu suport impulsa l’esport i la comunitat.
             </p>
           </div>
           <div className="flex gap-3">
@@ -1055,6 +1059,7 @@ export default function App() {
               mar a Cambrils.
             </p>
           </div>
+
           <div>
             <div className="font-semibold text-white mb-2">Club</div>
             <ul className="space-y-2 text-sm text-slate-300">
@@ -1074,6 +1079,7 @@ export default function App() {
               </li>
             </ul>
           </div>
+
           <div>
             <div className="font-semibold text-white mb-2">Activitat</div>
             <ul className="space-y-2 text-sm text-slate-300">
@@ -1086,8 +1092,12 @@ export default function App() {
               <li>
                 <a href="#competicio">Competició</a>
               </li>
+              <li>
+                <a href="#meteo">Meteo</a>
+              </li>
             </ul>
           </div>
+
           <div>
             <div className="font-semibold text-white mb-2">Legal</div>
             <ul className="space-y-2 text-sm text-slate-300">
@@ -1097,6 +1107,7 @@ export default function App() {
             </ul>
           </div>
         </div>
+
         <div className="max-w-7xl mx-auto px-4 md:px-6 mt-8 flex items-center justify-between text-xs text-slate-400">
           <p>
             © {new Date().getFullYear()} {BRAND.name}. Tots els drets reservats.
