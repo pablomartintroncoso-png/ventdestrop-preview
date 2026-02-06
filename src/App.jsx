@@ -55,8 +55,8 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mblnnvjp";
 
 /**
  * Meteocat:
- * - Evitem iframes/widgets perquè han estat donant 400/410/NoSuchKey (CORS/CSP/paths canviants).
- * - Solució robusta: mapa (OSM estàtic) + botons a Meteocat (predicció municipal + radar).
+ * - Evitem widgets/iframes de meteocat perquè poden donar errors (400/410/NoSuchKey).
+ * - Solució robusta: mapa + botons a Meteocat (predicció municipal + radar).
  */
 const METEOCAT_MUNICIPAL_URL = "https://www.meteo.cat/prediccio/municipal";
 const METEOCAT_RADAR_URL = "https://www.meteo.cat/observacions/radar";
@@ -196,6 +196,9 @@ export default function App() {
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [showVogadoresMore, setShowVogadoresMore] = useState(false);
   const [showRemAdaptatMore, setShowRemAdaptatMore] = useState(false);
+
+  // ✅ evita “imatge trencada” si falla el mapa extern
+  const [mapOk, setMapOk] = useState(true);
 
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
@@ -778,14 +781,36 @@ export default function App() {
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6 items-stretch">
-          {/* Panell esquerre: mapa + botons */}
+          {/* Esquerra: mapa (amb fallback bonic si falla) + botons */}
           <Card className="rounded-2xl shadow-sm overflow-hidden">
             <div className="relative">
-              <img
-                src={OSM_STATIC_MAP_URL}
-                alt="Mapa de Cambrils"
-                className="w-full h-[420px] object-cover"
-              />
+              {mapOk ? (
+                <img
+                  src={OSM_STATIC_MAP_URL}
+                  alt="Mapa de Cambrils"
+                  className="w-full h-[420px] object-cover"
+                  onError={() => setMapOk(false)}
+                  loading="lazy"
+                />
+              ) : (
+                <div className="w-full h-[420px] bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
+                  <div className="text-center px-6">
+                    <div className="mx-auto w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center">
+                      <MapPin className="h-6 w-6 text-[var(--primary)]" />
+                    </div>
+                    <div className="mt-3 font-semibold text-slate-900">
+                      Cambrils
+                    </div>
+                    <div className="text-sm text-slate-600 mt-1">
+                      El mapa no s’ha pogut carregar ara mateix.
+                    </div>
+                    <div className="text-xs text-slate-500 mt-1">
+                      Cap drama: Meteocat i el radar segueixen funcionant.
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="absolute left-4 top-4 rounded-2xl bg-white/90 backdrop-blur px-3 py-2 border border-white/60 shadow-sm">
                 <div className="flex items-center gap-2 text-slate-900">
                   <MapPin className="h-4 w-4 text-[var(--primary)]" />
@@ -845,7 +870,7 @@ export default function App() {
             </CardContent>
           </Card>
 
-          {/* Panell dret: explicació + avís */}
+          {/* Dreta: explicació + avís */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Predicció Meteocat</CardTitle>
