@@ -1,6 +1,6 @@
 import logoAzul from "@/assets/logo-azul.png";
 import logoBlanco from "@/assets/logo-blanco.png";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -36,9 +36,8 @@ import {
   Menu,
   Globe,
   ExternalLink,
-  Map as MapIcon,
-  Radar,
-  Wind,
+  Navigation,
+  CloudRain,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -54,14 +53,17 @@ const GALLERY_IMAGES = Array.from(
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mblnnvjp";
 
-// Mapa (OpenStreetMap) centrado en Cambrils (sin API key)
-const OSM_EMBED_URL =
-  "https://www.openstreetmap.org/export/embed.html?bbox=1.0285%2C41.0615%2C1.0915%2C41.0915&layer=mapnik&marker=41.0743%2C1.0564";
-const OSM_OPEN_URL = "https://www.openstreetmap.org/?mlat=41.0743&mlon=1.0564#map=14/41.0743/1.0564";
+/**
+ * Meteocat:
+ * - Evitem iframes/widgets perquè han estat donant 400/410/NoSuchKey (CORS/CSP/paths canviants).
+ * - Solució robusta: mapa (OSM estàtic) + botons a Meteocat (predicció municipal + radar).
+ */
+const METEOCAT_MUNICIPAL_URL = "https://www.meteo.cat/prediccio/municipal";
+const METEOCAT_RADAR_URL = "https://www.meteo.cat/observacions/radar";
 
-// Enlaces Meteocat (si algún día cambian, solo tocás estos 2)
-const METEOCAT_CAMBRILS_URL = "https://www.meteo.cat/";
-const METEOCAT_RADAR_URL = "https://www.meteo.cat/";
+// Cambrils (aprox.) per al mapa estàtic
+const CAMBRILS = { lat: 41.0676, lon: 1.0568 };
+const OSM_STATIC_MAP_URL = `https://staticmap.openstreetmap.de/staticmap.php?center=${CAMBRILS.lat},${CAMBRILS.lon}&zoom=13&size=900x520&maptype=mapnik&markers=${CAMBRILS.lat},${CAMBRILS.lon},lightblue1`;
 
 const BRAND = {
   name: "Vent d’Estrop",
@@ -106,7 +108,6 @@ const EVENTS = [
   },
 ];
 
-// ✅ SOLO 3 NOTICIAS (primera = beneficio 25%)
 const NEWS = [
   {
     title: "Avantatge per a socis: -25% al Gimnàs Municipal de Cambrils",
@@ -216,7 +217,6 @@ export default function App() {
     "social",
     "salut",
     "noticies",
-    "meteo",
     "contacte",
   ]);
 
@@ -593,23 +593,30 @@ export default function App() {
               <ul className="space-y-3 text-slate-700 text-sm">
                 <li>
                   <strong>• Sènior femení</strong>
-                  <br />
-                  Dimecres i divendres 19:00–21:00 · Dissabte 10:00–11:30
+                  <div className="text-slate-600">
+                    Dimecres i divendres 19:00–21:00 · Dissabte 10:00–11:30
+                  </div>
                 </li>
+
                 <li>
                   <strong>• Sènior masculí</strong>
-                  <br />
-                  Dimarts i dijous 19:00–21:00 · Dissabte 08:30–10:00
+                  <div className="text-slate-600">
+                    Dimarts i dijous 19:00–21:00 · Dissabte 08:30–10:00
+                  </div>
                 </li>
+
                 <li>
                   <strong>• Veteranes (femení)</strong>
-                  <br />
-                  Dimecres i divendres 19:00–21:00 · Diumenge 09:15–10:15
+                  <div className="text-slate-600">
+                    Dimecres i divendres 19:00–21:00 · Diumenge 09:15–10:15
+                  </div>
                 </li>
+
                 <li>
                   <strong>• Veterans (masculí)</strong>
-                  <br />
-                  Dimarts i dijous 20:00–22:00 · Diumenge 08:15–09:15
+                  <div className="text-slate-600">
+                    Dimarts i dijous 20:00–22:00 · Diumenge 08:15–09:15
+                  </div>
                 </li>
               </ul>
 
@@ -664,7 +671,7 @@ export default function App() {
 
             <CardContent>
               <ul className="space-y-2 text-slate-700 text-sm">
-                <li>• Rem social – Dm i Dv 17:00–18:30</li>
+                <li>• Rem social – Dimarts i divendres 17:00–18:30</li>
                 <li>• Sortides familiars – Caps de setmana</li>
                 <li>• Activitats comunitàries mensuals</li>
                 <li>• Sessions d’iniciació per nous membres</li>
@@ -765,66 +772,85 @@ export default function App() {
         </div>
       </section>
 
-      {/* ✅ NUEVO METEO: mapa + panel útil (sin iframes frágiles de Meteocat) */}
       <section id="meteo" className="py-16 bg-[var(--light)]">
         <SectionTitle kicker="Meteo" title="Condicions de vent i temps">
-          Predicció oficial (Meteocat) i mapa de referència per planificar les sortides amb seguretat.
+          Predicció oficial de Meteocat per planificar les sortides amb seguretat.
         </SectionTitle>
 
-        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6 items-stretch">
+          {/* Panell esquerre: mapa + botons */}
           <Card className="rounded-2xl shadow-sm overflow-hidden">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MapIcon className="h-5 w-5" /> Cambrils · Port i base nàutica
-              </CardTitle>
-              <CardDescription>
-                Ubicació ràpida per orientar-te abans de sortir.
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="pt-0">
-              <div className="rounded-2xl overflow-hidden border border-slate-200 bg-white h-[420px]">
-                <iframe
-                  title="Mapa Cambrils"
-                  src={OSM_EMBED_URL}
-                  width="100%"
-                  height="100%"
-                  frameBorder="0"
-                />
+            <div className="relative">
+              <img
+                src={OSM_STATIC_MAP_URL}
+                alt="Mapa de Cambrils"
+                className="w-full h-[420px] object-cover"
+              />
+              <div className="absolute left-4 top-4 rounded-2xl bg-white/90 backdrop-blur px-3 py-2 border border-white/60 shadow-sm">
+                <div className="flex items-center gap-2 text-slate-900">
+                  <MapPin className="h-4 w-4 text-[var(--primary)]" />
+                  <span className="font-semibold">Cambrils</span>
+                </div>
+                <div className="text-xs text-slate-600">
+                  Consulta Meteocat per hores i radar.
+                </div>
               </div>
+            </div>
 
-              <div className="mt-4 flex flex-wrap gap-2">
-                <a href={OSM_OPEN_URL} target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="border-slate-300">
-                    Obrir mapa <ExternalLink className="ml-2 h-4 w-4" />
-                  </Button>
-                </a>
-
-                <a href={METEOCAT_CAMBRILS_URL} target="_blank" rel="noopener noreferrer">
+            <CardContent className="p-4 md:p-5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <a
+                  href={METEOCAT_MUNICIPAL_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                >
                   <Button
+                    className="w-full justify-center"
                     style={{ backgroundColor: BRAND.primary }}
-                    className="text-white"
                   >
-                    Meteocat (Cambrils) <ExternalLink className="ml-2 h-4 w-4" />
+                    <Navigation className="h-4 w-4 mr-2" />
+                    Predicció (Meteocat)
+                    <ExternalLink className="h-4 w-4 ml-2" />
                   </Button>
                 </a>
 
-                <a href={METEOCAT_RADAR_URL} target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="border-slate-300">
-                    Radar <Radar className="ml-2 h-4 w-4" />
+                <a
+                  href={METEOCAT_RADAR_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <Button variant="outline" className="w-full border-slate-300">
+                    <CloudRain className="h-4 w-4 mr-2" />
+                    Radar
+                    <ExternalLink className="h-4 w-4 ml-2" />
                   </Button>
                 </a>
+
+                <Button
+                  variant="outline"
+                  className="w-full border-slate-300"
+                  onClick={() => scrollToSection("contacte")}
+                >
+                  Avís al club
+                  <ChevronRight className="h-4 w-4 ml-2" />
+                </Button>
               </div>
+
+              <p className="text-xs text-slate-500 mt-3">
+                Nota: Meteocat s’obre en una pestanya nova (més fiable que incrustar
+                widgets que a vegades fallen).
+              </p>
             </CardContent>
           </Card>
 
+          {/* Panell dret: explicació + avís */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Wind className="h-5 w-5" /> Predicció Meteocat
-              </CardTitle>
+              <CardTitle>Predicció Meteocat</CardTitle>
               <CardDescription>
-                Ideal per decidir si surts al matí o al vespre amb un sol cop d’ull.
+                Vista per hores (72h). Ideal per decidir si surts al matí o al vespre amb un sol cop d’ull.
               </CardDescription>
             </CardHeader>
 
@@ -844,12 +870,21 @@ export default function App() {
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <a href={METEOCAT_CAMBRILS_URL} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={METEOCAT_MUNICIPAL_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Button variant="outline" className="border-slate-300">
-                    Obrir Meteocat (Cambrils)
+                    Obrir Meteocat (Municipal)
                   </Button>
                 </a>
-                <a href={METEOCAT_RADAR_URL} target="_blank" rel="noopener noreferrer">
+
+                <a
+                  href={METEOCAT_RADAR_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Button variant="outline" className="border-slate-300">
                     Obrir Radar
                   </Button>
