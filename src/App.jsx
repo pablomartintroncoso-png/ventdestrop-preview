@@ -13,12 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetClose,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import {
   ChevronRight,
   ChevronLeft,
@@ -36,34 +31,18 @@ import {
   Menu,
   Globe,
   ExternalLink,
-  Navigation,
-  CloudRain,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-const HERO_PHOTOS = [
-  "/hero-botecompeti.jpg",
-  "/hero-boteescuela.jpg",
-  "/hero-botesocial.jpg",
-];
-const GALLERY_IMAGES = Array.from(
-  { length: 15 },
-  (_, i) => `/galeria-${i + 1}.jpg`
-);
+const HERO_PHOTOS = ["/hero-botecompeti.jpg", "/hero-boteescuela.jpg", "/hero-botesocial.jpg"];
+const GALLERY_IMAGES = Array.from({ length: 15 }, (_, i) => `/galeria-${i + 1}.jpg`);
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mblnnvjp";
 
-/**
- * Meteocat:
- * - Evitem widgets/iframes de meteocat perquè poden donar errors (400/410/NoSuchKey).
- * - Solució robusta: mapa + botons a Meteocat (predicció municipal + radar).
- */
-const METEOCAT_MUNICIPAL_URL = "https://www.meteo.cat/prediccio/municipal";
+// METEOCAT (links estables + imagen local)
+const METEOCAT_LOCATION = "cambrils";
+const METEOCAT_OPEN_URL = "https://www.meteo.cat/prediccio/municipis/cambrils";
 const METEOCAT_RADAR_URL = "https://www.meteo.cat/observacions/radar";
-
-// Cambrils (aprox.) per al mapa estàtic
-const CAMBRILS = { lat: 41.0676, lon: 1.0568 };
-const OSM_STATIC_MAP_URL = `https://staticmap.openstreetmap.de/staticmap.php?center=${CAMBRILS.lat},${CAMBRILS.lon}&zoom=13&size=900x520&maptype=mapnik&markers=${CAMBRILS.lat},${CAMBRILS.lon},lightblue1`;
 
 const BRAND = {
   name: "Vent d’Estrop",
@@ -108,6 +87,7 @@ const EVENTS = [
   },
 ];
 
+// ✅ SOLO 3 NOTICIAS. La del 25% va primera. Eliminamos la que marcaste.
 const NEWS = [
   {
     title: "Avantatge per a socis: -25% al Gimnàs Municipal de Cambrils",
@@ -145,12 +125,8 @@ const Pill = ({ children }) => (
 const SectionTitle = ({ kicker, title, children }) => (
   <div className="max-w-5xl mx-auto text-center mb-10">
     <p className="uppercase tracking-widest text-sm text-slate-500">{kicker}</p>
-    <h2 className="text-3xl md:text-4xl font-bold mt-1 text-slate-900">
-      {title}
-    </h2>
-    {children && (
-      <p className="text-slate-600 mt-4 max-w-3xl mx-auto">{children}</p>
-    )}
+    <h2 className="text-3xl md:text-4xl font-bold mt-1 text-slate-900">{title}</h2>
+    {children && <p className="text-slate-600 mt-4 max-w-3xl mx-auto">{children}</p>}
   </div>
 );
 
@@ -197,9 +173,6 @@ export default function App() {
   const [showVogadoresMore, setShowVogadoresMore] = useState(false);
   const [showRemAdaptatMore, setShowRemAdaptatMore] = useState(false);
 
-  // ✅ evita “imatge trencada” si falla el mapa extern
-  const [mapOk, setMapOk] = useState(true);
-
   const [contactName, setContactName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactMessage, setContactMessage] = useState("");
@@ -220,6 +193,7 @@ export default function App() {
     "social",
     "salut",
     "noticies",
+    "meteo",
     "contacte",
   ]);
 
@@ -235,15 +209,9 @@ export default function App() {
 
   const closeGallery = () => setIsGalleryOpen(false);
 
-  const nextImage = () => {
-    setGalleryIndex((i) => (i + 1) % GALLERY_IMAGES.length);
-  };
-
-  const prevImage = () => {
-    setGalleryIndex(
-      (i) => (i - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length
-    );
-  };
+  const nextImage = () => setGalleryIndex((i) => (i + 1) % GALLERY_IMAGES.length);
+  const prevImage = () =>
+    setGalleryIndex((i) => (i - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length);
 
   const submitContact = async (e) => {
     e.preventDefault();
@@ -253,10 +221,7 @@ export default function App() {
     try {
       const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
           name: contactName,
           email: contactEmail,
@@ -301,14 +266,20 @@ export default function App() {
                 key={n.href}
                 href={n.href}
                 className={`hover:text-slate-900 ${
-                  active === n.href
-                    ? "text-[var(--primary)] font-medium"
-                    : "text-slate-600"
+                  active === n.href ? "text-[var(--primary)] font-medium" : "text-slate-600"
                 }`}
               >
                 {n.label}
               </a>
             ))}
+            <a
+              href="#meteo"
+              className={`hover:text-slate-900 ${
+                active === "#meteo" ? "text-[var(--primary)] font-medium" : "text-slate-600"
+              }`}
+            >
+              Meteo
+            </a>
           </nav>
 
           <div className="hidden md:flex items-center gap-2">
@@ -355,9 +326,7 @@ export default function App() {
               <div className="flex items-center justify-between px-4 pt-4 pb-3 border-b border-slate-100">
                 <div className="flex items-center gap-2">
                   <img src={BRAND.logo} alt="logo" className="h-7" />
-                  <span className="font-semibold text-slate-900">
-                    {BRAND.name}
-                  </span>
+                  <span className="font-semibold text-slate-900">{BRAND.name}</span>
                 </div>
                 <SheetClose asChild>
                   <Button variant="ghost" size="sm">
@@ -377,6 +346,14 @@ export default function App() {
                     </a>
                   </SheetClose>
                 ))}
+                <SheetClose asChild>
+                  <a
+                    href="#meteo"
+                    className="text-slate-800 text-lg py-1 border-b border-slate-100 last:border-none"
+                  >
+                    Meteo
+                  </a>
+                </SheetClose>
               </nav>
 
               <div className="mt-auto px-4 pb-4 space-y-3">
@@ -385,10 +362,7 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Button
-                    style={{ backgroundColor: BRAND.primary }}
-                    className="w-full"
-                  >
+                  <Button style={{ backgroundColor: BRAND.primary }} className="w-full">
                     Fes-te soci
                   </Button>
                 </a>
@@ -413,10 +387,7 @@ export default function App() {
         </div>
       </header>
 
-      <section
-        className="relative bg-gradient-to-b from-white to-[var(--light)] pb-12 md:pb-20"
-        id="top"
-      >
+      <section className="relative bg-gradient-to-b from-white to-[var(--light)] pb-12 md:pb-20" id="top">
         <div className="absolute inset-0 -z-10" aria-hidden>
           <div
             className="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-3xl opacity-20"
@@ -427,12 +398,9 @@ export default function App() {
             style={{ background: BRAND.accent }}
           />
         </div>
+
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-10 items-center py-12 md:py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <Pill>Club esportiu · Comunitat · Mar</Pill>
             <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mt-6 md:mt-8 text-slate-900 leading-[1.2] md:leading-[1.28]">
               Rem al Mediterrani,
@@ -441,18 +409,18 @@ export default function App() {
               </span>
             </h1>
             <p className="text-lg text-slate-600 mt-4">
-              Promovem el rem tradicional i de competició per a totes les edats:
-              formació, salut i èxit esportiu en un entorn únic.
+              Promovem el rem tradicional i de competició per a totes les edats: formació, salut i èxit esportiu en un entorn únic.
             </p>
+
             <div className="flex flex-wrap gap-3 mt-6">
               <Button
                 size="lg"
                 style={{ backgroundColor: BRAND.primary }}
                 onClick={() => scrollToSection("contacte")}
               >
-                Prova una sessió
-                <ChevronRight className="ml-1 h-4 w-4" />
+                Prova una sessió <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
+
               <a
                 href="/calendario.jpg"
                 target="_blank"
@@ -464,6 +432,7 @@ export default function App() {
                 </Button>
               </a>
             </div>
+
             <div className="flex flex-wrap gap-6 mt-8 text-slate-500 text-sm">
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4" /> +200 socis
@@ -476,11 +445,8 @@ export default function App() {
               </div>
             </div>
           </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <div className="aspect-video rounded-2xl overflow-hidden shadow-xl">
               <img
                 src={HERO_PHOTOS[slide]}
@@ -488,35 +454,24 @@ export default function App() {
                 className="w-full h-full object-cover transition-opacity duration-1000"
               />
             </div>
-            <div className="mt-3 text-xs text-slate-500">
-              Foto: equip Vent d’Estrop
-            </div>
+            <div className="mt-3 text-xs text-slate-500">Foto: equip Vent d’Estrop</div>
           </motion.div>
         </div>
       </section>
 
       <section id="escoles" className="py-16 bg-white">
         <SectionTitle kicker="Programes" title="Escoles de rem">
-          Iniciació, tecnificació i veterà. Plans adaptats per edat i objectiu,
-          amb horaris flexibles.
+          Iniciació, tecnificació i veterà. Plans adaptats per edat i objectiu, amb horaris flexibles.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
           <Card className="rounded-2xl shadow-sm overflow-hidden">
-            <img
-              src="/escola-1.jpg"
-              alt="Escola infantil"
-              className="w-full h-64 object-cover"
-            />
+            <img src="/escola-1.jpg" alt="Escola infantil" className="w-full h-64 object-cover" />
             <CardHeader />
           </Card>
 
           <Card className="rounded-2xl shadow-sm overflow-hidden">
-            <img
-              src="/escola-2.jpg"
-              alt="Escola juvenil"
-              className="w-full h-64 object-cover"
-            />
+            <img src="/escola-2.jpg" alt="Escola juvenil" className="w-full h-64 object-cover" />
             <CardHeader />
           </Card>
 
@@ -568,56 +523,48 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
-            <img
-              src="/competi-1.jpg"
-              alt="Entrenaments de competició"
-              className="w-full h-full object-cover"
-            />
+            <img src="/competi-1.jpg" alt="Entrenaments de competició" className="w-full h-full object-cover" />
           </div>
 
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
-            <img
-              src="/competi-2.jpg"
-              alt="Equip de regates"
-              className="w-full h-full object-cover"
-            />
+            <img src="/competi-2.jpg" alt="Equip de regates" className="w-full h-full object-cover" />
           </div>
 
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Equips i entrenaments</CardTitle>
               <CardDescription>
-                Grups sènior i veterans (femení i masculí). Sessions setmanals per
-                millorar tècnica, resistència i coordinació.
+                Grups sènior i veterans (femení i masculí). Sessions setmanals per millorar tècnica, resistència i coordinació.
               </CardDescription>
             </CardHeader>
 
             <CardContent>
+              {/* ✅ DÍAS COMPLETOS + FEMENÍ/MASCULÍ EN VETERANS */}
               <ul className="space-y-3 text-slate-700 text-sm">
                 <li>
-                  <strong>• Sènior femení</strong>
-                  <div className="text-slate-600">
+                  <span className="font-semibold">• Sènior femení</span>
+                  <div className="mt-1 text-slate-600">
                     Dimecres i divendres 19:00–21:00 · Dissabte 10:00–11:30
                   </div>
                 </li>
 
                 <li>
-                  <strong>• Sènior masculí</strong>
-                  <div className="text-slate-600">
+                  <span className="font-semibold">• Sènior masculí</span>
+                  <div className="mt-1 text-slate-600">
                     Dimarts i dijous 19:00–21:00 · Dissabte 08:30–10:00
                   </div>
                 </li>
 
                 <li>
-                  <strong>• Veteranes (femení)</strong>
-                  <div className="text-slate-600">
+                  <span className="font-semibold">• Veteranes (femení)</span>
+                  <div className="mt-1 text-slate-600">
                     Dimecres i divendres 19:00–21:00 · Diumenge 09:15–10:15
                   </div>
                 </li>
 
                 <li>
-                  <strong>• Veterans (masculí)</strong>
-                  <div className="text-slate-600">
+                  <span className="font-semibold">• Veterans (masculí)</span>
+                  <div className="mt-1 text-slate-600">
                     Dimarts i dijous 20:00–22:00 · Diumenge 08:15–09:15
                   </div>
                 </li>
@@ -648,27 +595,18 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-3 gap-6">
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
-            <img
-              src="/social-1.jpg"
-              alt="Activitat social del club"
-              className="w-full h-full object-cover"
-            />
+            <img src="/social-1.jpg" alt="Activitat social del club" className="w-full h-full object-cover" />
           </div>
 
           <div className="rounded-2xl overflow-hidden shadow-sm h-64 bg-slate-200">
-            <img
-              src="/social-2.jpg"
-              alt="Esdeveniment comunitari"
-              className="w-full h-full object-cover"
-            />
+            <img src="/social-2.jpg" alt="Esdeveniment comunitari" className="w-full h-full object-cover" />
           </div>
 
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Activitats socials</CardTitle>
               <CardDescription>
-                Rem social, jornades familiars, sortides al mar i activitats de
-                comunitat per a totes les edats.
+                Rem social, jornades familiars, sortides al mar i activitats de comunitat per a totes les edats.
               </CardDescription>
             </CardHeader>
 
@@ -700,8 +638,7 @@ export default function App() {
 
       <section id="salut" className="py-16 bg-[var(--light)]">
         <SectionTitle kicker="Salut" title="Vogadores amb Cor & Rem Adaptat">
-          Programes especials que combinen esport, inclusió i benestar a través
-          del rem.
+          Programes especials que combinen esport, inclusió i benestar a través del rem.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid gap-6 md:grid-cols-2">
@@ -775,102 +712,54 @@ export default function App() {
         </div>
       </section>
 
+      {/* ✅ METEO: imagen estática + links estables (sin embeds frágiles) */}
       <section id="meteo" className="py-16 bg-[var(--light)]">
         <SectionTitle kicker="Meteo" title="Condicions de vent i temps">
           Predicció oficial de Meteocat per planificar les sortides amb seguretat.
         </SectionTitle>
 
-        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6 items-stretch">
-          {/* Esquerra: mapa (amb fallback bonic si falla) + botons */}
+        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
+          {/* LEFT: Mapa (imatge estàtica) + botons */}
           <Card className="rounded-2xl shadow-sm overflow-hidden">
-            <div className="relative">
-              {mapOk ? (
-                <img
-                  src={OSM_STATIC_MAP_URL}
-                  alt="Mapa de Cambrils"
-                  className="w-full h-[420px] object-cover"
-                  onError={() => setMapOk(false)}
-                  loading="lazy"
-                />
-              ) : (
-                <div className="w-full h-[420px] bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center">
-                  <div className="text-center px-6">
-                    <div className="mx-auto w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center">
-                      <MapPin className="h-6 w-6 text-[var(--primary)]" />
-                    </div>
-                    <div className="mt-3 font-semibold text-slate-900">
-                      Cambrils
-                    </div>
-                    <div className="text-sm text-slate-600 mt-1">
-                      El mapa no s’ha pogut carregar ara mateix.
-                    </div>
-                    <div className="text-xs text-slate-500 mt-1">
-                      Cap drama: Meteocat i el radar segueixen funcionant.
-                    </div>
-                  </div>
-                </div>
-              )}
+            <div className="relative bg-slate-100">
+              <img
+                src="/mapa-cambrils.jpg"
+                alt="Mapa de Cambrils"
+                className="w-full h-[420px] object-cover"
+              />
 
-              <div className="absolute left-4 top-4 rounded-2xl bg-white/90 backdrop-blur px-3 py-2 border border-white/60 shadow-sm">
-                <div className="flex items-center gap-2 text-slate-900">
-                  <MapPin className="h-4 w-4 text-[var(--primary)]" />
-                  <span className="font-semibold">Cambrils</span>
-                </div>
-                <div className="text-xs text-slate-600">
-                  Consulta Meteocat per hores i radar.
-                </div>
+              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur rounded-xl px-4 py-3 border border-slate-200 shadow-sm">
+                <div className="font-semibold text-slate-900">Cambrils</div>
+                <div className="text-xs text-slate-600">Consulta Meteocat per hores i radar.</div>
               </div>
             </div>
 
-            <CardContent className="p-4 md:p-5">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <a
-                  href={METEOCAT_MUNICIPAL_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                >
-                  <Button
-                    className="w-full justify-center"
-                    style={{ backgroundColor: BRAND.primary }}
-                  >
-                    <Navigation className="h-4 w-4 mr-2" />
-                    Predicció (Meteocat)
-                    <ExternalLink className="h-4 w-4 ml-2" />
+            <CardContent className="pt-4">
+              <div className="flex flex-wrap gap-3">
+                <a href={METEOCAT_OPEN_URL} target="_blank" rel="noopener noreferrer">
+                  <Button style={{ backgroundColor: BRAND.primary }}>
+                    Predicció (Meteocat) <ExternalLink className="ml-2 h-4 w-4" />
                   </Button>
                 </a>
 
-                <a
-                  href={METEOCAT_RADAR_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                >
-                  <Button variant="outline" className="w-full border-slate-300">
-                    <CloudRain className="h-4 w-4 mr-2" />
-                    Radar
-                    <ExternalLink className="h-4 w-4 ml-2" />
+                <a href={METEOCAT_RADAR_URL} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" className="border-slate-300">
+                    Radar <ExternalLink className="ml-2 h-4 w-4" />
                   </Button>
                 </a>
 
                 <Button
                   variant="outline"
-                  className="w-full border-slate-300"
+                  className="border-slate-300"
                   onClick={() => scrollToSection("contacte")}
                 >
-                  Avís al club
-                  <ChevronRight className="h-4 w-4 ml-2" />
+                  Avís al club <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
-
-              <p className="text-xs text-slate-500 mt-3">
-                Nota: Meteocat s’obre en una pestanya nova (més fiable que incrustar
-                widgets que a vegades fallen).
-              </p>
             </CardContent>
           </Card>
 
-          {/* Dreta: explicació + avís */}
+          {/* RIGHT: Info Meteocat + seguretat */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Predicció Meteocat</CardTitle>
@@ -879,7 +768,7 @@ export default function App() {
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-4 text-slate-700 text-sm">
+            <CardContent className="space-y-3 text-slate-700 text-sm">
               <ul className="list-disc list-inside space-y-1">
                 <li>Estat del cel i evolució per hores</li>
                 <li>Temperatura</li>
@@ -890,30 +779,27 @@ export default function App() {
               <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900">
                 <strong>Avís de seguretat</strong>
                 <div className="mt-1">
-                  Si hi ha avisos oficials (vent fort / mala mar) o indicacions del club, la sortida es pot anul·lar. En cas de dubte, prioritzeu la seguretat.
+                  Si hi ha avisos oficials (vent fort / mala mar) o indicacions del club, la sortida es pot anul·lar.
+                  En cas de dubte, prioritzeu la seguretat.
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-2">
-                <a
-                  href={METEOCAT_MUNICIPAL_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+              <div className="flex flex-wrap gap-3 pt-1">
+                <a href={METEOCAT_OPEN_URL} target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="border-slate-300">
-                    Obrir Meteocat (Municipal)
+                    Obrir Meteocat (Cambrils)
                   </Button>
                 </a>
 
-                <a
-                  href={METEOCAT_RADAR_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={METEOCAT_RADAR_URL} target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="border-slate-300">
                     Obrir Radar
                   </Button>
                 </a>
+              </div>
+
+              <div className="text-xs text-slate-500 pt-1">
+                Nota: Meteocat s’obre en una pestanya nova (més fiable que incrustar widgets que a vegades fallen).
               </div>
             </CardContent>
           </Card>
@@ -975,12 +861,9 @@ export default function App() {
       <section className="py-16 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white">
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6 items-center">
           <div>
-            <h3 className="text-2xl md:text-3xl font-bold">
-              Ajuda’ns a fer créixer el rem a Cambrils
-            </h3>
+            <h3 className="text-2xl md:text-3xl font-bold">Ajuda’ns a fer créixer el rem a Cambrils</h3>
             <p className="text-white/90 mt-2">
-              Col·labora com a soci o patrocinador. El teu suport impulsa
-              l’esport i la comunitat.
+              Col·labora com a soci o patrocinador. El teu suport impulsa l’esport i la comunitat.
             </p>
           </div>
           <div className="flex gap-3">
@@ -1053,8 +936,7 @@ export default function App() {
             </CardHeader>
             <CardContent className="space-y-3 text-slate-700 text-sm">
               <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de
-                Cambrils
+                <MapPin className="h-4 w-4" /> Moll de Ponent s/n, Port de Cambrils
               </p>
               <p className="flex items-center gap-2">
                 <Mail className="h-4 w-4" /> info@ventdestrop.com
@@ -1097,29 +979,19 @@ export default function App() {
       <footer className="py-10 bg-[var(--dark)] text-slate-200">
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-4 gap-8">
           <div>
-            <img
-              src={BRAND.logoAlt}
-              alt="logo blanc"
-              className="h-8 w-auto mb-2"
-            />
+            <img src={BRAND.logoAlt} alt="logo blanc" className="h-8 w-auto mb-2" />
             <div className="font-bold text-white text-lg">{BRAND.name}</div>
             <p className="text-slate-400 mt-2 text-sm">
-              Club de rem sense ànim de lucre. Promovem el rem tradicional i de
-              mar a Cambrils.
+              Club de rem sense ànim de lucre. Promovem el rem tradicional i de mar a Cambrils.
             </p>
           </div>
+
           <div>
             <div className="font-semibold text-white mb-2">Club</div>
             <ul className="space-y-2 text-sm text-slate-300">
-              <li>
-                <a href="#club">Qui som</a>
-              </li>
-              <li>
-                <a href="#socis">Fes-te soci</a>
-              </li>
-              <li>
-                <a href="#contacte">Contacte</a>
-              </li>
+              <li><a href="#club">Qui som</a></li>
+              <li><a href="#socis">Fes-te soci</a></li>
+              <li><a href="#contacte">Contacte</a></li>
               <li>
                 <a href="/ficha-salut-rem.pdf" download>
                   Descarregar fitxa
@@ -1127,23 +999,17 @@ export default function App() {
               </li>
             </ul>
           </div>
+
           <div>
             <div className="font-semibold text-white mb-2">Activitat</div>
             <ul className="space-y-2 text-sm text-slate-300">
-              <li>
-                <a href="#salut">Salut</a>
-              </li>
-              <li>
-                <a href="#escoles">Escoles</a>
-              </li>
-              <li>
-                <a href="#competicio">Competició</a>
-              </li>
-              <li>
-                <a href="#meteo">Meteo</a>
-              </li>
+              <li><a href="#salut">Salut</a></li>
+              <li><a href="#escoles">Escoles</a></li>
+              <li><a href="#competicio">Competició</a></li>
+              <li><a href="#meteo">Meteo</a></li>
             </ul>
           </div>
+
           <div>
             <div className="font-semibold text-white mb-2">Legal</div>
             <ul className="space-y-2 text-sm text-slate-300">
@@ -1153,6 +1019,7 @@ export default function App() {
             </ul>
           </div>
         </div>
+
         <div className="max-w-7xl mx-auto px-4 md:px-6 mt-8 flex items-center justify-between text-xs text-slate-400">
           <p>
             © {new Date().getFullYear()} {BRAND.name}. Tots els drets reservats.
@@ -1169,11 +1036,7 @@ export default function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Button
-            size="lg"
-            style={{ backgroundColor: BRAND.primary }}
-            className="shadow-xl"
-          >
+          <Button size="lg" style={{ backgroundColor: BRAND.primary }} className="shadow-xl">
             Fes-te soci <ExternalLink className="ml-2 h-4 w-4" />
           </Button>
         </a>
