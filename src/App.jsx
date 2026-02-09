@@ -31,6 +31,8 @@ import {
   Menu,
   Globe,
   ExternalLink,
+  Navigation,
+  Radar,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -39,10 +41,12 @@ const GALLERY_IMAGES = Array.from({ length: 15 }, (_, i) => `/galeria-${i + 1}.j
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mblnnvjp";
 
-// METEOCAT (links estables + imagen local)
-const METEOCAT_LOCATION = "cambrils";
-const METEOCAT_OPEN_URL = "https://www.meteo.cat/prediccio/municipis/cambrils";
+// ✅ Meteocat URLs correctas (las antiguas dejaron de funcionar)
+const METEOCAT_MUNICIPAL_URL = "https://www.meteo.cat/prediccio/municipal";
 const METEOCAT_RADAR_URL = "https://www.meteo.cat/observacions/radar";
+
+// ✅ Mapa estático (subido a /public)
+const CAMBRILS_MAP_IMAGE = "/mapa-cambrils.jpg";
 
 const BRAND = {
   name: "Vent d’Estrop",
@@ -87,12 +91,12 @@ const EVENTS = [
   },
 ];
 
-// ✅ SOLO 3 NOTICIAS. La del 25% va primera. Eliminamos la que marcaste.
+// ✅ SOLO 3 noticias. Primera: beneficio 25%. Quitada: Projecte de renovació del varador.
 const NEWS = [
   {
     title: "Avantatge per a socis: -25% al Gimnàs Municipal de Cambrils",
     excerpt:
-      "Tots els socis del Vent d’Estrop gaudeixen d’un 25% de descompte al gimnàs del Poliesportiu Municipal de Cambrils. Demana’l amb l’acreditació de soci o escriu-nos a info@ventdestrop.com.",
+      "Tots els socis del Vent d’Estrop gaudeixen d’un 25% de descompte al gimnàs del Poliesportiu Municipal. Demana’l amb l’acreditació de soci o escriu-nos a info@ventdestrop.com.",
   },
   {
     title: "Bronze al Campionat de Catalunya de Llagut",
@@ -210,8 +214,7 @@ export default function App() {
   const closeGallery = () => setIsGalleryOpen(false);
 
   const nextImage = () => setGalleryIndex((i) => (i + 1) % GALLERY_IMAGES.length);
-  const prevImage = () =>
-    setGalleryIndex((i) => (i - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length);
+  const prevImage = () => setGalleryIndex((i) => (i - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length);
 
   const submitContact = async (e) => {
     e.preventDefault();
@@ -222,11 +225,7 @@ export default function App() {
       const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          name: contactName,
-          email: contactEmail,
-          message: contactMessage,
-        }),
+        body: JSON.stringify({ name: contactName, email: contactEmail, message: contactMessage }),
       });
 
       if (res.ok) {
@@ -249,11 +248,7 @@ export default function App() {
       <header className="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-3" aria-label="Inici">
-            <img
-              src={BRAND.logo}
-              alt={`${BRAND.name} logo`}
-              className="h-10 w-auto object-contain"
-            />
+            <img src={BRAND.logo} alt={`${BRAND.name} logo`} className="h-10 w-auto object-contain" />
             <div>
               <div className="font-bold leading-tight">{BRAND.name}</div>
               <div className="text-xs text-slate-500">{BRAND.tagline}</div>
@@ -265,21 +260,11 @@ export default function App() {
               <a
                 key={n.href}
                 href={n.href}
-                className={`hover:text-slate-900 ${
-                  active === n.href ? "text-[var(--primary)] font-medium" : "text-slate-600"
-                }`}
+                className={`hover:text-slate-900 ${active === n.href ? "text-[var(--primary)] font-medium" : "text-slate-600"}`}
               >
                 {n.label}
               </a>
             ))}
-            <a
-              href="#meteo"
-              className={`hover:text-slate-900 ${
-                active === "#meteo" ? "text-[var(--primary)] font-medium" : "text-slate-600"
-              }`}
-            >
-              Meteo
-            </a>
           </nav>
 
           <div className="hidden md:flex items-center gap-2">
@@ -309,11 +294,7 @@ export default function App() {
 
           <Sheet>
             <SheetTrigger asChild>
-              <Button
-                size="icon"
-                variant="outline"
-                className="md:hidden border-slate-500 text-slate-900"
-              >
+              <Button size="icon" variant="outline" className="md:hidden border-slate-500 text-slate-900">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
@@ -329,31 +310,18 @@ export default function App() {
                   <span className="font-semibold text-slate-900">{BRAND.name}</span>
                 </div>
                 <SheetClose asChild>
-                  <Button variant="ghost" size="sm">
-                    Tancar
-                  </Button>
+                  <Button variant="ghost" size="sm">Tancar</Button>
                 </SheetClose>
               </div>
 
               <nav className="grid gap-3 px-4 py-4">
                 {NAV.map((n) => (
                   <SheetClose asChild key={n.href}>
-                    <a
-                      href={n.href}
-                      className="text-slate-800 text-lg py-1 border-b border-slate-100 last:border-none"
-                    >
+                    <a href={n.href} className="text-slate-800 text-lg py-1 border-b border-slate-100 last:border-none">
                       {n.label}
                     </a>
                   </SheetClose>
                 ))}
-                <SheetClose asChild>
-                  <a
-                    href="#meteo"
-                    className="text-slate-800 text-lg py-1 border-b border-slate-100 last:border-none"
-                  >
-                    Meteo
-                  </a>
-                </SheetClose>
               </nav>
 
               <div className="mt-auto px-4 pb-4 space-y-3">
@@ -389,14 +357,8 @@ export default function App() {
 
       <section className="relative bg-gradient-to-b from-white to-[var(--light)] pb-12 md:pb-20" id="top">
         <div className="absolute inset-0 -z-10" aria-hidden>
-          <div
-            className="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-3xl opacity-20"
-            style={{ background: BRAND.primary }}
-          />
-          <div
-            className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-3xl opacity-10"
-            style={{ background: BRAND.accent }}
-          />
+          <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-3xl opacity-20" style={{ background: BRAND.primary }} />
+          <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-3xl opacity-10" style={{ background: BRAND.accent }} />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-10 items-center py-12 md:py-20">
@@ -409,24 +371,16 @@ export default function App() {
               </span>
             </h1>
             <p className="text-lg text-slate-600 mt-4">
-              Promovem el rem tradicional i de competició per a totes les edats: formació, salut i èxit esportiu en un entorn únic.
+              Promovem el rem tradicional i de competició per a totes les edats:
+              formació, salut i èxit esportiu en un entorn únic.
             </p>
 
             <div className="flex flex-wrap gap-3 mt-6">
-              <Button
-                size="lg"
-                style={{ backgroundColor: BRAND.primary }}
-                onClick={() => scrollToSection("contacte")}
-              >
+              <Button size="lg" style={{ backgroundColor: BRAND.primary }} onClick={() => scrollToSection("contacte")}>
                 Prova una sessió <ChevronRight className="ml-1 h-4 w-4" />
               </Button>
 
-              <a
-                href="/calendario.jpg"
-                target="_blank"
-                rel="noopener"
-                aria-label="Calendari d’activitats (imatge)"
-              >
+              <a href="/calendario.jpg" target="_blank" rel="noopener" aria-label="Calendari d’activitats (imatge)">
                 <Button size="lg" variant="outline" className="border-slate-300">
                   Calendari d’activitats
                 </Button>
@@ -434,15 +388,9 @@ export default function App() {
             </div>
 
             <div className="flex flex-wrap gap-6 mt-8 text-slate-500 text-sm">
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4" /> +200 socis
-              </div>
-              <div className="flex items-center gap-2">
-                <Trophy className="h-4 w-4" /> 15 títols
-              </div>
-              <div className="flex items-center gap-2">
-                <Ship className="h-4 w-4" /> 6 embarcacions
-              </div>
+              <div className="flex items-center gap-2"><Users className="h-4 w-4" /> +200 socis</div>
+              <div className="flex items-center gap-2"><Trophy className="h-4 w-4" /> 15 títols</div>
+              <div className="flex items-center gap-2"><Ship className="h-4 w-4" /> 6 embarcacions</div>
             </div>
           </motion.div>
 
@@ -477,16 +425,13 @@ export default function App() {
 
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
-              <Badge variant="secondary" className="w-fit">
-                Adults
-              </Badge>
+              <Badge variant="secondary" className="w-fit">Adults</Badge>
               <CardTitle className="mt-2">Salut i competició</CardTitle>
               <CardDescription>
                 Grups fitness i equip de llagut.
                 <br />
                 Matí o vespre.
-                <br />
-                <br />
+                <br /><br />
                 <strong>Horaris:</strong>
                 <br />
                 Dilluns – 19:00–20:30
@@ -499,11 +444,7 @@ export default function App() {
 
             <CardContent>
               <div className="mt-4 flex flex-wrap gap-2">
-                <Button
-                  size="lg"
-                  style={{ backgroundColor: BRAND.primary }}
-                  onClick={() => scrollToSection("contacte")}
-                >
+                <Button size="lg" style={{ backgroundColor: BRAND.primary }} onClick={() => scrollToSection("contacte")}>
                   Prova una sessió
                 </Button>
 
@@ -539,43 +480,30 @@ export default function App() {
             </CardHeader>
 
             <CardContent>
-              {/* ✅ DÍAS COMPLETOS + FEMENÍ/MASCULÍ EN VETERANS */}
-              <ul className="space-y-3 text-slate-700 text-sm">
+              <ul className="space-y-4 text-slate-700 text-sm">
                 <li>
-                  <span className="font-semibold">• Sènior femení</span>
-                  <div className="mt-1 text-slate-600">
-                    Dimecres i divendres 19:00–21:00 · Dissabte 10:00–11:30
-                  </div>
+                  <div className="font-semibold text-slate-900">• Sènior femení</div>
+                  <div className="text-slate-700">Dimecres i divendres 19:00–21:00 · Dissabte 10:00–11:30</div>
                 </li>
 
                 <li>
-                  <span className="font-semibold">• Sènior masculí</span>
-                  <div className="mt-1 text-slate-600">
-                    Dimarts i dijous 19:00–21:00 · Dissabte 08:30–10:00
-                  </div>
+                  <div className="font-semibold text-slate-900">• Sènior masculí</div>
+                  <div className="text-slate-700">Dimarts i dijous 19:00–21:00 · Dissabte 08:30–10:00</div>
                 </li>
 
                 <li>
-                  <span className="font-semibold">• Veteranes (femení)</span>
-                  <div className="mt-1 text-slate-600">
-                    Dimecres i divendres 19:00–21:00 · Diumenge 09:15–10:15
-                  </div>
+                  <div className="font-semibold text-slate-900">• Veteranes (femení)</div>
+                  <div className="text-slate-700">Dimecres i divendres 19:00–21:00 · Diumenge 09:15–10:15</div>
                 </li>
 
                 <li>
-                  <span className="font-semibold">• Veterans (masculí)</span>
-                  <div className="mt-1 text-slate-600">
-                    Dimarts i dijous 20:00–22:00 · Diumenge 08:15–09:15
-                  </div>
+                  <div className="font-semibold text-slate-900">• Veterans (masculí)</div>
+                  <div className="text-slate-700">Dimarts i dijous 20:00–22:00 · Diumenge 08:15–09:15</div>
                 </li>
               </ul>
 
               <div className="mt-5 flex flex-wrap gap-2">
-                <Button
-                  size="lg"
-                  style={{ backgroundColor: BRAND.primary }}
-                  onClick={() => scrollToSection("contacte")}
-                >
+                <Button size="lg" style={{ backgroundColor: BRAND.primary }} onClick={() => scrollToSection("contacte")}>
                   Prova una sessió
                 </Button>
 
@@ -612,18 +540,14 @@ export default function App() {
 
             <CardContent>
               <ul className="space-y-2 text-slate-700 text-sm">
-                <li>• Rem social – Dimarts i divendres 17:00–18:30</li>
+                <li>• Rem social – Dm i Dv 17:00–18:30</li>
                 <li>• Sortides familiars – Caps de setmana</li>
                 <li>• Activitats comunitàries mensuals</li>
                 <li>• Sessions d’iniciació per nous membres</li>
               </ul>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                <Button
-                  size="lg"
-                  style={{ backgroundColor: BRAND.primary }}
-                  onClick={() => scrollToSection("contacte")}
-                >
+                <Button size="lg" style={{ backgroundColor: BRAND.primary }} onClick={() => scrollToSection("contacte")}>
                   Prova una sessió
                 </Button>
 
@@ -644,11 +568,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid gap-6 md:grid-cols-2">
           <Card className="rounded-2xl shadow-sm flex flex-col">
             <CardHeader className="pb-0">
-              <img
-                src="/vogadores-amb-cor.jpg"
-                alt="Vogadores amb Cor"
-                className="w-full h-56 rounded-2xl object-cover mb-4"
-              />
+              <img src="/vogadores-amb-cor.jpg" alt="Vogadores amb Cor" className="w-full h-56 rounded-2xl object-cover mb-4" />
               <CardTitle>Vogadores amb Cor</CardTitle>
             </CardHeader>
             <CardContent className="pt-4 flex flex-col">
@@ -667,11 +587,7 @@ export default function App() {
 
           <Card className="rounded-2xl shadow-sm flex flex-col">
             <CardHeader className="pb-0">
-              <img
-                src="/rem-adaptat.jpg"
-                alt="Rem adaptat"
-                className="w-full h-56 rounded-2xl object-cover mb-4"
-              />
+              <img src="/rem-adaptat.jpg" alt="Rem adaptat" className="w-full h-56 rounded-2xl object-cover mb-4" />
               <CardTitle>Rem adaptat</CardTitle>
             </CardHeader>
             <CardContent className="pt-4 flex flex-col">
@@ -712,59 +628,67 @@ export default function App() {
         </div>
       </section>
 
-      {/* ✅ METEO: imagen estática + links estables (sin embeds frágiles) */}
+      {/* ✅ METEO (mapa estático + botones funcionales) */}
       <section id="meteo" className="py-16 bg-[var(--light)]">
         <SectionTitle kicker="Meteo" title="Condicions de vent i temps">
           Predicció oficial de Meteocat per planificar les sortides amb seguretat.
         </SectionTitle>
 
-        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6">
-          {/* LEFT: Mapa (imatge estàtica) + botons */}
-          <Card className="rounded-2xl shadow-sm overflow-hidden">
-            <div className="relative bg-slate-100">
-              <img
-                src="/mapa-cambrils.jpg"
-                alt="Mapa de Cambrils"
-                className="w-full h-[420px] object-cover"
-              />
+        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6 items-stretch">
+          <Card className="rounded-2xl shadow-sm overflow-hidden flex flex-col">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2">
+                <MapPin className="h-5 w-5 text-[var(--primary)]" />
+                Cambrils
+              </CardTitle>
+              <CardDescription>Consulta Meteocat per hores i radar.</CardDescription>
+            </CardHeader>
 
-              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur rounded-xl px-4 py-3 border border-slate-200 shadow-sm">
-                <div className="font-semibold text-slate-900">Cambrils</div>
-                <div className="text-xs text-slate-600">Consulta Meteocat per hores i radar.</div>
+            <CardContent className="pt-0 flex-1 flex flex-col">
+              <div className="rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 flex-1">
+                <img
+                  src={CAMBRILS_MAP_IMAGE}
+                  alt="Mapa de Cambrils"
+                  className="w-full h-full object-cover"
+                />
               </div>
-            </div>
 
-            <CardContent className="pt-4">
-              <div className="flex flex-wrap gap-3">
-                <a href={METEOCAT_OPEN_URL} target="_blank" rel="noopener noreferrer">
-                  <Button style={{ backgroundColor: BRAND.primary }}>
-                    Predicció (Meteocat) <ExternalLink className="ml-2 h-4 w-4" />
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <a href={METEOCAT_MUNICIPAL_URL} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    className="w-full"
+                    style={{ backgroundColor: BRAND.primary }}
+                  >
+                    <Navigation className="h-4 w-4 mr-2" />
+                    Predicció (Meteocat)
+                    <ExternalLink className="h-4 w-4 ml-2" />
                   </Button>
                 </a>
 
                 <a href={METEOCAT_RADAR_URL} target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="border-slate-300">
-                    Radar <ExternalLink className="ml-2 h-4 w-4" />
+                  <Button variant="outline" className="w-full border-slate-300">
+                    <Radar className="h-4 w-4 mr-2" />
+                    Radar
+                    <ExternalLink className="h-4 w-4 ml-2" />
                   </Button>
                 </a>
 
                 <Button
                   variant="outline"
-                  className="border-slate-300"
+                  className="w-full border-slate-300"
                   onClick={() => scrollToSection("contacte")}
                 >
-                  Avís al club <ChevronRight className="ml-2 h-4 w-4" />
+                  Avís al club <ChevronRight className="h-4 w-4 ml-2" />
                 </Button>
               </div>
             </CardContent>
           </Card>
 
-          {/* RIGHT: Info Meteocat + seguretat */}
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
               <CardTitle>Predicció Meteocat</CardTitle>
               <CardDescription>
-                Vista per hores (72h). Ideal per decidir si surts al matí o al vespre amb un sol cop d’ull.
+                Vista per hores i radar. Ideal per decidir si surts al matí o al vespre amb un sol cop d’ull.
               </CardDescription>
             </CardHeader>
 
@@ -784,10 +708,10 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-3 pt-1">
-                <a href={METEOCAT_OPEN_URL} target="_blank" rel="noopener noreferrer">
+              <div className="flex flex-wrap gap-2">
+                <a href={METEOCAT_MUNICIPAL_URL} target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="border-slate-300">
-                    Obrir Meteocat (Cambrils)
+                    Obrir Meteocat (Predicció municipal)
                   </Button>
                 </a>
 
@@ -797,10 +721,6 @@ export default function App() {
                   </Button>
                 </a>
               </div>
-
-              <div className="text-xs text-slate-500 pt-1">
-                Nota: Meteocat s’obre en una pestanya nova (més fiable que incrustar widgets que a vegades fallen).
-              </div>
             </CardContent>
           </Card>
         </div>
@@ -809,51 +729,15 @@ export default function App() {
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex flex-wrap items-center justify-center gap-10">
-            <img
-              src="/logos/radio-cambrils.png"
-              alt="Ràdio Cambrils"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/club-nautic-cambrils.png"
-              alt="Club Nàutic Cambrils"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/castro.png"
-              alt="A.N. Castro"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/fcr.png"
-              alt="FCR"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/ajuntament-cambrils.png"
-              alt="Ajuntament de Cambrils"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/savall.png"
-              alt="Savall"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/comaigua.png"
-              alt="Comaigua"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/acuamar.png"
-              alt="Acuamar"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
-            <img
-              src="/logos/revista-cambrils.png"
-              alt="Revista Cambrils"
-              className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition"
-            />
+            <img src="/logos/radio-cambrils.png" alt="Ràdio Cambrils" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/club-nautic-cambrils.png" alt="Club Nàutic Cambrils" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/castro.png" alt="A.N. Castro" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/fcr.png" alt="FCR" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/ajuntament-cambrils.png" alt="Ajuntament de Cambrils" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/savall.png" alt="Savall" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/comaigua.png" alt="Comaigua" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/acuamar.png" alt="Acuamar" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
+            <img src="/logos/revista-cambrils.png" alt="Revista Cambrils" className="h-24 w-auto object-contain opacity-80 hover:opacity-100 transition" />
           </div>
         </div>
       </section>
@@ -861,18 +745,16 @@ export default function App() {
       <section className="py-16 bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white">
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6 items-center">
           <div>
-            <h3 className="text-2xl md:text-3xl font-bold">Ajuda’ns a fer créixer el rem a Cambrils</h3>
+            <h3 className="text-2xl md:text-3xl font-bold">
+              Ajuda’ns a fer créixer el rem a Cambrils
+            </h3>
             <p className="text-white/90 mt-2">
               Col·labora com a soci o patrocinador. El teu suport impulsa l’esport i la comunitat.
             </p>
           </div>
           <div className="flex gap-3">
-            <Button variant="secondary" className="text-[var(--dark)]">
-              Fes-te soci
-            </Button>
-            <Button variant="outline" className="border-white text-white">
-              Converteix-te en patrocinador
-            </Button>
+            <Button variant="secondary" className="text-[var(--dark)]">Fes-te soci</Button>
+            <Button variant="outline" className="border-white text-white">Converteix-te en patrocinador</Button>
           </div>
         </div>
       </section>
@@ -1021,9 +903,7 @@ export default function App() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 mt-8 flex items-center justify-between text-xs text-slate-400">
-          <p>
-            © {new Date().getFullYear()} {BRAND.name}. Tots els drets reservats.
-          </p>
+          <p>© {new Date().getFullYear()} {BRAND.name}. Tots els drets reservats.</p>
           <p className="flex items-center gap-1">
             <Heart className="h-3 w-3" /> Fet amb passió pel mar
           </p>
@@ -1044,19 +924,11 @@ export default function App() {
 
       {isGalleryOpen && (
         <div className="fixed inset-0 z-[60] bg-black/80 flex items-center justify-center">
-          <button
-            className="absolute top-4 right-4 text-white"
-            onClick={closeGallery}
-            aria-label="Tancar galeria"
-          >
+          <button className="absolute top-4 right-4 text-white" onClick={closeGallery} aria-label="Tancar galeria">
             <X className="h-6 w-6" />
           </button>
 
-          <button
-            className="absolute left-4 text-white"
-            onClick={prevImage}
-            aria-label="Imatge anterior"
-          >
+          <button className="absolute left-4 text-white" onClick={prevImage} aria-label="Imatge anterior">
             <ChevronLeft className="h-8 w-8" />
           </button>
 
@@ -1066,11 +938,7 @@ export default function App() {
             className="max-h-[80vh] max-w-[90vw] rounded-xl shadow-2xl object-contain"
           />
 
-          <button
-            className="absolute right-4 text-white"
-            onClick={nextImage}
-            aria-label="Imatge següent"
-          >
+          <button className="absolute right-4 text-white" onClick={nextImage} aria-label="Imatge següent">
             <ChevronRight className="h-8 w-8" />
           </button>
         </div>
