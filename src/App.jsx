@@ -33,6 +33,10 @@ import {
   ExternalLink,
   Navigation,
   Radar,
+  Thermometer,
+  Wind,
+  Eye,
+  AlertTriangle,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -41,12 +45,17 @@ const GALLERY_IMAGES = Array.from({ length: 15 }, (_, i) => `/galeria-${i + 1}.j
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mblnnvjp";
 
-// ✅ Meteocat URLs correctas (las antiguas dejaron de funcionar)
-const METEOCAT_MUNICIPAL_URL = "https://www.meteo.cat/prediccio/municipal";
+// Meteocat (Cambrils)
+const METEOCAT_HOURLY_URL = "https://m.meteo.cat/prediccio-per-hores?codi=430385";
+const METEOCAT_MUNICIPAL_URL = "https://www.meteo.cat/prediccio/municipal/430385";
 const METEOCAT_RADAR_URL = "https://www.meteo.cat/observacions/radar";
 
-// ✅ Mapa estático (subido a /public)
+// Imagen local subida en /public
 const CAMBRILS_MAP_IMAGE = "/mapa-cambrils.jpg";
+
+// Open-Meteo para datos actuales en la web
+const OPEN_METEO_URL =
+  "https://api.open-meteo.com/v1/forecast?latitude=41.0676&longitude=1.0568&current=temperature_2m,wind_speed_10m,wind_gusts_10m,weather_code&hourly=visibility&forecast_days=1&timezone=Europe%2FMadrid";
 
 const BRAND = {
   name: "Vent d’Estrop",
@@ -70,28 +79,6 @@ const NAV = [
   { label: "Contacte", href: "#contacte" },
 ];
 
-const EVENTS = [
-  {
-    date: "24 NOV",
-    title: "Regata Llagut Mediterrani – Badia de Cambrils",
-    location: "Port de Cambrils",
-    desc: "Prova del calendari federatiu. Categories absolut i veterà.",
-  },
-  {
-    date: "30 NOV",
-    title: "Jornada de Portes Obertes",
-    location: "Base nàutica",
-    desc: "Sessió gratuïta per a nous remers i famílies.",
-  },
-  {
-    date: "12 DES",
-    title: "Assemblea General Ordinària",
-    location: "Sala Polivalent – Club",
-    desc: "Memòria anual, pressupost i projectes 2026.",
-  },
-];
-
-// ✅ SOLO 3 noticias. Primera: beneficio 25%. Quitada: Projecte de renovació del varador.
 const NEWS = [
   {
     title: "Avantatge per a socis: -25% al Gimnàs Municipal de Cambrils",
@@ -169,6 +156,12 @@ function useActiveSection(ids) {
   return active;
 }
 
+function formatVisibility(meters) {
+  if (meters == null) return "—";
+  if (meters >= 1000) return `${(meters / 1000).toFixed(1)} km`;
+  return `${Math.round(meters)} m`;
+}
+
 export default function App() {
   const [slide, setSlide] = useState(0);
   const [lang, setLang] = useState("CAT");
@@ -183,11 +176,75 @@ export default function App() {
   const [contactStatus, setContactStatus] = useState("idle");
   const [contactError, setContactError] = useState("");
 
+  const [meteoNow, setMeteoNow] = useState({
+    loading: true,
+    error: "",
+    temperature: null,
+    wind: null,
+    gusts: null,
+    visibility: null,
+  });
+
   useEffect(() => {
     const id = setInterval(() => {
       setSlide((s) => (s + 1) % HERO_PHOTOS.length);
     }, 4000);
     return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadMeteo = async () => {
+      try {
+        const res = await fetch(OPEN_METEO_URL);
+        if (!res.ok) throw new Error("No s'han pogut carregar les dades meteorològiques.");
+
+        const data = await res.json();
+        const current = data?.current;
+        const hourly = data?.hourly;
+
+        let visibilityNow = null;
+        if (hourly?.time?.length && hourly?.visibility?.length) {
+          const currentHour = new Date();
+          currentHour.setMinutes(0, 0, 0);
+          const yyyy = currentHour.getFullYear();
+          const mm = String(currentHour.getMonth() + 1).padStart(2, "0");
+          const dd = String(currentHour.getDate()).padStart(2, "0");
+          const hh = String(currentHour.getHours()).padStart(2, "0");
+          const targetIso = `${yyyy}-${mm}-${dd}T${hh}:00`;
+          const idx = hourly.time.findIndex((t) => t === targetIso);
+          if (idx >= 0) visibilityNow = hourly.visibility[idx];
+        }
+
+        if (!cancelled) {
+          setMeteoNow({
+            loading: false,
+            error: "",
+            temperature: current?.temperature_2m ?? null,
+            wind: current?.wind_speed_10m ?? null,
+            gusts: current?.wind_gusts_10m ?? null,
+            visibility: visibilityNow,
+          });
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setMeteoNow({
+            loading: false,
+            error: "Ara mateix no hem pogut carregar les dades en temps real.",
+            temperature: null,
+            wind: null,
+            gusts: null,
+            visibility: null,
+          });
+        }
+      }
+    };
+
+    loadMeteo();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const active = useActiveSection([
@@ -243,6 +300,16 @@ export default function App() {
     }
   };
 
+  const quickUnsafe =
+    (meteoNow.visibility != null && meteoNow.visibility <= 1000) ||
+    (meteoNow.wind != null && meteoNow.wind >= 29) ||
+    (meteoNow.gusts != null && meteoNow.gusts >= 29);
+
+  const quickReady =
+    !meteoNow.loading &&
+    !meteoNow.error &&
+    (meteoNow.temperature != null || meteoNow.wind != null || meteoNow.visibility != null);
+
   return (
     <Shell>
       <header className="sticky top-0 z-50 backdrop-blur bg-white/80 border-b border-slate-100">
@@ -265,6 +332,12 @@ export default function App() {
                 {n.label}
               </a>
             ))}
+            <a
+              href="#meteo"
+              className={`hover:text-slate-900 ${active === "#meteo" ? "text-[var(--primary)] font-medium" : "text-slate-600"}`}
+            >
+              Meteo
+            </a>
           </nav>
 
           <div className="hidden md:flex items-center gap-2">
@@ -322,6 +395,11 @@ export default function App() {
                     </a>
                   </SheetClose>
                 ))}
+                <SheetClose asChild>
+                  <a href="#meteo" className="text-slate-800 text-lg py-1 border-b border-slate-100 last:border-none">
+                    Meteo
+                  </a>
+                </SheetClose>
               </nav>
 
               <div className="mt-auto px-4 pb-4 space-y-3">
@@ -628,39 +706,84 @@ export default function App() {
         </div>
       </section>
 
-      {/* ✅ METEO (mapa estático + botones funcionales) */}
       <section id="meteo" className="py-16 bg-[var(--light)]">
         <SectionTitle kicker="Meteo" title="Condicions de vent i temps">
-          Predicció oficial de Meteocat per planificar les sortides amb seguretat.
+          Dades actuals de Cambrils + criteris de seguretat del club + accessos oficials de Meteocat.
         </SectionTitle>
 
-        <div className="max-w-7xl mx-auto px-4 md:px-6 grid md:grid-cols-2 gap-6 items-stretch">
-          <Card className="rounded-2xl shadow-sm overflow-hidden flex flex-col">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-[var(--primary)]" />
-                Cambrils
-              </CardTitle>
-              <CardDescription>Consulta Meteocat per hores i radar.</CardDescription>
-            </CardHeader>
+        <div className="max-w-7xl mx-auto px-4 md:px-6 grid lg:grid-cols-[1.15fr_0.85fr] gap-6">
+          <Card className="rounded-2xl shadow-sm overflow-hidden">
+            <div className="relative">
+              <img
+                src={CAMBRILS_MAP_IMAGE}
+                alt="Mapa de Cambrils"
+                className="w-full h-[420px] object-cover"
+              />
 
-            <CardContent className="pt-0 flex-1 flex flex-col">
-              <div className="rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 flex-1">
-                <img
-                  src={CAMBRILS_MAP_IMAGE}
-                  alt="Mapa de Cambrils"
-                  className="w-full h-full object-cover"
-                />
+              <div className="absolute top-4 left-4 rounded-2xl bg-white/92 backdrop-blur px-4 py-3 border border-slate-200 shadow-sm">
+                <div className="flex items-center gap-2 text-slate-900">
+                  <MapPin className="h-4 w-4 text-[var(--primary)]" />
+                  <span className="font-semibold">Cambrils · Port / base nàutica</span>
+                </div>
+                <div className="text-xs text-slate-600 mt-1">
+                  Consulta ràpida abans de sortir a remar.
+                </div>
               </div>
 
-              <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <a href={METEOCAT_MUNICIPAL_URL} target="_blank" rel="noopener noreferrer">
-                  <Button
-                    className="w-full"
-                    style={{ backgroundColor: BRAND.primary }}
-                  >
+              {!meteoNow.loading && !meteoNow.error && (
+                <div className="absolute bottom-4 left-4 right-4 grid grid-cols-2 md:grid-cols-4 gap-2">
+                  <div className="rounded-xl bg-white/92 backdrop-blur border border-slate-200 px-3 py-3 shadow-sm">
+                    <div className="flex items-center gap-2 text-slate-500 text-xs">
+                      <Thermometer className="h-4 w-4" /> Temperatura
+                    </div>
+                    <div className="mt-1 text-lg font-bold text-slate-900">
+                      {meteoNow.temperature != null ? `${Math.round(meteoNow.temperature)}°C` : "—"}
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-white/92 backdrop-blur border border-slate-200 px-3 py-3 shadow-sm">
+                    <div className="flex items-center gap-2 text-slate-500 text-xs">
+                      <Wind className="h-4 w-4" /> Vent
+                    </div>
+                    <div className="mt-1 text-lg font-bold text-slate-900">
+                      {meteoNow.wind != null ? `${Math.round(meteoNow.wind)} km/h` : "—"}
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-white/92 backdrop-blur border border-slate-200 px-3 py-3 shadow-sm">
+                    <div className="flex items-center gap-2 text-slate-500 text-xs">
+                      <AlertTriangle className="h-4 w-4" /> Ratxes
+                    </div>
+                    <div className="mt-1 text-lg font-bold text-slate-900">
+                      {meteoNow.gusts != null ? `${Math.round(meteoNow.gusts)} km/h` : "—"}
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-white/92 backdrop-blur border border-slate-200 px-3 py-3 shadow-sm">
+                    <div className="flex items-center gap-2 text-slate-500 text-xs">
+                      <Eye className="h-4 w-4" /> Visibilitat
+                    </div>
+                    <div className="mt-1 text-lg font-bold text-slate-900">
+                      {formatVisibility(meteoNow.visibility)}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <CardContent className="pt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <a href={METEOCAT_HOURLY_URL} target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full" style={{ backgroundColor: BRAND.primary }}>
                     <Navigation className="h-4 w-4 mr-2" />
-                    Predicció (Meteocat)
+                    Meteocat per hores
+                    <ExternalLink className="h-4 w-4 ml-2" />
+                  </Button>
+                </a>
+
+                <a href={METEOCAT_MUNICIPAL_URL} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" className="w-full border-slate-300">
+                    Predicció municipal
                     <ExternalLink className="h-4 w-4 ml-2" />
                   </Button>
                 </a>
@@ -672,46 +795,94 @@ export default function App() {
                     <ExternalLink className="h-4 w-4 ml-2" />
                   </Button>
                 </a>
-
-                <Button
-                  variant="outline"
-                  className="w-full border-slate-300"
-                  onClick={() => scrollToSection("contacte")}
-                >
-                  Avís al club <ChevronRight className="h-4 w-4 ml-2" />
-                </Button>
               </div>
+
+              {meteoNow.loading && (
+                <div className="mt-4 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
+                  Carregant dades actuals de Cambrils...
+                </div>
+              )}
+
+              {meteoNow.error && (
+                <div className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+                  {meteoNow.error}
+                </div>
+              )}
             </CardContent>
           </Card>
 
           <Card className="rounded-2xl shadow-sm">
             <CardHeader>
-              <CardTitle>Predicció Meteocat</CardTitle>
+              <CardTitle>Indicador ràpid de sortida</CardTitle>
               <CardDescription>
-                Vista per hores i radar. Ideal per decidir si surts al matí o al vespre amb un sol cop d’ull.
+                Resum visual orientatiu. No substitueix mai el criteri del timonel ni els avisos oficials.
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-3 text-slate-700 text-sm">
-              <ul className="list-disc list-inside space-y-1">
-                <li>Estat del cel i evolució per hores</li>
-                <li>Temperatura</li>
-                <li>Precipitació</li>
-                <li>Vent: velocitat i direcció</li>
-              </ul>
+            <CardContent className="space-y-4">
+              <div
+                className={`rounded-2xl px-4 py-4 border ${
+                  !quickReady
+                    ? "bg-slate-50 border-slate-200 text-slate-700"
+                    : quickUnsafe
+                    ? "bg-rose-50 border-rose-200 text-rose-900"
+                    : "bg-emerald-50 border-emerald-200 text-emerald-900"
+                }`}
+              >
+                {!quickReady ? (
+                  <>
+                    <div className="font-semibold">Indicador pendent</div>
+                    <div className="text-sm mt-1">
+                      Quan carreguen les dades actuals, aquí veuràs un resum ràpid.
+                    </div>
+                  </>
+                ) : quickUnsafe ? (
+                  <>
+                    <div className="font-semibold">Precaució / possible anul·lació</div>
+                    <div className="text-sm mt-1">
+                      Hi ha un valor actual que ja entra en zona delicada segons els criteris visibles de la web.
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="font-semibold">Sense alerta ràpida visible</div>
+                    <div className="text-sm mt-1">
+                      Les dades actuals visibles no mostren, ara mateix, un tall automàtic dels criteris bàsics.
+                    </div>
+                  </>
+                )}
+              </div>
 
-              <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900">
-                <strong>Avís de seguretat</strong>
+              <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900 text-sm">
+                <strong>Avís de seguretat del club</strong>
                 <div className="mt-1">
-                  Si hi ha avisos oficials (vent fort / mala mar) o indicacions del club, la sortida es pot anul·lar.
+                  Si hi ha avisos oficials o indicacions del club, la sortida es pot anul·lar.
                   En cas de dubte, prioritzeu la seguretat.
                 </div>
               </div>
 
+              <div className="space-y-2 text-sm text-slate-700">
+                <div className="font-semibold text-slate-900">No sortir quan hi hagi:</div>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>Visibilitat igual o inferior a 1 km</li>
+                  <li>Vent sostingut o ratxes iguals o superiors a 29 km/h</li>
+                  <li>Mar de vent Douglas igual o superior a 4</li>
+                  <li>Alerta SMP igual o superior a 4/6</li>
+                  <li>Tempesta elèctrica en un radi de 50 km</li>
+                </ul>
+              </div>
+
+              <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
+                <strong className="text-slate-900">Decisió final</strong>
+                <div className="mt-1">
+                  El timonel també pot cancel·lar o interrompre la sortida encara que les condicions siguin millors.
+                </div>
+              </div>
+
               <div className="flex flex-wrap gap-2">
-                <a href={METEOCAT_MUNICIPAL_URL} target="_blank" rel="noopener noreferrer">
+                <a href={METEOCAT_HOURLY_URL} target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="border-slate-300">
-                    Obrir Meteocat (Predicció municipal)
+                    Obrir Meteocat per hores
                   </Button>
                 </a>
 
