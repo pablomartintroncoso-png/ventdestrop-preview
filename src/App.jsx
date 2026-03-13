@@ -42,6 +42,7 @@ import {
   Wind,
   Eye,
   AlertTriangle,
+  Phone,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -65,7 +66,7 @@ const METEOCAT_MUNICIPAL_URL =
   "https://www.meteo.cat/prediccio/municipal/430385";
 const METEOCAT_RADAR_URL = "https://www.meteo.cat/observacions/radar";
 
-// Mapa online de Cambrils (OpenStreetMap embebido)
+// Mapa online de Cambrils
 const CAMBRILS_MAP_EMBED_URL =
   "https://www.openstreetmap.org/export/embed.html?bbox=1.0280%2C41.0550%2C1.0860%2C41.0855&layer=mapnik&marker=41.0676%2C1.0568";
 
@@ -199,6 +200,7 @@ export default function App() {
   const [showRemAdaptatMore, setShowRemAdaptatMore] = useState(false);
 
   const [contactName, setContactName] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactMessage, setContactMessage] = useState("");
   const [contactStatus, setContactStatus] = useState("idle");
@@ -327,6 +329,7 @@ export default function App() {
         },
         body: JSON.stringify({
           name: contactName,
+          phone: contactPhone,
           email: contactEmail,
           message: contactMessage,
         }),
@@ -335,6 +338,7 @@ export default function App() {
       if (res.ok) {
         setContactStatus("success");
         setContactName("");
+        setContactPhone("");
         setContactEmail("");
         setContactMessage("");
       } else {
@@ -897,8 +901,7 @@ export default function App() {
 
       <section id="meteo" className="py-16 bg-[var(--light)]">
         <SectionTitle kicker="Meteo" title="Condicions de vent i temps">
-          Dades actuals de Cambrils + criteris de seguretat del club + accessos
-          oficials de Meteocat.
+          Dades actuals de Cambrils i criteris essencials de seguretat per planificar les sortides.
         </SectionTitle>
 
         <div className="max-w-7xl mx-auto px-4 md:px-6 grid lg:grid-cols-[1.15fr_0.85fr] gap-6">
@@ -1031,8 +1034,7 @@ export default function App() {
             <CardHeader>
               <CardTitle>Indicador ràpid de sortida</CardTitle>
               <CardDescription>
-                Resum visual orientatiu segons les dades visibles i els criteris
-                de seguretat del club.
+                Resum visual orientatiu segons les dades visibles i els criteris de seguretat del club.
               </CardDescription>
             </CardHeader>
 
@@ -1050,8 +1052,7 @@ export default function App() {
                   <>
                     <div className="font-semibold">Indicador pendent</div>
                     <div className="text-sm mt-1">
-                      Quan carreguen les dades actuals, aquí veuràs un resum
-                      ràpid.
+                      Quan carreguen les dades actuals, aquí veuràs un resum ràpid.
                     </div>
                   </>
                 ) : quickUnsafe ? (
@@ -1060,8 +1061,7 @@ export default function App() {
                       Precaució / possible anul·lació
                     </div>
                     <div className="text-sm mt-1">
-                      Hi ha un valor actual que ja entra en zona delicada segons
-                      els criteris visibles de la web.
+                      Hi ha un valor actual que ja entra en zona delicada segons els criteris visibles de la web.
                     </div>
                   </>
                 ) : (
@@ -1070,18 +1070,16 @@ export default function App() {
                       Sense alerta ràpida visible
                     </div>
                     <div className="text-sm mt-1">
-                      Les dades actuals visibles no mostren, ara mateix, un tall
-                      automàtic dels criteris bàsics.
+                      Les dades actuals visibles no mostren, ara mateix, un tall automàtic dels criteris bàsics.
                     </div>
                   </>
                 )}
               </div>
 
               <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900 text-sm">
-                <strong>Avís de seguretat del club</strong>
+                <strong>Avís de seguretat</strong>
                 <div className="mt-1">
-                  Si hi ha avisos oficials o indicacions del club, la sortida es
-                  pot anul·lar. En cas de dubte, prioritzeu la seguretat.
+                  En cas de dubte, prioritzeu la seguretat i consulteu sempre els avisos oficials.
                 </div>
               </div>
 
@@ -1213,6 +1211,15 @@ export default function App() {
                   onChange={(e) => setContactName(e.target.value)}
                   required
                 />
+
+                <Input
+                  type="tel"
+                  placeholder="Telèfon"
+                  value={contactPhone}
+                  onChange={(e) => setContactPhone(e.target.value)}
+                  required
+                />
+
                 <Input
                   type="email"
                   placeholder="Correu"
@@ -1220,6 +1227,7 @@ export default function App() {
                   onChange={(e) => setContactEmail(e.target.value)}
                   required
                 />
+
                 <Textarea
                   placeholder="Missatge"
                   value={contactMessage}
